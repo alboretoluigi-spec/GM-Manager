@@ -15,7 +15,7 @@ import (
 )
 
 // Villaggio di Nebbiavalle (1249, 622) e Borgofosco: due località note di locs.json.
-const villaggio, borgofosco = "villaggio-di-gasterbless", "borgofosco"
+const villaggio, borgofosco = "villaggio-di-nebbiavalle", "borgofosco"
 
 func (sc *scontro) mappa(c *cliente, codice int, metodo, p string, dati any) map[string]any {
 	sc.a.t.Helper()
@@ -315,7 +315,7 @@ func TestNebbiaDueDispositivi(t *testing.T) {
 // P1: i percorsi si calcolano sul server; i giocatori solo fuori dalla nebbia.
 func TestStradeSulServer(t *testing.T) {
 	sc := nuovoScontro(t)
-	sc.a.s.Web = os.DirFS("../../web")
+	sc.a.s.Web = os.DirFS("testdata/web")
 	ag := func(c *cliente, codice, x, y int) int {
 		out := sc.mappa(c, codice, "POST", "strada", map[string]any{"op": "aggancia", "x": x, "y": y, "r": 42})
 		if codice != 200 {
@@ -356,7 +356,7 @@ func TestStradeSulServer(t *testing.T) {
 // Immagine della mappa coperta dalla nebbia (dal ramo main-ke8sy4): niente spoiler dagli indirizzi dei file.
 func TestMappaImmagineConNebbia(t *testing.T) {
 	sc := nuovoScontro(t)
-	sc.a.s.Web = os.DirFS("../../web")
+	sc.a.s.Web = os.DirFS("testdata/web")
 	// (il Master li riceve dal gestore dei file statici: qui l'ambiente di prova non li contiene)
 	for _, p := range []string{"/carta/img/gasterbless.webp", "/carta/img/mask.png"} {
 		if c := sc.scaricaPercorso(sc.luca, p); c != 404 {

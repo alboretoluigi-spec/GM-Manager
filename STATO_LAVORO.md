@@ -39,7 +39,6 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 - **Logo (13/11)**: il Master ha mandato due proposte fatte con Turbologo; le immagini nella chat hanno la filigrana
   «turbologo» e la scritta «GASTERL BLESS» (con una L di troppo). Serve il file acquistato, senza filigrana, con la
   scritta corretta, e la licenza d'uso commerciale; le immagini della chat non arrivano come file nella sessione.
-- **Aggiorna**: si ferma finché ci sono prove rosse (19, elenco in `docs/PIANO.md` §5.1).
 - Da decidere: quali famiglie di sistemi di gioco nella prima versione e in che ordine (`docs/PIANO.md` §3.3bis);
   nomi dei giochi nell'app solo dopo il parere dell'avvocato sulle licenze di compatibilità.
 - Domande ancora aperte (`docs/PIANO.md` §6): accesso da Internet nella prima versione, prezzo e piattaforma di vendita,
@@ -50,8 +49,8 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Prossimo passo
 000. **App di base installabile (richiesta del Master del 13/11)**: script sistemati (porta 7700/7701, servizio e cartelle
    `GasterBless`, percorsi `C:\Progetti\GM-Manager\app`, niente passaggi di Barovia), pacchetto completo
-   (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Da fare subito**: rimettere in verde
-   le 19 prove rosse, altrimenti il tasto «Aggiorna» si ferma ai test. Logo nuovo: in attesa del file senza filigrana
+   (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
+   non è più bloccato. Da fare sul PC del Master: installazione con i due comandi di `docs/INSTALLAZIONE.md` (modo A). Logo nuovo: in attesa del file senza filigrana
    (vedi Problemi aperti). Il passo L4 (campagne) della libreria è in pausa.
 00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1, L2 e L3 fatti**;
    prossimo **L4 – campagne** (entità campagna con sistema, edizione, regolamento, documenti, regole e impostazioni; gruppi
@@ -69,6 +68,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **Prove tutte verdi**: mondo di prova inventato in `app/internal/server/testdata` (luoghi e strade disegnate, terreni, bestiario, professioni, scheda d'esempio); prove adattate (bilanciamento senza modelli, prodotto di prova, porta 7700); `go vet` e `go test ./...` verdi; prove nel browser 13 + 12 (download veri) + 24. |
 | 2026-11-13 | Claude Code (cloud) | App di base installabile: porta 7700/7701 (config, conf d'esempio, prove), script `installa.ps1` (riscritto senza i passaggi di Barovia), `aggiorna.ps1`, `aggiorna_auto.ps1`, `disinstalla.ps1`, `.bat`, `crea-pacchetto.ps1` (pacchetto zip completo), `LEGGIMI_INSTALLAZIONE.txt`, icona `gasterbless.ico` «GB»; pagina di aggiornamento con i percorsi nuovi; `docs/INSTALLAZIONE.md`. Compilazione per Windows e macOS verificata. Logo nuovo in attesa del file valido. |
 | 2026-11-13 | Claude Code (cloud) | **L3 fatto**: MY RULEBOOKS completo (importazione con controlli, RTF, ricerca nel contenuto, categorie, versioni, sostituzione, eliminazione, lettura), pagina e schede tra le due sezioni; prove Go e nel browser 24/24; nessuna regressione. |
 | 2026-11-13 | Claude Code (cloud) | **L2 fatto**: migrazione 038, download con ripresa e controlli, elenco e file di MY RULEBOOKS, pulsante con avanzamento; prove Go e nel browser con download veri (10/10); nessuna regressione. Rinominate in modo neutro le raccolte dei PNG («CoS Reloaded» → «Raccolta alternativa»), parole vietate aggiunte. Creato l'ambiente cloud personale «Gaster Bless (GM-Manager e Barovia)» con i due siti degli editori. |

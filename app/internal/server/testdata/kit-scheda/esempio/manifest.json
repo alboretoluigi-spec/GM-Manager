@@ -1,0 +1,9 @@
+{
+  "nome": "Scheda d'esempio",
+  "autore": "Kit di Gaster Bless",
+  "versione": "1.0",
+  "descrizione": "Scheda minima che mostra come parlare con Gaster Bless: dati base, PF, tiri.",
+  "protocollo": 1,
+  "ingresso": "index.html",
+  "funzioni": ["pf", "tiri", "tema"]
+}

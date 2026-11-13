@@ -25,8 +25,9 @@ const { BASE, ok, browser, master, chiudiFinestre, fine } = require('./comune');
     const errore = await box.locator('.rl-errore').count() ? await box.locator('.rl-errore').textContent() : '';
     ok(await box.getByText('Nella mia libreria').count() === 1, doc + ': scaricato nella libreria ' + errore);
     ok(vistoAvanzamento, doc + ': avanzamento mostrato durante il download');
-    const href = await box.locator('a').getAttribute('href');
-    const r = await p.request.get(BASE + href);
+    ok(await box.locator('a').getAttribute('href') === '/miei-regolamenti', doc + ': collegamento a My Rulebooks');
+    const cat = await (await p.request.get(BASE + '/api/v1/regolamenti/catalogo')).json();
+    const r = await p.request.get(BASE + '/api/v1/regolamenti/miei/' + cat.nellaLibreria[doc] + '/file');
     const corpo = await r.body();
     ok(r.status() === 200 && r.headers()['content-type'] === 'application/pdf' && corpo.slice(0, 5).toString() === '%PDF-', doc + ': il file si apre ed è un PDF (' + corpo.length + ' byte)');
   }

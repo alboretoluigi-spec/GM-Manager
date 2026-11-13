@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheda d'esempio</title>
+<link rel="stylesheet" href="stile.css">
+</head>
+<body>
+<main>
+  <h1 id="titolo">Scheda d'esempio</h1>
+  <p id="stato" class="tenue">In attesa di Gaster Bless…</p>
+
+  <section>
+    <label>Nome <input id="nome" data-campo="nome" readonly></label>
+    <div class="riga">
+      <label>Classe <input id="classe" data-campo="classe"></label>
+      <label>Livello <input id="livello" data-campo="livello" type="number" min="1" max="20"></label>
+      <label>Razza <input id="razza" data-campo="razza"></label>
+    </div>
+    <div class="riga">
+      <label>CA <input id="ca" data-campo="ca" type="number" min="0" max="40"></label>
+      <label>PF massimi <input id="pfMax" data-campo="pfMax" type="number" min="1" max="999"></label>
+      <label>PF attuali <input id="hpCur" type="number" min="0" max="999"></label>
+      <label>PF temporanei <input id="hpTmp" type="number" min="0" max="999"></label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Caratteristiche</h2>
+    <div class="caratteristiche" id="car"></div>
+    <label>Bonus di competenza <input id="comp" data-campo="comp" type="number" min="2" max="6"></label>
+  </section>
+
+  <p id="ultimoTiro" class="tenue" aria-live="polite"></p>
+</main>
+<script src="scheda.js"></script>
+</body>
+</html>

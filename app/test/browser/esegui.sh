@@ -2,7 +2,7 @@
 # Prove nel browser di Gaster Bless (Playwright, Chromium). Uso, dalla cartella app:
 #   bash test/browser/esegui.sh                 (tutte)
 #   bash test/browser/esegui.sh regolamenti     (una sola)
-# Ogni prova avvia il programma in modalità di prova su una cartella temporanea nuova (porta 7600).
+# Ogni prova avvia il programma in modalità di prova su una cartella temporanea nuova (porta 7700).
 # Le schermate vanno in test/browser/schermate/ (ignorata da Git).
 set -u
 QUI="$(cd "$(dirname "$0")" && pwd)"

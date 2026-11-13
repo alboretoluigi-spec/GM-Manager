@@ -1,6 +1,6 @@
 // Funzioni comuni alle prove nel browser.
 const { chromium } = require('playwright');
-const BASE = 'https://127.0.0.1:7600';
+const BASE = 'https://127.0.0.1:7700';
 let errori = 0;
 function ok(cond, msg) { if (cond) console.log('ok', msg); else { console.log('FALLITO', msg); errori++; } }
 async function browser() { return chromium.launch(); }

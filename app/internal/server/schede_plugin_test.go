@@ -16,7 +16,7 @@ func installaPlugin(t *testing.T, a *ambiente, id string) {
 	dest := filepath.Join(a.s.Cfg.CartellaMedia, "SchedePlugin", id)
 	os.MkdirAll(dest, 0o755)
 	for _, f := range []string{"manifest.json", "index.html", "scheda.js", "stile.css"} {
-		b, err := os.ReadFile(filepath.Join("..", "..", "kit-scheda", "esempio", f))
+		b, err := os.ReadFile(filepath.Join("testdata", "kit-scheda", "esempio", f))
 		if err != nil {
 			t.Fatal(err)
 		}

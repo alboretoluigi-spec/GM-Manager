@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -91,11 +90,10 @@ Lontano.
 	if d := p["domandaIA"].(string); !strings.Contains(d, "si trova a Borgofosco") || !strings.Contains(d, "«Il festival»") || !strings.Contains(d, "Martedì") {
 		t.Fatalf("domanda per l'IA: %s", d)
 	}
-	// un bilanciamento salvato per il gruppo compare; quello di un altro gruppo no
-	sc.m.deve(200, "POST", "/bilanciamento/orfanotrofio/salva", map[string]any{"gruppo": g, "pg": []string{sc.pg}})
+	// nessun modello di scenario incluso nell'app (i modelli arriveranno dall'utente): nessun bilanciamento salvato
 	altro := sc.m.deve(200, "POST", "/gruppi", map[string]any{"nome": "Domenica"})["id"].(string)
 	p = sc.m.deve(200, "GET", "/preparazione?gruppo="+g, nil)
-	if b := p["bilanciamenti"].([]any); len(b) != 1 || !strings.Contains(b[0].(map[string]any)["testo"].(string), "BAMBINI") && !strings.Contains(fmt.Sprint(b), "Bambini in tutto") {
+	if b, _ := p["bilanciamenti"].([]any); len(b) != 0 {
 		t.Fatalf("bilanciamenti: %v", b)
 	}
 	if b := sc.m.deve(200, "GET", "/preparazione?gruppo="+altro, nil)["bilanciamenti"].([]any); len(b) != 0 {

@@ -99,18 +99,18 @@ func TestSezionePNGeMostri(t *testing.T) {
 // bestiario di Gaster Bless e per quelli nuovi; resta nel file della campagna.
 func TestRaccoltaPNG(t *testing.T) {
 	tv := nuovoTavolo(t)
-	tv.m.deve(200, "PUT", "/bestiario/voci/png-stanimir/raccolta", map[string]any{"raccolta": "reloaded"})
+	tv.m.deve(200, "PUT", "/bestiario/voci/png-oste/raccolta", map[string]any{"raccolta": "reloaded"})
 	e := tv.m.deve(200, "GET", "/bestiario", nil)["entries"].(map[string]any)
-	if e["png-stanimir"].(map[string]any)["raccolta"] != "reloaded" {
-		t.Fatalf("raccolta di un PNG del bestiario: %v", e["png-stanimir"])
+	if e["png-oste"].(map[string]any)["raccolta"] != "reloaded" {
+		t.Fatalf("raccolta di un PNG del bestiario: %v", e["png-oste"])
 	}
-	if c, _ := tv.m.chiama("PUT", "/bestiario/voci/png-stanimir/raccolta", map[string]any{"raccolta": "altro"}); c != 400 {
+	if c, _ := tv.m.chiama("PUT", "/bestiario/voci/png-oste/raccolta", map[string]any{"raccolta": "altro"}); c != 400 {
 		t.Fatal("solo ufficiale o reloaded")
 	}
 	if c, _ := tv.m.chiama("PUT", "/bestiario/voci/png-inventato/raccolta", map[string]any{"raccolta": "reloaded"}); c != 404 {
 		t.Fatal("voce inesistente")
 	}
-	if c, _ := tv.luca.chiama("PUT", "/bestiario/voci/png-stanimir/raccolta", map[string]any{"raccolta": "ufficiale"}); c != 403 {
+	if c, _ := tv.luca.chiama("PUT", "/bestiario/voci/png-oste/raccolta", map[string]any{"raccolta": "ufficiale"}); c != 403 {
 		t.Fatal("solo il Master")
 	}
 	id := tv.m.deve(200, "POST", "/bestiario/voci", map[string]any{"nome": "Ezmerelda di prova", "cat": "png", "raccolta": "reloaded"})["id"].(string)
@@ -122,9 +122,9 @@ func TestRaccoltaPNG(t *testing.T) {
 		t.Fatalf("PNG nuovo nella raccolta scelta: %v", e[id])
 	}
 	// di nuovo nella campagna ufficiale
-	tv.m.deve(200, "PUT", "/bestiario/voci/png-stanimir/raccolta", map[string]any{"raccolta": "ufficiale"})
+	tv.m.deve(200, "PUT", "/bestiario/voci/png-oste/raccolta", map[string]any{"raccolta": "ufficiale"})
 	e = tv.m.deve(200, "GET", "/bestiario", nil)["entries"].(map[string]any)
-	if e["png-stanimir"].(map[string]any)["raccolta"] != "ufficiale" {
+	if e["png-oste"].(map[string]any)["raccolta"] != "ufficiale" {
 		t.Fatal("spostato nella campagna ufficiale")
 	}
 }

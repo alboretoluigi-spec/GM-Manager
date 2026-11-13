@@ -49,7 +49,7 @@ func TestViaggi(t *testing.T) {
 		t.Fatalf("prima posizione: %d avvisi", n)
 	}
 	// Al Villaggio di Nebbiavalle con un tratto di foresta: terreno difficile e arrivo.
-	v := viaggio(5, 2.5, []map[string]any{strada(3), {"tipo": "foresta", "nome": "Foresta di Selvascura", "mi": 2, "f": .5}}, "villaggio-di-gasterbless")
+	v := viaggio(5, 2.5, []map[string]any{strada(3), {"tipo": "foresta", "nome": "Foresta di Selvascura", "mi": 2, "f": .5}}, "villaggio-di-nebbiavalle")
 	sc.mappa(sc.luca, 200, "POST", "party", map[string]any{"azione": "muovi", "id": "g", "x": 1245, "y": 620, "viaggio": v})
 	a := avvisi(cl)
 	if len(a) != 1 || tipi(a[0]) != "terreno,arrivo" || !strings.Contains(string(mustJSON(a[0])), "un luogo ancora sconosciuto") {

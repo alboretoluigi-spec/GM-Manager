@@ -45,6 +45,9 @@ Materiale creato per il progetto (13/11/2026), nessuna licenza di terzi: icone d
 video di benvenuto e immagine di saluto (dal marchio), immagine «borsa vuota», simbolo di stanchezza (`stanco.svg`),
 suoni `corvo.mp3` e `attesa.mp3` (sintesi con ffmpeg), immagine provvisoria della mappa, guide PDF provvisorie.
 
+Dati delle prove (`app/internal/server/testdata`): mondo di prova INVENTATO per le prove automatiche (luoghi, strade,
+terreni, bestiario, professioni, scheda d'esempio); non fa parte del prodotto e non viene da manuali o avventure.
+
 Le dipendenze indirette di Go si elencano con `go list -m all` e si controllano prima della versione di prova (fase 6).
 
 ## 4. Elementi di Barovia esclusi

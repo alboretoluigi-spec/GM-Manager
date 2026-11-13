@@ -107,7 +107,7 @@ func TestProfessioni(t *testing.T) {
 	// Erborista: pozione di guarigione (25 mo, nessuna prova) nell'equipaggiamento
 	tv.luca.deve(200, "POST", "/professioni/"+pg+"/erborista/fabbrica", map[string]any{"formula": "pozione_guarigione"})
 	d := tv.luca.deve(200, "GET", "/personaggi/"+pg, nil)["dati"].(map[string]any)
-	if d["eq"] != "Kit da avvelenatore\nBorsa da erborista\n1 × Pozione di guarigione" || moneteMO() != "60" {
+	if d["eq"] != "Kit da avvelenatore\nBorsa da erborista\n1 × Pozione di prova" || moneteMO() != "60" {
 		t.Fatalf("pozione nell'equipaggiamento: %q, monete %s", d["eq"], moneteMO())
 	}
 

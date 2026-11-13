@@ -117,7 +117,7 @@ func TestManualiSoloMaster(t *testing.T) {
 
 func TestBestiarioJSONSoloMaster(t *testing.T) {
 	a := nuovoAmbiente(t)
-	a.s.Web = os.DirFS("../../web")
+	a.s.Web = os.DirFS("testdata/web")
 	srv := a.srv
 	m := a.master()
 	g := a.giocatore("Luca", "333 1234567", "192.168.1.20")

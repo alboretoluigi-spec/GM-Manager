@@ -1,0 +1,14 @@
+:root { --sfondo: #f3ead7; --testo: #2a2118; --bordo: #cdb98f; --accento: #8a1c1c; }
+body.scuro { --sfondo: #1c1612; --testo: #e8dfcc; --bordo: #4a3d2b; --accento: #d9a441; }
+body { margin: 0; background: var(--sfondo); color: var(--testo); font: 15px/1.4 system-ui, sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 12px; }
+h1, h2 { color: var(--accento); margin: 8px 0; }
+section { border: 1px solid var(--bordo); border-radius: 8px; padding: 10px; margin: 10px 0; }
+label { display: inline-flex; flex-direction: column; font-size: 13px; margin: 4px 8px 4px 0; }
+input { font: inherit; padding: 4px 6px; border: 1px solid var(--bordo); border-radius: 4px; background: transparent; color: inherit; width: 9em; }
+.riga { display: flex; flex-wrap: wrap; }
+.caratteristiche { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.car { border: 1px solid var(--bordo); border-radius: 6px; padding: 6px; text-align: center; }
+.car input { width: 4em; text-align: center; }
+.car button { margin-top: 4px; cursor: pointer; }
+.tenue { opacity: .75; }

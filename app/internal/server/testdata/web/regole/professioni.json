@@ -1,0 +1,212 @@
+{
+ "versione": 1,
+ "nota": "Catalogo INVENTATO per le prove del server.",
+ "disponibilita": [
+  {
+   "id": "comune",
+   "n": "Comune / abbondante",
+   "cd": 10
+  },
+  {
+   "id": "limitata",
+   "n": "Limitata",
+   "cd": 15
+  },
+  {
+   "id": "rara",
+   "n": "Rara / scarsa",
+   "cd": 20
+  }
+ ],
+ "regoleRaccolta": [
+  "Regola di prova sulla raccolta."
+ ],
+ "regoleEstrazione": [
+  "Regola di prova sull'estrazione."
+ ],
+ "regoleCreazione": [
+  "Regola di prova sulla creazione."
+ ],
+ "regoleUso": [
+  "Regola di prova sull'uso."
+ ],
+ "professioni": {
+  "erborista": {
+   "n": "Erborista",
+   "icona": "🌿",
+   "strumento": "erborista",
+   "fonte": "prova",
+   "raccolta": true,
+   "ingredienti": [
+    {
+     "id": "erbe_medicinali",
+     "n": "Erbe di prova",
+     "dove": "testo di prova",
+     "cd": 15,
+     "abil": [
+      "Natura",
+      "Sopravvivenza"
+     ]
+    }
+   ],
+   "formule": [
+    {
+     "id": "pozione_guarigione",
+     "n": "Pozione di prova",
+     "conosciuta": true,
+     "tempo": "1 giorno",
+     "cd": 0,
+     "pieno": 25,
+     "ridotto": 12.5,
+     "proposta": true,
+     "raccoglibili": [
+      "erbe_medicinali"
+     ],
+     "dosi": 1,
+     "prodotto": "Pozione di prova",
+     "effetto": "testo di prova"
+    }
+   ]
+  },
+  "avvelenatore": {
+   "n": "Avvelenatore",
+   "icona": "☠",
+   "strumento": "avvelenatore",
+   "fonte": "prova",
+   "raccolta": true,
+   "estrazione": true,
+   "dosi": true,
+   "ingredienti": [
+    {
+     "id": "felce_ombra",
+     "n": "Felce di prova",
+     "dove": "testo di prova",
+     "cd": 15,
+     "abil": [
+      "Sopravvivenza",
+      "Natura"
+     ]
+    },
+    {
+     "id": "lume_cripta",
+     "n": "Fungo di prova",
+     "dove": "testo di prova",
+     "cd": 15,
+     "abil": [
+      "Sopravvivenza",
+      "Natura"
+     ]
+    },
+    {
+     "id": "ragni",
+     "n": "Ingrediente di prova ragni",
+     "dove": "testo di prova",
+     "cd": 15,
+     "abil": [
+      "Sopravvivenza"
+     ]
+    },
+    {
+     "id": "aconito",
+     "n": "Ingrediente di prova aconito",
+     "dove": "testo di prova",
+     "cd": 15,
+     "abil": [
+      "Natura"
+     ]
+    }
+   ],
+   "secrezioni": [
+    {
+     "id": "sacca_ragno_gigante",
+     "n": "Sacca di prova grande",
+     "cd": 20
+    },
+    {
+     "id": "sacca_animale",
+     "n": "Sacca di prova comune",
+     "cd": 20,
+     "tana": 15
+    },
+    {
+     "id": "ghiandola_pericolosa",
+     "n": "Ghiandola di prova",
+     "cd": 20
+    }
+   ],
+   "speciali": [
+    {
+     "id": "speciale_prova",
+     "n": "Ingrediente speciale di prova"
+    }
+   ],
+   "formule": [
+    {
+     "id": "essenza_spettrale",
+     "n": "Essenza di prova",
+     "tempo": "1 ora",
+     "cd": 13,
+     "pieno": 50,
+     "ridotto": 25,
+     "raccoglibili": [
+      "felce_ombra",
+      "lume_cripta"
+     ],
+     "dosi": "BC",
+     "ts": "Costituzione CD 13",
+     "effetto": "testo di prova",
+     "immuni": true,
+     "opzionali": [
+      {
+       "id": "ectoplasma",
+       "effetto": "TS Costituzione CD 14"
+      }
+     ]
+    },
+    {
+     "id": "paralizzante",
+     "n": "Veleno di prova paralizzante",
+     "tempo": "1 ora",
+     "cd": 14,
+     "pieno": 60,
+     "ridotto": 30,
+     "raccoglibili": [
+      "ragni",
+      "aconito"
+     ],
+     "dosi": "BC",
+     "ts": "Costituzione CD 13",
+     "effetto": "testo di prova",
+     "immuni": true,
+     "opzionali": [
+      {
+       "id": "sacca_ragno_gigante",
+       "effetto": "«presa ferrea»: se il TS fallisce di 5 o più, anche trattenuto fino alla fine del suo turno successivo"
+      }
+     ]
+    },
+    {
+     "id": "predatore_potenziato",
+     "n": "Estratto di prova potenziato",
+     "tempo": "8 ore (1 lotto al giorno)",
+     "cd": 18,
+     "pieno": 300,
+     "secrezioni": [
+      "ghiandola_pericolosa"
+     ],
+     "dosi": 1,
+     "bonus5": true,
+     "ts": "Costituzione CD 15",
+     "effetto": "testo di prova",
+     "immuni": true
+    }
+   ]
+  }
+ },
+ "artigiani": [
+  {
+   "id": "artigiano_prova",
+   "n": "Artigiano di prova"
+  }
+ ]
+}

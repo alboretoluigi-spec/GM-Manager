@@ -169,7 +169,7 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 | 3a | Repository e struttura di base: istruzioni, stato del lavoro, piano, regole sui contenuti | **fatta** (13/11) |
 | 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | **fatta** (13/11): vedi §5.1 |
 | 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | da fare |
-| 3d | Compilazione e prove automatiche verdi (le 19 rosse del §5.1, nuove prove nel browser); elenco delle licenze nell'app | da fare |
+| 3d | Compilazione e prove automatiche verdi (le 19 rosse del §5.1, nuove prove nel browser); elenco delle licenze nell'app | **prove verdi** (13/11): mondo di prova inventato in `app/internal/server/testdata`; manca l'elenco delle licenze nell'app |
 | 4 | Funzioni generiche (mappa, compendio, «Parla con un PNG», mazzo di carte, regole di zona, modelli di scenario) e rete per un cliente qualsiasi | — |
 | 5 | Installatore firmato, licenza, aggiornamenti, lingue (italiano e inglese) | — |
 | 6 | Versione di prova privata, poi il lancio | — |

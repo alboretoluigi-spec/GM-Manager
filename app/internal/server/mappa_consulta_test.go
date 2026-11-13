@@ -9,7 +9,7 @@ import (
 // chi non è del gruppo non la vede.
 func TestMappaConsultazione(t *testing.T) {
 	a := nuovoAmbiente(t)
-	a.s.Web = os.DirFS("../../web") // rete stradale vera (mask.png)
+	a.s.Web = os.DirFS("testdata/web") // rete stradale vera (mask.png)
 	m := a.master()
 	g := m.deve(200, "POST", "/gruppi", map[string]any{"nome": "Martedì"})["id"].(string)
 	g2 := m.deve(200, "POST", "/gruppi", map[string]any{"nome": "Venerdì"})["id"].(string)

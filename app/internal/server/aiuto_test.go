@@ -29,15 +29,15 @@ func nuovoAmbiente(t *testing.T) *ambiente {
 	cfg.CartellaMedia = t.TempDir()
 	cfg.ModalitaProva = true
 	cfg.ApprovazioneSchede = false // i test delle altre funzioni salvano le schede come prima; TestModificaManuale la accende
-	locs, err := os.ReadFile("../../web/carta/locs.json")
+	locs, err := os.ReadFile("testdata/web/carta/locs.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	best, err := os.ReadFile("../../web/carta/bestiario.json")
+	best, err := os.ReadFile("testdata/web/carta/bestiario.json")
 	if err != nil {
 		t.Fatal(err)
 	}
-	prof, err := os.ReadFile("../../web/regole/professioni.json")
+	prof, err := os.ReadFile("testdata/web/regole/professioni.json")
 	if err != nil {
 		t.Fatal(err)
 	}

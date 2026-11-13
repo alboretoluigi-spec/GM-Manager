@@ -39,8 +39,7 @@ powershell -ExecutionPolicy Bypass -File "C:\Program Files\GasterBless\disinstal
 ```
 I dati restano in `C:\ProgramData\GasterBless`.
 
-## Attenzione (13/11/2026)
-Il tasto «Aggiorna» installa solo se **tutte** le prove automatiche passano. Oggi 19 prove del server sono ancora
-rosse (usano dati tolti nella fase 3b): finché non sono sistemate, «Aggiorna» si ferma ai test e non installa nulla
-(la versione installata resta com'è). L'installazione del punto A.2 non fa le prove e funziona.
+## Prove automatiche
+Il tasto «Aggiorna» installa solo se `go vet` e **tutte** le prove automatiche passano. Dal 13/11/2026 sono tutte verdi
+(le 19 rimaste dalla fase 3b ora usano un mondo di prova inventato in `app/internal/server/testdata`).
 macOS: il programma si compila (`GOOS=darwin`), ma installatore e servizio per Mac sono da fare (fase 5).
