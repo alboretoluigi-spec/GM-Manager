@@ -6,6 +6,9 @@
 da Barovia è la fase 3b.
 
 ## Fase attuale (aggiornamento)
+**13/11/2026: modulo RPG RULEBOOK LIBRARY completo (L1–L6).** Catalogo, download, My Rulebooks, campagne, analisi dei
+regolamenti con approvazione del Master; rapporto finale in `docs/RAPPORTO_RULEBOOK_LIBRARY.md`. Tutte le prove verdi.
+
 **13/11/2026 sera: fase 3b fatta.** Il programma ripulito è in `app/`: compila, il controllo delle parole vietate passa, il
 marchio è su tutte le schermate, provato nel browser senza errori. **19 prove del server sono ancora rosse** perché
 usano dati che non ci sono più (elenco in `docs/PIANO.md` §5.1): da sistemare nella fase 3d. La scheda del personaggio
@@ -52,9 +55,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
    (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
    non è più bloccato. Da fare sul PC del Master: installazione con i due comandi di `docs/INSTALLAZIONE.md` (modo A). Logo nuovo: in attesa del file senza filigrana
    (vedi Problemi aperti). 
-00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1–L5 fatti**; prossimo **L6 – rapporto
-   finale** del modulo. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti campagne analisi_regole"` (la seconda
-   scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`).
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS**: **L1–L6 fatti**, modulo concluso. Rapporto: `docs/RAPPORTO_RULEBOOK_LIBRARY.md`
+   (cosa resta: §5). Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti campagne analisi_regole"` (la seconda
+   scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`). Prossima scelta del Master:
+   fase 3c (moduli di sistema, priorità dei giochi in `docs/PIANO.md` §3.3bis) oppure le parti mancanti del rapporto §5.
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
    edizione come primo «modulo di sistema», scheda libera per gli altri giochi; poi **3d**: le 19 prove rosse e nuove
@@ -67,6 +71,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **L6 fatto**: rapporto finale del modulo in `docs/RAPPORTO_RULEBOOK_LIBRARY.md` (funzioni, file creati e modificati, prove e risultati, cosa resta, limiti tecnici e legali); `docs/RULEBOOK_LIBRARY.md` §7 aggiornato. |
 | 2026-11-13 | Claude Code (cloud) | **L5 fatto**: analisi dei regolamenti (migrazione 040, 13 categorie, analizzatore per parole chiave, IA predisposta non attiva, proposte da approvare, regole approvate per campagna), pagina «Regole da approvare», pulsante «Analizza»; prove Go e nel browser 13/13; tutte le prove verdi. |
 | 2026-11-13 | Claude Code (cloud) | Richiesta del Master: Farsight nel catalogo (Lightfish Games): 21 giochi; schede e Quickstarter segnati «da verificare» (pagine non apribili da qui). Ambiente cloud: aggiunti lightfishgames.altervista.org e i domini di DriveThruRPG. Prove aggiornate (21 giochi). |
 | 2026-11-13 | Claude Code (cloud) | **L4 fatto**: campagne (migrazione 039 con Campagna principale e trigger per i gruppi nuovi, API, pagina Campagne, collegamento da My Rulebooks); prove Go e nel browser 11/11; tutte le prove verdi. |
@@ -84,5 +89,4 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 | 2026-11-13 | Claude Code (cloud) | Fase 3a: repository collegato alla sessione; creati `CLAUDE.md`, `README.md`, `.gitignore`, `STATO_LAVORO.md`, `docs/PIANO.md` (dall'inventario di Barovia, con il nome GM Manager e le fasi 3a-3d), `docs/LICENZE_E_CONTENUTI.md` (regole, attribuzione SRD 5.1, componenti di terzi). |
 
 ## File creati o modificati nell'ultima sessione
-`app/` (nuovo: tutto il programma), `docs/parole_vietate.txt` (nuovo), `docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md`,
-`branding/MARCHIO.md`, `branding/intestazione.html`, `branding/logo.svg`, `.gitignore`, `STATO_LAVORO.md`.
+`docs/RAPPORTO_RULEBOOK_LIBRARY.md` (nuovo), `docs/RULEBOOK_LIBRARY.md`, `STATO_LAVORO.md`.

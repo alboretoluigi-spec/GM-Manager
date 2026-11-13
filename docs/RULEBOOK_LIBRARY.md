@@ -192,3 +192,8 @@ aperta trovata. Sito indicato: la pagina Kickstarter di Lightfish Games (da veri
   pulsante «🔎 Analizza» in My Rulebooks.
 - Prove: `TestAnalisiRegolamenti` (Go) verde; nel browser `analisi_regole` **13/13**. Tutte le altre prove verdi
   (`go test ./...`; nel browser 13, 12, 24, 11).
+
+### L6 – Prove e rapporto: fatto (13/11/2026)
+- Rapporto finale: `docs/RAPPORTO_RULEBOOK_LIBRARY.md` (funzioni realizzate, file creati e modificati, prove e risultati,
+  cosa resta da completare, limiti tecnici e legali).
+- Prove: `go vet` e `go test ./...` verdi; nel browser 13 + 12 (download veri) + 24 + 11 + 13, tutte riuscite.
