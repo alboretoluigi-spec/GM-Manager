@@ -1,0 +1,29 @@
+/* GASTER BLESS – MASTER SUITE: marchio (colori, carattere, intestazione). Riferimento: branding/MARCHIO.md */
+@font-face { font-family: "Source Sans 3"; src: url("font/source-sans-3.woff2") format("woff2"); font-weight: 200 900; font-display: swap; }
+
+:root {
+  --gb-fondo: #191923;        /* fondo dell'intestazione */
+  --gb-fondo-esterno: #000000;
+  --gb-oro: #d8b978;          /* oro antico: nome e slogan */
+  --gb-bianco: #ffffff;       /* MASTER SUITE */
+  --gb-filetto: #65543d;      /* linea sottile fra nome e slogan */
+  --gb-grigio: #bababb;       /* sottotitolo */
+  --gb-raggio: 16px;
+  --gb-carattere: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* Intestazione completa (schermata d'accesso, pagina iniziale, copertine delle guide) */
+.gb-intestazione {
+  background: var(--gb-fondo); border-radius: var(--gb-raggio); padding: 22px 20px 18px; text-align: center;
+  font-family: var(--gb-carattere); text-transform: uppercase;
+}
+.gb-nome { margin: 0; color: var(--gb-oro); font-weight: 700; font-size: clamp(1.6rem, 4vw, 2rem); letter-spacing: .02em; line-height: 1.2; }
+.gb-suite { margin: 12px 0 0; color: var(--gb-bianco); font-weight: 700; font-size: clamp(1rem, 2.4vw, 1.2rem); letter-spacing: .02em; }
+.gb-filetto { border: 0; border-top: 1px solid var(--gb-filetto); margin: 22px 0 20px; }
+.gb-slogan { margin: 0; color: var(--gb-oro); font-weight: 600; font-size: clamp(1.05rem, 2.6vw, 1.3rem); letter-spacing: .02em; }
+.gb-sottotitolo { margin: 12px 0 0; color: var(--gb-grigio); font-weight: 400; font-size: clamp(.75rem, 1.7vw, .85rem); letter-spacing: .03em; }
+
+/* Logo breve (barra in alto delle schermate interne): nome su una riga, MASTER SUITE sotto in piccolo */
+.gb-logo { text-decoration: none; white-space: nowrap; flex-shrink: 0; display: inline-flex; flex-direction: column; align-items: flex-start; font-family: var(--gb-carattere); text-transform: uppercase; line-height: 1.1; }
+.gb-logo .gb-nome { font-size: 1.15rem; }
+.gb-logo .gb-suite { margin: 2px 0 0; font-size: .62rem; letter-spacing: .12em; }

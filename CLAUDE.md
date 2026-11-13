@@ -1,14 +1,15 @@
-# Istruzioni permanenti per Claude: GM Manager
+# Istruzioni permanenti per Claude: GASTER BLESS – MASTER SUITE
 
 Leggi questo file all'inizio di ogni sessione. Vale per qualsiasi account usato su questo repository.
 
 ## Il progetto
-**GM Manager** è un'app per il Master di giochi di ruolo (quinta edizione, regole 2014), da vendere con licenza e da
-installare sul PC del Master. I giocatori si collegano dal browser (telefono, tablet, PC). Nasce dal codice di
+**GASTER BLESS – MASTER SUITE** (nome breve «Gaster Bless»; nome di lavoro precedente «GM Manager», repository
+`GM-Manager`) è un'app per il Master di giochi di ruolo **generica, per diversi
+sistemi di gioco**, da vendere con licenza e da installare sul PC del Master (Windows e macOS). I giocatori si collegano dal browser (telefono, tablet, PC). Nasce dal codice di
 **Barovia**, l'app personale del Master per la sua campagna, ma è un prodotto **separato e generico**: nessuna campagna,
-nessun contenuto di terzi.
+nessun contenuto di terzi, **nessun contenuto di gioco incluso**.
 
-Piano, decisioni e inventario: `docs/PIANO.md`. Regole sui contenuti e le licenze: `docs/LICENZE_E_CONTENUTI.md`.
+Piano, decisioni e inventario: `docs/PIANO.md`. Marchio (nome, slogan, colori, logo): `branding/MARCHIO.md`. Regole sui contenuti e le licenze: `docs/LICENZE_E_CONTENUTI.md`.
 
 ## Prima di tutto, a ogni sessione
 1. Leggi `STATO_LAVORO.md`: è la memoria condivisa tra gli account. Riparti da «Prossimo passo».
@@ -16,15 +17,18 @@ Piano, decisioni e inventario: `docs/PIANO.md`. Regole sui contenuti e le licenz
 
 ## Barovia è solo un riferimento
 Il codice di partenza viene dal repository `alboretoluigi-spec/Progetto_Barovia` (cartella `04_nuova_app`). Da lì si
-**copia**, mai il contrario: in Barovia non si scrive nulla per conto di GM Manager. Si copia solo ciò che le regole di
+**copia**, mai il contrario: in Barovia non si scrive nulla per conto di questo progetto. Si copia solo ciò che le regole di
 `docs/LICENZE_E_CONTENUTI.md` permettono, e la storia Git di Barovia non entra mai qui.
 
 ## Regole sui contenuti (vincolanti)
 - Mai nel prodotto (codice, pagine, dati, immagini, guide): nomi, testi, mappe, immagini o personaggi di prodotti di
   Wizards of the Coast o di altri editori (per esempio Curse of Strahd, Barovia, Strahd, Ravenloft, Tarokka); i marchi
   «Dungeons & Dragons» e «D&D». I documenti interni in `docs/` possono nominarli solo per spiegare cosa escludere.
-- Regole e dati di gioco: solo quelli del **System Reference Document 5.1** (licenza CC-BY-4.0), con l'attribuzione.
-  Il resto lo carica il Master con le sue copie, e l'app non lo distribuisce.
+- **Nessun contenuto di gioco nell'app** (decisione del Master, 13/11/2026): niente mostri, incantesimi, classi, oggetti,
+  manuali, ambientazioni o avventure inclusi o scaricati automaticamente dall'app, nemmeno dall'SRD. L'app offre gli
+  strumenti perché l'utente li **importi da file che si procura lui** o li **inserisca a mano**.
+- Le meccaniche (calcoli, tiri, iniziativa, condizioni) sono codice nostro e si organizzano per **sistema di gioco**,
+  senza testi dei manuali.
 - Immagini, suoni, font e librerie: solo con una licenza che permetta la vendita, annotata in `docs/LICENZE_E_CONTENUTI.md`.
 - Niente dati personali del Master o dei suoi giocatori nel repository.
 - In caso di dubbio su un contenuto: non copiarlo, segnalalo e chiedi.

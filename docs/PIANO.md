@@ -1,4 +1,4 @@
-# GM Manager: piano, decisioni e inventario
+# GASTER BLESS – MASTER SUITE: piano, decisioni e inventario
 
 Prima stesura il 13/11/2026 (nel repository di Barovia, `docs/gm_desktop/01_DECISIONI_E_INVENTARIO.md`, con il nome di
 lavoro «GM Desktop»); da qui in avanti il documento di riferimento è questo.
@@ -17,17 +17,19 @@ un avvocato esperto di proprietà intellettuale.
 | 13/11/2026 | Sistemi: **Windows e macOS** |
 | 13/11/2026 | Licenza: **1 PC per licenza, a vita** |
 | 13/11/2026 | **Niente gioco da remoto** nella prima versione (MQTT, Cloudflare, VPN restano fuori) |
+| 13/11/2026 | **App generica per diversi giochi di ruolo. Nessun contenuto di gioco incluso né scaricato dall'app** (mostri, manuali, ambientazioni, incantesimi, classi, oggetti, nemmeno dall'SRD): l'utente li **importa da file che si procura** o li **inserisce a mano** |
+| 13/11/2026 | **Nome ufficiale: GASTER BLESS – MASTER SUITE**, slogan **MASTER YOUR WORLD**, sottotitolo **THE UNIVERSAL TABLETOP RPG PLATFORM**; stile dell'immagine di riferimento (oro antico su fondo scuro). Cambiano solo nome, logo testuale e intestazione; funzioni, struttura e contenuti restano. Dettagli: `branding/MARCHIO.md` |
 
 ### Nota sul nome
-Una ricerca sul web (13/11/2026) non ha trovato un'app chiamata esattamente «GM Manager», ma il settore ha nomi vicini:
-«Game Master» su Steam, «Game Master 5th Edition» per iPad, «RPG Manager» (estensione di Obsidian). Il nome è
-**descrittivo**: facile da capire, difficile da proteggere come marchio. Prima di registrare dominio e marchio serve una
-ricerca nelle banche dati EUIPO e UIBM (e USPTO per gli Stati Uniti), con l'avvocato.
+Il 13/11/2026 il nome ufficiale è diventato **GASTER BLESS – MASTER SUITE** (prima «GM Manager», nome di lavoro, e prima
+ancora «GM Desktop»). Va verificato con l'avvocato nelle banche dati dei marchi (EUIPO, UIBM, USPTO): «Gaster» è anche il
+nome di un personaggio noto di un videogioco (W. D. Gaster di *Undertale*). Per «GM Manager» una ricerca sul web aveva
+trovato solo nomi vicini (Game Master, RPG Manager).
 
 ## 2. Come nasce il codice
 1. Il repository è nato **vuoto** e privato.
 2. Il codice si copia da Barovia (`04_nuova_app`) **senza la sua storia Git**.
-3. Ogni parte entra in GM Manager **solo dopo** la pulizia dell'inventario qui sotto: nessun commit deve mai contenere
+3. Ogni parte entra in Gaster Bless **solo dopo** la pulizia dell'inventario qui sotto: nessun commit deve mai contenere
    materiale da togliere (la storia Git lo conserverebbe).
 4. Barovia continua nel suo repository; una correzione utile a entrambe si riporta a mano.
 
@@ -46,21 +48,23 @@ licenza da accertare).
 | Font Cinzel, Pirata One, Source Sans 3 | RESTA | Licenza OFL, file di licenza presenti |
 | ffmpeg | RESTA (esterno) | Non è incluso: l'app lo cerca sul PC. Se un giorno si includesse, va rivista la licenza (LGPL/GPL) |
 
-### 3.2 Regole di quinta edizione
+### 3.2 Regole e dati di gioco (rivisto il 13/11: app generica, nessun contenuto incluso)
 | Elemento | Esito | Note |
 |---|---|---|
-| Motore delle regole (`web/regole/motore.js`: livelli, multiclasse, slot, CD) | RESTA | Le meccaniche si possono usare; il codice è nostro |
-| Dati di classi, sottoclassi, razze, talenti (`web/regole/dati.js`) | GENERICO | Oggi includono contenuti di PHB fuori dall'SRD, Xanathar (circa 120 voci), Tasha (circa 50), Volo, Mordenkainen, Van Richten. Nella versione in vendita: **solo l'SRD 5.1** (CC-BY-4.0, regole 2014) con l'attribuzione |
-| Circa 470 incantesimi | GENERICO | Restano quelli dell'SRD 5.1; gli altri si tolgono |
-| Contenuti oltre l'SRD | SOSTITUIRE | Funzione «importa contenuti» per il Master (file suoi, non distribuiti da noi) |
-| Effetti automatici degli incantesimi, oggetti magici, attacchi | RESTA | È codice nostro; i dati seguono la regola dell'SRD |
+| Motore delle regole di quinta edizione (`web/regole/motore.js`: livelli, multiclasse, slot, CD) | GENERICO | Resta come **primo modulo di sistema**; i calcoli sono codice nostro. Lo stesso schema servirà per altri sistemi |
+| Dati di classi, sottoclassi, razze, talenti, incantesimi (`web/regole/dati.js`) | TOGLIERE | Nessun dato incluso, **nemmeno dell'SRD** |
+| Mostri (`web/carta/mostri.json`, 892 voci, anche le 245 dell'SRD) e bestiario della mappa | TOGLIERE | Il bestiario parte vuoto |
+| Manuali, testi OCR, ambientazioni, avventure | TOGLIERE | Nessuno incluso |
+| Importazione (file JSON, CSV, Markdown, PDF del Master) e inserimento a mano | GENERICO | Diventano il modo **unico** per avere contenuti: formati documentati e aperti, così l'utente può prepararli o scaricarli da fonti che sceglie lui |
+| Script di conversione e traduzione (`strumenti/*.py`, `strumenti/dati/`) | TOGLIERE | Strumenti di lavoro di Barovia |
+| Effetti automatici di incantesimi, oggetti magici, attacchi | GENERICO | Restano come meccaniche; funzionano sui dati importati dall'utente |
 
-### 3.3 Mostri
+### 3.3 Più sistemi di gioco
 | Elemento | Esito | Note |
 |---|---|---|
-| `web/carta/mostri.json`: 892 creature | GENERICO | **245 dall'SRD restano**; le **647 non SRD** (anche solo valori e nomi dei tratti, con il riferimento al manuale) si tolgono |
-| `web/carta/bestiario.json` (bestiario della mappa) | VERIFICARE | Dichiara materiale SRD adattato; vanno controllate le voci di Curse of Strahd |
-| Script di conversione e traduzione (`strumenti/*.py`, `strumenti/dati/`) | TOGLIERE | Strumenti di lavoro, non vanno nel prodotto |
+| Scheda del personaggio | GENERICO | Scheda per sistema di gioco; oltre alla quinta edizione, una scheda libera (campi definiti dall'utente) per gli altri giochi |
+| Tracker dell'iniziativa, dadi, condizioni | GENERICO | Regole di iniziativa e dadi scelte dal sistema (es. d20, pool di d6, d100) |
+| Sanità mentale, terrore, indebolimento | GENERICO | Moduli facoltativi, attivabili per campagna |
 
 ### 3.4 Mappa
 | Elemento | Esito | Note |
@@ -77,7 +81,7 @@ licenza da accertare).
 | `benvenuto.mp4` («Bentornato in BAROVIA»), `saluto.webp`, `povero.webp`, immagini del Ghakis | VERIFICARE | Materiale del Master: va accertato chi li ha creati e con quali diritti |
 | Suoni `corvo.mp3`, `attesa.mp3` | SOSTITUIRE | Estratti dal vecchio tracker, origine sconosciuta; sostituirli con suoni CC0 o comprati |
 | `internal/server/dati/barovia.jpg` | TOGLIERE | Immagine di Barovia |
-| Icone dell'app (`icona-*.png`) | SOSTITUIRE | Nuovo logo di GM Manager |
+| Icone dell'app (`icona-*.png`) | SOSTITUIRE | Icone nuove con il marchio Gaster Bless (`branding/MARCHIO.md`) |
 
 ### 3.6 Contenuti della campagna e funzioni legate a Curse of Strahd
 | Elemento | Esito | Note |
@@ -102,7 +106,7 @@ licenza da accertare).
 | Certificato HTTPS da accettare su ogni dispositivo | SOSTITUIRE | Ostacolo principale per un cliente; soluzione da scegliere nella fase 4 |
 | Installazione e aggiornamenti con PowerShell (`strumenti/*.ps1`, `portatile/`) | SOSTITUIRE | Installatore firmato e aggiornamento automatico verificato |
 | Criteri del browser per il tutto schermo (comandi PowerShell) | GENERICO | Da semplificare o spiegare nell'installatore |
-| Guide (`guide/`, PDF di Barovia) | SOSTITUIRE | Da riscrivere per GM Manager, in italiano e inglese |
+| Guide (`guide/`, PDF di Barovia) | SOSTITUIRE | Da riscrivere per Gaster Bless, in italiano e inglese |
 
 ### 3.8 Da aggiungere (non esiste in Barovia)
 - Attivazione della licenza (chiave, verifica offline, più PC per licenza da decidere).
@@ -134,8 +138,8 @@ licenza da accertare).
 | 1 | Decisioni (nome, modello di vendita, Barovia separata) | **fatta** (13/11) |
 | 2 | Inventario dei contenuti e delle licenze (§3) | **fatta** (13/11) |
 | 3a | Repository e struttura di base: istruzioni, stato del lavoro, piano, regole sui contenuti | **fatta** (13/11) |
-| 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gmmanager`); nessun contenuto di Barovia | da fare |
-| 3c | Dati di gioco solo SRD 5.1 (classi, sottoclassi, razze, incantesimi, mostri) con l'attribuzione | da fare |
+| 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | da fare |
+| 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | da fare |
 | 3d | Compilazione e prove automatiche verdi; elenco delle licenze nell'app | da fare |
 | 4 | Funzioni generiche (mappa, compendio, «Parla con un PNG», mazzo di carte, regole di zona, modelli di scenario) e rete per un cliente qualsiasi | — |
 | 5 | Installatore firmato, licenza, aggiornamenti, lingue (italiano e inglese) | — |
@@ -149,6 +153,8 @@ le prove se ne trova.
 
 ## 6. Domande aperte
 Le quattro domande del 13/11 hanno avuto risposta (vedi §1). Restano:
-1. Accesso dei giocatori da fuori casa (Internet) nella prima versione: solo rete di casa, oppure anche da Internet?
-2. Prezzo e piattaforma di vendita (dopo il parere del commercialista).
-3. Lingua di partenza: italiano e inglese insieme, oppure prima l'italiano.
+1. **Sistemi di gioco nella prima versione**: quinta edizione completa più una scheda libera per gli altri giochi,
+   oppure altri sistemi completi fin da subito (quali)?
+2. Accesso dei giocatori da Internet (fuori casa) nella prima versione, oppure solo dalla rete di casa?
+3. Lingua di partenza: italiano e inglese insieme, oppure prima l'italiano?
+4. Prezzo e piattaforma di vendita (dopo il parere del commercialista).
