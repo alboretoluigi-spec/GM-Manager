@@ -4,7 +4,7 @@
 import { el, svuota, api, avviso, dialogo, conferma, tempoReale } from "../ui/ui.js";
 
 export async function mostra(corpo) {
-  const stato = { campagne: [], senza: [], docs: [], giochi: [] };
+  const stato = { campagne: [], senza: [], docs: [], giochi: [], moduli: [] };
   const elenco = el("div", { class: "cp-elenco", "aria-live": "polite" });
   const datalist = el("datalist", { id: "cp-sistemi" });
   svuota(corpo, el("div", { class: "largo rl" },
@@ -20,6 +20,7 @@ export async function mostra(corpo) {
     try {
       const [c, d] = await Promise.all([api("/campagne"), api("/regolamenti/miei")]);
       stato.campagne = c.campagne; stato.senza = c.gruppiSenzaCampagna; stato.docs = d.documenti;
+      if (!stato.moduli.length) stato.moduli = (await api("/gioco")).moduli || [];
     } catch (e) { avviso(e.message, "errore"); return; }
     if (!stato.giochi.length) {
       try { stato.giochi = (await api("/regolamenti/catalogo")).giochi.map((g) => g.nome); } catch { /* facoltativo */ }
@@ -87,6 +88,7 @@ export async function mostra(corpo) {
     const regole = el("textarea", { rows: "4", "aria-label": "Regole aggiuntive di " + c.nome, maxlength: "50000", placeholder: "Regole della casa, varianti, chiarimenti…" }, c.regoleMaster || "");
     return el("article", { class: "scheda-ui cp-campagna", "data-campagna": c.id },
       el("div", { class: "rl-doc-testa" }, el("h3", { testo: c.nome }),
+        el("span", { class: "etichetta mr-cat cp-modulo", title: "Gioco della campagna: decide sezioni e pulsanti dell'app", testo: "🎮 " + nomeModulo(c.modulo) }),
         c.sistema ? el("span", { class: "etichetta mr-cat", testo: "🎲 " + c.sistema + (c.edizione ? " · " + c.edizione : "") }) : el("span", { class: "etichetta", testo: "sistema non indicato" })),
       c.descrizione ? el("p", { class: "tenue piccolo", testo: c.descrizione }) : null,
       el("div", { class: "cp-griglia" },
@@ -107,10 +109,15 @@ export async function mostra(corpo) {
         } } })));
   }
 
+  function nomeModulo(id) { return (stato.moduli.find((m) => m.id === id) || {}).nome || id || "—"; }
+
   function finestraCampagna(c) {
     const campo = (k, etichetta, attr = {}) => el("label", { class: "riga-campo" }, el("span", { testo: etichetta }), el("input", { name: k, value: (c && c[k]) || "", ...attr }));
     const campi = el("div", { class: "mr-campi" },
       campo("nome", "Nome della campagna", { maxlength: "80" }),
+      el("label", { class: "riga-campo" }, el("span", { testo: "Gioco (decide sezioni e pulsanti dell'app)" }),
+        (() => { const s = el("select", { name: "modulo" }, stato.moduli.map((m) => el("option", { value: m.id,
+          testo: m.nome + (m.pronto ? "" : " — per ora con la scheda libera") }))); s.value = (c && c.modulo) || "d20-5e"; return s; })()),
       campo("sistema", "Sistema di gioco", { maxlength: "100", list: "cp-sistemi", placeholder: "dal catalogo o scritto da te" }),
       campo("edizione", "Edizione", { maxlength: "60" }),
       el("label", { class: "riga-campo" }, el("span", { testo: "Descrizione" }), el("textarea", { name: "descrizione", rows: "2", maxlength: "2000" }, (c && c.descrizione) || "")));

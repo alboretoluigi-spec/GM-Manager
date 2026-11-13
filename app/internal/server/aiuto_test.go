@@ -41,8 +41,13 @@ func nuovoAmbiente(t *testing.T) *ambiente {
 	if err != nil {
 		t.Fatal(err)
 	}
+	moduli, err := os.ReadFile("../../web/sistemi/moduli.json") // registro dei giochi (interfaccia adattiva, C4a)
+	if err != nil {
+		t.Fatal(err)
+	}
 	web := fstest.MapFS{"index.html": {Data: []byte("<!doctype html><title>Gaster Bless</title>")}, "carta/locs.json": {Data: locs}, "carta/bestiario.json": {Data: best},
 		"regole/professioni.json":      {Data: prof},
+		"sistemi/moduli.json":          {Data: moduli},
 		"carta/img/lm/borgofosco.webp": {Data: []byte("RIFF....WEBPVP8 ")}}
 	s, err := Nuovo(cfg, web)
 	if err != nil {

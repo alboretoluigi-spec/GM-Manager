@@ -161,6 +161,17 @@ async function mostra() {
   if (!dispositivoSalvato()) setTimeout(() => aspetto(true, () => setTimeout(() => invitoInstallazione(stato.io, true), 300)), 0);
   else setTimeout(() => { if (!document.querySelector(".velo")) invitoInstallazione(stato.io, true); }, 1200);
   if (io.offline && !p.startsWith("/schede")) return vai("/schede", true); // senza rete: solo le schede
+  // Master appena entrato (o che non ha mai scelto): «Che cosa giochiamo oggi?» (interfaccia adattiva, C4a)
+  // (una volta dopo l'accesso; senza una scelta salvata, una volta per sessione del browser)
+  let appena = false, chiesta = false;
+  try {
+    appena = sessionStorage.getItem("gasterbless.sceltaCampagna") === "1"; sessionStorage.removeItem("gasterbless.sceltaCampagna");
+    chiesta = sessionStorage.getItem("gasterbless.sceltaChiesta") === "1";
+  } catch { /* ignora */ }
+  if (u.ruolo === "master" && io.gioco && !finestra && (appena || !io.gioco.scelta && !chiesta)) {
+    try { sessionStorage.setItem("gasterbless.sceltaChiesta", "1"); } catch { /* ignora */ }
+    setTimeout(() => sceltaCampagna(), 0);
+  }
   if (p === "/" || p === "/altro" && layoutAttuale() !== "cellulare") return vai("/sessioni", true);
   if (p === "/altro") return altro();
   const s = SEZIONI.find((x) => p === x.p || p.startsWith(x.p + "/"));
@@ -186,7 +197,7 @@ async function sezione(modulo, conGuscio) {
   if (conGuscio) {
     svuota(radice, el("div", { class: "guscio" }, menu(), el("div", { class: "contenuto" },
       el("header", { class: "intestazione non-stampare" }, tastoMenu(), titolo, el("span", { class: "spazio" }), azioni,
-        !(stato.io && stato.io.offline) ? tastiRiposo() : null, // riposo lungo e breve (2026-11-11)
+        !(stato.io && stato.io.offline) && conPulsante("riposi") ? tastiRiposo() : null, // riposo lungo e breve (2026-11-11), solo nei giochi che li prevedono
         modulo !== "documenti" && !(stato.io && stato.io.offline) ? el("a", { href: "/documenti", "data-interno": true, class: "pulsante piccolo tasto-documenti con-icona", "data-ico": "📁", testo: "📁 Documenti", title: "I tuoi documenti (PDF, Word, immagini)" }) : null,
         // «🎭 PNG in scena» (2026-11-12, solo Master): un clic su un PNG e la sua immagine va sugli schermi dei giocatori
         stato.io && stato.io.utente && stato.io.utente.ruolo === "master" ? el("button", { class: "piccolo tasto-scena con-icona", "data-ico": "🎭", testo: "🎭 PNG in scena",
@@ -217,6 +228,7 @@ function menu() {
   const voci = SEZIONI.filter((s) => !s.nascosta && (s.chi === "pubblica" || visibile(s, u)));
   return el("nav", { class: "menu non-stampare", "aria-label": "Menu principale" },
     logoBreve(),
+    giocoAttivo(),
     tastoFissa(),
     GRUPPI_MENU.map((g) => gruppoMenu(g, voci.filter((s) => s.g === g.id))),
     el("div", { class: "piede" },
@@ -262,8 +274,47 @@ function barraBasso() {
     }));
 }
 
+/** Interfaccia adattiva (fase 3c, C4a): una sezione esiste solo se il gioco della campagna attiva la prevede. Senza
+ *  informazioni sul gioco (senza connessione) valgono tutte. */
+function accesa(s) {
+  const g = stato.io && stato.io.gioco;
+  return !g || s.chi === "pubblica" || g.sezioni.includes(s.m);
+}
+const conPulsante = (id) => { const g = stato.io && stato.io.gioco; return !g || (g.barra || []).includes(id); };
+
+/** Campagna e gioco attivi sotto il logo; il Master li cambia con un clic. */
+function giocoAttivo() {
+  const g = stato.io && stato.io.gioco;
+  if (!g || !g.campagna || !g.campagna.id) return null;
+  const master = stato.io.utente && stato.io.utente.ruolo === "master";
+  return el("div", { class: "gioco-attivo", title: g.modulo.meccanica || "" },
+    el("div", { class: "gioco-campagna", testo: "🏰 " + g.campagna.nome }),
+    el("div", { class: "gioco-modulo", testo: "🎲 " + g.modulo.nome }),
+    master ? el("button", { type: "button", class: "piccolo", testo: "Cambia campagna", on: { click: () => sceltaCampagna() } }) : null);
+}
+
+/** «Che cosa giochiamo oggi?»: il Master sceglie la campagna (e con lei il gioco); la scelta vale per tutti. */
+async function sceltaCampagna() {
+  let c;
+  try { c = (await api("/campagne")).campagne; } catch (e) { avviso(e.message, "errore"); return; }
+  const g = stato.io.gioco || {};
+  let moduli = [];
+  try { moduli = (await api("/gioco")).moduli || []; } catch { /* nomi dei giochi non disponibili */ }
+  const nomeGioco = (id) => (moduli.find((m) => m.id === id) || {}).nome || id;
+  dialogo("Che cosa giochiamo oggi?", (chiudi) => el("div", { class: "scelta-campagna" },
+    el("p", { class: "tenue", testo: "Scegli la campagna: l'app mostra solo ciò che serve al suo gioco, anche ai giocatori collegati." }),
+    el("div", { class: "scelta-elenco" }, c.map((x) => el("button", { type: "button", class: "scelta-voce" + (x.id === (g.campagna || {}).id ? " scelta-attuale" : ""),
+      "data-campagna": x.id, on: { click: async () => {
+        try { stato.io.gioco = await api("/gioco", { metodo: "PUT", dati: { campagna: x.id } }); chiudi(); mostra(); }
+        catch (e) { avviso(e.message, "errore"); }
+      } } },
+      el("strong", { testo: x.nome }), el("span", { class: "tenue", testo: "🎲 " + nomeGioco(x.modulo) + (x.gruppi.length ? " · 👥 " + x.gruppi.map((y) => y.nome).join(", ") : "") })))),
+    el("p", { class: "piccolo" }, el("a", { href: "/campagne", "data-interno": true, testo: "＋ Nuova campagna o cambia il gioco di una campagna" }))));
+}
+
 /** Chi vede una sezione: «professioni» il Master sempre, il giocatore solo se un suo personaggio ne ha una. */
 function visibile(s, u) {
+  if (!accesa(s)) return false;
   if (s.chi === "tutti" || s.chi === "pubblica") return true;
   if (u.ruolo === "master") return true;
   return s.chi === "professioni" && (stato.io.professioni || 0) > 0;
@@ -353,6 +404,14 @@ function chiamata(pagina, testo) {
 }
 tempoReale.su("iniz.chiamata", chiamata("/iniziativa", (d) => d.fase === "inizio" ? "⚔ Il combattimento è iniziato!" : "⚔ Si combatte! Tira l'iniziativa."));
 tempoReale.su("mappa.chiamata", chiamata("/mappa", "📺 Il Master sta proiettando sulla mappa."));
+// Il Master ha scelto un'altra campagna (o ne ha cambiato il gioco): l'interfaccia di tutti si ridisegna (C4a).
+tempoReale.su("gioco", (d) => {
+  if (!stato.io || !stato.io.collegato || !d || !d.modulo) return;
+  const prima = stato.io.gioco && stato.io.gioco.modulo && stato.io.gioco.modulo.id;
+  stato.io.gioco = d;
+  if (prima !== d.modulo.id) avviso("🎲 Si gioca a «" + d.campagna.nome + "» · " + d.modulo.nome, "", 6000);
+  if (!document.querySelector(".velo")) mostra(); else { const m = document.querySelector("nav.menu"); if (m) m.replaceWith(menu()); }
+});
 tempoReale.su("riassunto.ottimo", (d) => avviso(d.testo, "", 8000)); // «Ottimo lavoro» del Master sul tuo riassunto
 tempoReale.su("assistente.nuova", (d) => { if (location.pathname !== "/assistente") avviso("🧛 L'assistente ha nuove idee per l'antagonista (" + d.gruppo + "): apri «Assistente IA».", "", 9000); }); // dopo un riassunto nuovo (agganci_ia.go)
 // Il Master sul PC di Gaster Bless: prepara le pagine dei manuali per i telefoni (pagine_manuali.js, 2026-11-11).

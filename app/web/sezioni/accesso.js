@@ -3,6 +3,9 @@ import { el, svuota, api, avviso } from "../ui/ui.js";
 import { intestazione } from "../ui/marchio.js";
 import { avvio } from "../ui/app.js";
 
+// Interfaccia adattiva (fase 3c, C4a): dopo ogni accesso il Master sceglie la campagna da giocare (web/ui/app.js).
+function appenaEntrato() { try { sessionStorage.setItem("gasterbless.sceltaCampagna", "1"); } catch { /* ignora */ } }
+
 const PREFISSI = [["+39", "🇮🇹 +39"], ["+41", "🇨🇭 +41"], ["+33", "🇫🇷 +33"], ["+49", "🇩🇪 +49"], ["+34", "🇪🇸 +34"],
   ["+43", "🇦🇹 +43"], ["+44", "🇬🇧 +44"], ["+378", "🇸🇲 +378"], ["+356", "🇲🇹 +356"], ["", "Altro"]];
 
@@ -65,6 +68,7 @@ function primoAvvio(radice) {
   inviaModulo(f, b, err, async () => {
     if (pw.pw.value !== pw.conf.value) throw new Error("Le due password non coincidono.");
     await api("/primo-avvio", { dati: { nome: nome.value, password: pw.pw.value } });
+    appenaEntrato();
     avvio();
   });
   svuota(radice, pagina(f));
@@ -93,6 +97,7 @@ function accesso(radice) {
     const r = await api("/accesso", { dati: master ? { nome: nome.value, password: pw.value } : { telefono: tel.valore(), password: pw.value } });
     if (r.serveTOTP) return secondoFattore(radice);
     history.replaceState(null, "", "/");
+    appenaEntrato();
     avvio();
   });
   svuota(radice, pagina(f));
@@ -105,7 +110,7 @@ function secondoFattore(radice) {
   const f = el("form", { class: "scheda-ui" }, el("h2", { testo: "Secondo fattore" }),
     el("p", { class: "tenue", testo: "Apri l'app di autenticazione sul telefono e scrivi il codice di 6 cifre di Gaster Bless." }),
     el("label", {}, "Codice", c), err, b);
-  inviaModulo(f, b, err, async () => { await api("/accesso/totp", { dati: { codice: c.value } }); history.replaceState(null, "", "/"); avvio(); });
+  inviaModulo(f, b, err, async () => { await api("/accesso/totp", { dati: { codice: c.value } }); history.replaceState(null, "", "/"); appenaEntrato(); avvio(); });
   svuota(radice, pagina(f));
 }
 

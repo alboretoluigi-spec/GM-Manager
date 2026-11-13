@@ -22,6 +22,7 @@ type vistaCampagna struct {
 	Descrizione   string              `json:"descrizione"`
 	Sistema       string              `json:"sistema"`
 	Edizione      string              `json:"edizione"`
+	Modulo        string              `json:"modulo"` // modulo di gioco (web/sistemi/moduli.json, passo C4a)
 	Regolamento   string              `json:"regolamento,omitempty"`
 	RegoleMaster  string              `json:"regoleMaster"`
 	Impostazioni  json.RawMessage     `json:"impostazioni"`
@@ -41,7 +42,7 @@ func (s *Server) rotteCampagne(mux *http.ServeMux) {
 }
 
 func (s *Server) campagne() ([]vistaCampagna, error) {
-	rows, err := s.DB.Query(`SELECT id, nome, descrizione, sistema, edizione, COALESCE(regolamento_id, ''), regole_master, impostazioni, creato_il
+	rows, err := s.DB.Query(`SELECT id, nome, descrizione, sistema, edizione, modulo, COALESCE(regolamento_id, ''), regole_master, impostazioni, creato_il
 		FROM campagne ORDER BY creato_il, nome COLLATE NOCASE`)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func (s *Server) campagne() ([]vistaCampagna, error) {
 	for rows.Next() {
 		var c vistaCampagna
 		var imp string
-		if err := rows.Scan(&c.ID, &c.Nome, &c.Descrizione, &c.Sistema, &c.Edizione, &c.Regolamento, &c.RegoleMaster, &imp, &c.CreatoIl); err != nil {
+		if err := rows.Scan(&c.ID, &c.Nome, &c.Descrizione, &c.Sistema, &c.Edizione, &c.Modulo, &c.Regolamento, &c.RegoleMaster, &imp, &c.CreatoIl); err != nil {
 			rows.Close()
 			return nil, err
 		}
@@ -113,6 +114,7 @@ type datiCampagna struct {
 	Descrizione  *string          `json:"descrizione"`
 	Sistema      *string          `json:"sistema"`
 	Edizione     *string          `json:"edizione"`
+	Modulo       *string          `json:"modulo"`
 	Regolamento  *string          `json:"regolamento"`
 	RegoleMaster *string          `json:"regoleMaster"`
 	Impostazioni *json.RawMessage `json:"impostazioni"`
@@ -142,6 +144,9 @@ func (s *Server) leggiDatiCampagna(r *http.Request) (datiCampagna, error) {
 			return d, errore(http.StatusBadRequest, "Il regolamento scelto non è in My Rulebooks.")
 		}
 	}
+	if d.Modulo != nil && s.moduloGioco(*d.Modulo) == nil {
+		return d, errore(http.StatusBadRequest, "Gioco sconosciuto: scegline uno dall'elenco.")
+	}
 	if d.Impostazioni != nil {
 		var o map[string]any
 		if len(*d.Impostazioni) > 16<<10 || json.Unmarshal(*d.Impostazioni, &o) != nil || o == nil {
@@ -168,9 +173,9 @@ func (s *Server) apiNuovaCampagna(w http.ResponseWriter, r *http.Request) (any, 
 	if d.Impostazioni != nil {
 		imp = string(*d.Impostazioni)
 	}
-	_, err = s.DB.Exec(`INSERT INTO campagne (id, nome, descrizione, sistema, edizione, regolamento_id, regole_master, impostazioni, creato_il, aggiornato_il)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, id, strings.TrimSpace(*d.Nome), valore(d.Descrizione, ""), valore(d.Sistema, ""),
-		valore(d.Edizione, ""), nulla(valore(d.Regolamento, "")), valore(d.RegoleMaster, ""), imp, ora, ora)
+	_, err = s.DB.Exec(`INSERT INTO campagne (id, nome, descrizione, sistema, edizione, modulo, regolamento_id, regole_master, impostazioni, creato_il, aggiornato_il)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, id, strings.TrimSpace(*d.Nome), valore(d.Descrizione, ""), valore(d.Sistema, ""),
+		valore(d.Edizione, ""), valore(d.Modulo, "d20-5e"), nulla(valore(d.Regolamento, "")), valore(d.RegoleMaster, ""), imp, ora, ora)
 	if err != nil {
 		return nil, errore(http.StatusConflict, "Esiste già una campagna con questo nome.")
 	}
@@ -214,6 +219,9 @@ func (s *Server) apiModificaCampagna(w http.ResponseWriter, r *http.Request) (an
 	if d.Edizione != nil {
 		add("edizione", strings.TrimSpace(*d.Edizione))
 	}
+	if d.Modulo != nil {
+		add("modulo", *d.Modulo)
+	}
 	if d.Regolamento != nil {
 		add("regolamento_id", nulla(*d.Regolamento))
 	}
@@ -229,6 +237,9 @@ func (s *Server) apiModificaCampagna(w http.ResponseWriter, r *http.Request) (an
 		return nil, errore(http.StatusConflict, "Esiste già una campagna con questo nome.")
 	}
 	s.Hub.AlMaster(Msg{Tipo: "campagne", Dati: map[string]any{}})
+	if a, _ := s.campagnaAttiva(); a == id {
+		s.avvisaGioco() // nome o gioco della campagna attiva cambiati: l'interfaccia di tutti si adegua
+	}
 	c, _ := s.campagne()
 	for _, x := range c {
 		if x.ID == id {
@@ -263,6 +274,10 @@ func (s *Server) apiEliminaCampagna(w http.ResponseWriter, r *http.Request) (any
 	}
 	s.evento("campagna_elimina", u.ID, id)
 	s.Hub.AlMaster(Msg{Tipo: "campagne", Dati: map[string]any{}})
+	if a, _ := s.impostazione("campagna_attiva"); a == id {
+		s.DB.Exec(`DELETE FROM impostazioni WHERE chiave = 'campagna_attiva'`)
+		s.avvisaGioco()
+	}
 	return map[string]any{"eliminata": id}, nil
 }
 

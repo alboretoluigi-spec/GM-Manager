@@ -59,7 +59,7 @@ Legenda: **Tutti** = serve a qualsiasi gioco; **5e** = esiste solo per le meccan
 ## 6. Sotto-passi
 | Passo | Contenuto | Stato |
 |---|---|---|
-| C4a | Registro dei moduli di gioco (`app/web/sistemi/moduli.json`: tutte le famiglie, sezioni e pulsanti accesi); gioco di ogni campagna (migrazione 043); schermata «Che cosa giochiamo oggi?» all'accesso del Master; campagna attiva sul server; menu, barra e pagine filtrati per tutti; nome del gioco accanto al logo e «Cambia campagna»; giocatori aggiornati in tempo reale | in corso |
+| C4a | Registro dei moduli di gioco (`app/web/sistemi/moduli.json`: tutte le famiglie, sezioni e pulsanti accesi); gioco di ogni campagna (migrazione 043); schermata «Che cosa giochiamo oggi?» all'accesso del Master; campagna attiva sul server; menu, barra e pagine filtrati per tutti; nome del gioco accanto al logo e «Cambia campagna»; giocatori aggiornati in tempo reale | **fatto** (13/11): `internal/server/gioco.go` (`GET`/`PUT /api/v1/gioco`, campo `gioco` in `/io`, messaggio «gioco» a tutti), migrazione 043, `web/ui/app.js` (menu, barra, scelta), `web/sezioni/campagne.js` (gioco della campagna). I moduli non ancora pronti usano per ora la scheda libera |
 | C4b | Scheda libera: campi e tiri definiti dal Master (modelli di scheda), dadi liberi, iniziativa libera, valute del gioco nelle Finanze | da fare |
 | C4c | Motore dei tiri per famiglia (d100 sotto il valore, riserve di d6 e d10 con successi, 2d6 + modificatore a fasce, d10 + caratteristica + abilità, dadi a passi esplosivi, dadi Fate, 3d6 sotto, d20 sotto, dadi narrativi) nella sezione Dadi e nella scheda | da fare |
 | C4d | Modelli di scheda e iniziativa per ogni famiglia, costruiti sulla scheda libera (solo campi e calcoli, nessun testo dei manuali) | da fare |

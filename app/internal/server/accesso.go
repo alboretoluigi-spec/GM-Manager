@@ -187,6 +187,9 @@ func (s *Server) apiIo(w http.ResponseWriter, r *http.Request) (any, error) {
 	} else if u.Approvato() {
 		out["professioni"] = s.contaProfessioni(u) // la voce «Professioni» compare solo se ce n'è almeno una
 	}
+	if u.Approvato() || u.Master() {
+		out["gioco"] = s.infoGioco() // interfaccia adattiva: sezioni e pulsanti del gioco della campagna attiva (gioco.go)
+	}
 	return out, nil
 }
 

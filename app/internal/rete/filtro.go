@@ -80,7 +80,7 @@ func (f *Filtro) PortaPubblica(next http.Handler, nome string) http.Handler {
 				paginaChiusa(w, casa)
 				return
 			}
-			// JSON con un codice, come gli errori dell'API 
+			// JSON con un codice, come gli errori dell'API
 			w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(http.StatusForbidden)
 			w.Write([]byte(`{"errore":"Gaster Bless in questo momento non è raggiungibile da Internet: chiedi al Master di aprire l'accesso.","codice":"accesso_chiuso"}` + "\n"))
