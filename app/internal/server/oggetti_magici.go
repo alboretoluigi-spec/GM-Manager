@@ -85,6 +85,18 @@ func validaOggettoMagico(raw json.RawMessage) (oggettoMagico, []byte, error) {
 	return o, b, err
 }
 
+// datiOggetto: l'oggetto dell'archivio con questo id oppure, se l'archivio non lo ha, quello di un pacchetto di
+// contenuti attivo (fase 3c, C3: l'archivio ha la precedenza, così il Master può modificarne una copia).
+func (s *Server) datiOggetto(id string) (dati, man string, pag int, pacchetto string, ok bool) {
+	if s.DB.QueryRow(`SELECT dati, manuale_nome, pagina FROM oggetti_magici WHERE id = ?`, id).Scan(&dati, &man, &pag) == nil {
+		return dati, man, pag, "", true
+	}
+	if o, c := s.oggettiDaPacchetti()[id]; c {
+		return string(o.Dati), "", 0, o.Pacchetto, true
+	}
+	return "", "", 0, "", false
+}
+
 func (s *Server) rotteOggettiMagici(mux *http.ServeMux) {
 	mux.Handle("GET /api/v1/oggetti-magici", api(s.apiOggettiMagici))
 	mux.Handle("GET /api/v1/oggetti-magici/{id}", api(s.apiOggettoMagico))
@@ -146,6 +158,7 @@ func (s *Server) apiOggettiMagici(w http.ResponseWriter, r *http.Request) (any, 
 	}
 	defer rows.Close()
 	oggetti := []map[string]any{}
+	visti := map[string]bool{}
 	for rows.Next() {
 		var id, dati, man string
 		var pag int
@@ -163,7 +176,25 @@ func (s *Server) apiOggettiMagici(w http.ResponseWriter, r *http.Request) (any, 
 		if p == nil {
 			p = []possessore{}
 		}
+		visti[id] = true
 		oggetti = append(oggetti, map[string]any{"id": id, "oggetto": m, "immagine": img, "manualeNome": man, "pagina": pag, "aggiornato": agg, "possessori": p})
+	}
+	// oggetti dei pacchetti di contenuti attivi che l'archivio non ha (fase 3c, C3)
+	for id, o := range s.oggettiDaPacchetti() {
+		if visti[id] {
+			continue
+		}
+		var m map[string]json.RawMessage
+		if json.Unmarshal(o.Dati, &m) != nil {
+			continue
+		}
+		img := len(m["img"]) > 2
+		delete(m, "img")
+		p := pos[id]
+		if p == nil {
+			p = []possessore{}
+		}
+		oggetti = append(oggetti, map[string]any{"id": id, "oggetto": m, "immagine": img, "pacchetto": o.Pacchetto, "aggiornato": 0, "possessori": p})
 	}
 	pgs := []map[string]any{}
 	prow, err := s.DB.Query(`SELECT p.id, p.nome, p.stato, COALESCE(u.nome,'') FROM personaggi p LEFT JOIN utenti u ON u.id = p.proprietario_id
@@ -184,12 +215,11 @@ func (s *Server) apiOggettoMagico(w http.ResponseWriter, r *http.Request) (any, 
 	if _, err := richiedi(r, "master"); err != nil {
 		return nil, err
 	}
-	var dati, man string
-	var pag int
-	if s.DB.QueryRow(`SELECT dati, manuale_nome, pagina FROM oggetti_magici WHERE id = ?`, r.PathValue("id")).Scan(&dati, &man, &pag) != nil {
+	dati, man, pag, pac, ok := s.datiOggetto(r.PathValue("id"))
+	if !ok {
 		return nil, errNonTrovato
 	}
-	return map[string]any{"oggetto": json.RawMessage(dati), "manualeNome": man, "pagina": pag, "possessori": s.possessoriOggetti()[r.PathValue("id")]}, nil
+	return map[string]any{"oggetto": json.RawMessage(dati), "manualeNome": man, "pagina": pag, "pacchetto": pac, "possessori": s.possessoriOggetti()[r.PathValue("id")]}, nil
 }
 
 // immagineOggettoMagico: l'immagine dell'oggetto come file (per le miniature dell'archivio).
@@ -198,9 +228,9 @@ func (s *Server) immagineOggettoMagico(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Non trovato.", http.StatusNotFound)
 		return
 	}
-	var dati string
 	var o oggettoMagico
-	if s.DB.QueryRow(`SELECT dati FROM oggetti_magici WHERE id = ?`, r.PathValue("id")).Scan(&dati) != nil || json.Unmarshal([]byte(dati), &o) != nil {
+	dati, _, _, _, ok := s.datiOggetto(r.PathValue("id"))
+	if !ok || json.Unmarshal([]byte(dati), &o) != nil {
 		http.Error(w, "Non trovato.", http.StatusNotFound)
 		return
 	}
@@ -349,8 +379,8 @@ func (s *Server) apiConsegnaOggettoMagico(w http.ResponseWriter, r *http.Request
 	if len(in.Personaggi) == 0 || len(in.Personaggi) > 60 {
 		return nil, errore(http.StatusBadRequest, "Scegli a chi consegnarlo.")
 	}
-	var dati string
-	if s.DB.QueryRow(`SELECT dati FROM oggetti_magici WHERE id = ?`, r.PathValue("id")).Scan(&dati) != nil {
+	dati, _, _, _, ok := s.datiOggetto(r.PathValue("id"))
+	if !ok {
 		return nil, errNonTrovato
 	}
 	o, b, err := validaOggettoMagico(json.RawMessage(dati))

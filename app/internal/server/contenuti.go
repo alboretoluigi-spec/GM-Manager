@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 	"unicode/utf8"
 
@@ -27,11 +28,12 @@ const maxFileContenuti = 20 << 20 // 20 MB
 
 // cacheContenuti tiene i due file generati finché un pacchetto non cambia.
 type cacheContenuti struct {
-	mu     sync.Mutex
-	pronti bool
-	file   map[string]*fileGenerato // "regole/dati.js", "regole/talenti.js"
-	sovr   []string                 // voci sovrascritte da un pacchetto successivo
-	liste  map[string]string        // liste di incantesimi dichiarate dai pacchetti attivi (per l'inserimento a mano)
+	mu      sync.Mutex
+	pronti  bool
+	file    map[string]*fileGenerato // "regole/dati.js", "regole/talenti.js"
+	sovr    []string                 // voci sovrascritte da un pacchetto successivo
+	liste   map[string]string        // liste di incantesimi dichiarate dai pacchetti attivi (per l'inserimento a mano)
+	oggetti []oggettoPacchetto       // oggetti magici dei pacchetti attivi (archivio degli oggetti magici)
 }
 
 type fileGenerato struct {
@@ -41,8 +43,9 @@ type fileGenerato struct {
 
 func (c *cacheContenuti) svuota() {
 	c.mu.Lock()
-	c.pronti, c.file, c.sovr = false, nil, nil
+	c.pronti, c.file, c.sovr, c.oggetti = false, nil, nil, nil
 	c.mu.Unlock()
+	versioneCataloghi.Add(1)
 }
 
 type vistaPacchetto struct {
@@ -60,6 +63,7 @@ type vistaPacchetto struct {
 }
 
 func (s *Server) rotteContenuti(mux *http.ServeMux) {
+	versioneCataloghi.Add(1) // un server nuovo (anche nelle prove) rilegge i cataloghi con i suoi pacchetti
 	mux.Handle("GET /api/v1/contenuti", api(s.apiContenuti))
 	mux.Handle("POST /api/v1/contenuti", api(s.apiImportaContenuti))
 	mux.Handle("POST /api/v1/contenuti/verifica", api(s.apiVerificaContenuti))
@@ -358,7 +362,57 @@ func urlPercorso(s string) string {
 	return b.String()
 }
 
-// contenutiGenerati prepara (una volta, finché nulla cambia) i due file della scheda con i pacchetti attivi.
+// versioneCataloghi cresce a ogni cambio dei pacchetti: i cataloghi tenuti in memoria (professioni, mostri) si
+// rileggono alla richiesta successiva.
+var versioneCataloghi atomic.Int64
+
+// ricaricabile: come sync.Once, ma si ripete quando cambiano i pacchetti di contenuti attivi.
+type ricaricabile struct {
+	mu    sync.Mutex
+	ver   int64
+	fatto bool
+}
+
+func (r *ricaricabile) Do(f func()) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if v := versioneCataloghi.Load(); !r.fatto || r.ver != v {
+		f()
+		r.ver, r.fatto = v, true
+	}
+}
+
+// fileUniti: i file dell'app a cui si aggiungono le voci dei pacchetti attivi.
+var fileUniti = map[string]string{
+	"regole/dati.js": "text/javascript", "regole/talenti.js": "text/javascript", "regole/incantesimi_auto.js": "text/javascript",
+	"regole/strumenti.js": "text/javascript", "carta/mostri.json": "application/json", "regole/professioni.json": "application/json",
+}
+
+// leggiWeb legge un file dell'app; per i cataloghi uniti restituisce la versione con i pacchetti attivi.
+func (s *Server) leggiWeb(nome string) ([]byte, error) {
+	if fileUniti[nome] != "" {
+		if f, err := s.contenutiGenerati(); err == nil && f[nome] != nil {
+			return f[nome].dati, nil
+		}
+	}
+	return fs.ReadFile(s.Web, nome)
+}
+
+// oggettiDaPacchetti: gli oggetti magici dei pacchetti attivi per id (l'archivio li mostra accanto ai suoi).
+func (s *Server) oggettiDaPacchetti() map[string]oggettoPacchetto {
+	out := map[string]oggettoPacchetto{}
+	if _, err := s.contenutiGenerati(); err != nil {
+		return out
+	}
+	s.pacchettiCache.mu.Lock()
+	defer s.pacchettiCache.mu.Unlock()
+	for _, o := range s.pacchettiCache.oggetti {
+		out[o.ID] = o
+	}
+	return out
+}
+
+// contenutiGenerati prepara (una volta, finché nulla cambia) i file della scheda e i cataloghi con i pacchetti attivi.
 func (s *Server) contenutiGenerati() (map[string]*fileGenerato, error) {
 	c := &s.pacchettiCache
 	c.mu.Lock()
@@ -379,13 +433,9 @@ func (s *Server) contenutiGenerati() (map[string]*fileGenerato, error) {
 		}
 		sovr = append(sovr, tot.unisci(p.Dati)...)
 	}
+	tot.nomiIncantesimiInglesi()
 	out := map[string]*fileGenerato{}
-	for nome, coda := range codeContenuti(tot, len(file)) {
-		base, err := fs.ReadFile(s.Web, nome)
-		if err != nil {
-			return nil, err
-		}
-		dati := append(append(append([]byte{}, base...), '\n'), coda...)
+	nuovo := func(nome string, dati []byte) {
 		h := sha256.Sum256(dati)
 		g := &fileGenerato{dati: dati, etag: `"c-` + hex.EncodeToString(h[:8]) + `"`}
 		var zb bytes.Buffer
@@ -395,15 +445,27 @@ func (s *Server) contenutiGenerati() (map[string]*fileGenerato, error) {
 		g.gz = zb.Bytes()
 		out[nome] = g
 	}
-	c.file, c.sovr, c.liste, c.pronti = out, sovr, tot.NomiListe, true
+	for nome, coda := range codeContenuti(tot, len(file)) {
+		base, err := fs.ReadFile(s.Web, nome)
+		if err != nil {
+			continue // file dell'app assente (solo nelle prove): niente da unire
+		}
+		nuovo(nome, append(append(append([]byte{}, base...), '\n'), coda...))
+	}
+	base, _ := fs.ReadFile(s.Web, "carta/mostri.json")
+	nuovo("carta/mostri.json", catalogoMostri(base, tot.Mostri))
+	base, _ = fs.ReadFile(s.Web, "regole/professioni.json")
+	nuovo("regole/professioni.json", catalogoProfessioniUnito(base, tot.Professioni))
+	c.file, c.sovr, c.liste, c.oggetti, c.pronti = out, sovr, tot.NomiListe, tot.Oggetti, true
 	return out, nil
 }
 
-// codeContenuti: il codice aggiunto in fondo ai due file. Lavora sulle costanti già dichiarate nel file (oggetti ed
-// elenchi vuoti) e funziona sia come script della pagina sia nel caricamento con new Function delle altre sezioni.
+// codeContenuti: il codice aggiunto in fondo ai file della scheda. Lavora sulle costanti già dichiarate nel file
+// (oggetti ed elenchi vuoti) e funziona sia come script della pagina sia nel caricamento con new Function delle altre
+// sezioni.
 func codeContenuti(d *datiScheda, n int) map[string][]byte {
 	j, _ := json.Marshal(d)
-	js := strings.ReplaceAll(string(j), "</", `<\/`)
+	js := func(b []byte) string { return strings.ReplaceAll(string(b), "</", `<\/`) }
 	intest := "/* ===== Pacchetti di contenuti attivi: " + itoa(n) + " (aggiunti da Gaster Bless, docs/FORMATO_CONTENUTI.md) ===== */\n"
 	dati := intest + `(function(P){
  Object.assign(CLASSES,P.classi);Object.assign(RACES,P.razze);Object.assign(BGS,P.bg);
@@ -413,17 +475,23 @@ func codeContenuti(d *datiScheda, n int) map[string][]byte {
  Object.assign(CODICI_LISTE,P.codici);Object.assign(NOMI_LISTE,P.nomiListe);Object.assign(FONTI,P.fonti);
  Object.assign(FD_GEN,P.fdGen);Object.assign(FD_CLS,P.fdCls);Object.assign(FD_SUB,P.fdSub);Object.assign(FD_RACE,P.fdRace);
  Object.assign(FD_BG,P.fdBg);Object.assign(FD_RES,P.fdRes);
-})(` + js + `);
+ Object.assign(PREZZI,P.prezzi);EQUIP_CAT.push.apply(EQUIP_CAT,P.equipCat);
+})(` + js(j) + `);
 `
 	tj, _ := json.Marshal(d.Talenti)
-	tal := intest + `(function(T){FEATS.push.apply(FEATS,T);T.forEach(function(f){FEAT_IDX[_fnorm(f[0])]=f;FEAT_IDX[_fnorm(f[1])]=f;});})(` +
-		strings.ReplaceAll(string(tj), "</", `<\/`) + ");\n"
-	return map[string][]byte{"regole/dati.js": []byte(dati), "regole/talenti.js": []byte(tal)}
+	tal := intest + `(function(T){FEATS.push.apply(FEATS,T);T.forEach(function(f){FEAT_IDX[_fnorm(f[0])]=f;FEAT_IDX[_fnorm(f[1])]=f;});})(` + js(tj) + ");\n"
+	ij, _ := json.Marshal(map[string]any{"sub": d.SubSpells, "terra": d.LandSpells, "razze": d.RaceSpells, "trucchetti": d.RaceCantrip})
+	inc := intest + `(function(I){Object.assign(SUB_SPELLS,I.sub);Object.assign(LAND_SPELLS,I.terra);Object.assign(RACE_SPELLS,I.razze);Object.assign(RACE_CANTRIP_CHOICE,I.trucchetti);})(` + js(ij) + ");\n"
+	sj, _ := json.Marshal(d.Strumenti)
+	str := intest + `(function(S){STRUMENTI.push.apply(STRUMENTI,S);})(` + js(sj) + ");\n"
+	return map[string][]byte{"regole/dati.js": []byte(dati), "regole/talenti.js": []byte(tal), "regole/incantesimi_auto.js": []byte(inc), "regole/strumenti.js": []byte(str)}
 }
 
-// serviContenuti risponde per /regole/dati.js e /regole/talenti.js quando c'è un utente collegato; true se ha risposto.
+// serviContenuti risponde per i file uniti (fileUniti) quando c'è un utente collegato; true se ha risposto. Il
+// catalogo dei mostri arriva qui solo per il Master (il controllo è in statiche, server.go).
 func (s *Server) serviContenuti(w http.ResponseWriter, r *http.Request, nome string) bool {
-	if nome != "regole/dati.js" && nome != "regole/talenti.js" || utenteDa(r.Context()) == nil {
+	tipo := fileUniti[nome]
+	if tipo == "" || utenteDa(r.Context()) == nil {
 		return false
 	}
 	file, err := s.contenutiGenerati()
@@ -431,7 +499,7 @@ func (s *Server) serviContenuti(w http.ResponseWriter, r *http.Request, nome str
 		return false
 	}
 	f := file[nome]
-	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
+	w.Header().Set("Content-Type", tipo+"; charset=utf-8")
 	w.Header().Set("ETag", f.etag)
 	w.Header().Set("Cache-Control", "private, no-cache")
 	w.Header().Add("Vary", "Accept-Encoding, Cookie")

@@ -6,7 +6,8 @@ import { el, svuota, api, avviso, dialogo, conferma, tempoReale } from "../ui/ui
 import { apriEditor } from "./contenuti_editor.js";
 
 const TIPI = [["classi", "classi"], ["razze", "razze"], ["background", "background"], ["incantesimi", "incantesimi"], ["armi", "armi"],
-  ["armature", "armature"], ["talenti", "talenti"], ["stili", "stili di combattimento"]];
+  ["armature", "armature"], ["talenti", "talenti"], ["stili", "stili di combattimento"], ["strumenti", "strumenti"],
+  ["equipaggiamento", "categorie di equipaggiamento"], ["mostri", "mostri"], ["oggettiMagici", "oggetti magici"], ["professioni", "professioni"]];
 
 function conteggi(c) {
   const p = TIPI.filter(([k]) => c && c[k]).map(([k, n]) => c[k] + " " + n);

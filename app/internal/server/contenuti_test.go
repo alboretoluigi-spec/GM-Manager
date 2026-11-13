@@ -32,7 +32,7 @@ func (c *cliente) statico(percorso string) (int, string) {
 func TestPacchettiContenuti(t *testing.T) {
 	a := nuovoAmbiente(t)
 	web := a.s.Web.(fstest.MapFS)
-	for _, f := range []string{"regole/dati.js", "regole/talenti.js"} {
+	for _, f := range []string{"regole/dati.js", "regole/talenti.js", "regole/incantesimi_auto.js", "regole/strumenti.js"} {
 		b, err := os.ReadFile("../../web/" + f)
 		if err != nil {
 			t.Fatal(err)
@@ -109,6 +109,60 @@ func TestPacchettiContenuti(t *testing.T) {
 	anon := a.cliente("")
 	if cod, js := anon.statico("/regole/dati.js"); cod != 200 || strings.Contains(js, "Custode") {
 		t.Fatalf("senza accesso: %d, contenuti presenti=%v", cod, strings.Contains(js, "Custode"))
+	}
+
+	// Altri contenuti (passo C3): incantesimi concessi (con il nome inglese dell'archivio), strumenti, prezzi e catalogo,
+	// mostri (solo al Master), professioni, oggetti magici nell'archivio.
+	_, inc := g.statico("/regole/incantesimi_auto.js")
+	for _, atteso := range []string{`"Ordine del Faro":{"3":["Bright Mist Veil"],"modo":"prep","tr":{"3":["Keeper's Spark"]}}`,
+		`"muschiati/":{"1":["Keeper's Spark"],"ab":"SAG"}`, `"muschiati/valle":{"1":["Keeper's Spark"],"ab":"SAG"}`, "Object.assign(SUB_SPELLS,I.sub)"} {
+		if !strings.Contains(inc, atteso) {
+			t.Fatalf("incantesimi_auto.js: manca %s\n%s", atteso, inc[strings.Index(inc, "===== Pacchetti"):])
+		}
+	}
+	if _, str := g.statico("/regole/strumenti.js"); !strings.Contains(str, `"id":"vetraio"`) || !strings.Contains(str, `{"car":"INT","cd":12,"n":"Valutare un oggetto di vetro","ab":"Indagare"}`) && !strings.Contains(str, `"ab":"Indagare","car":"INT","cd":12`) {
+		t.Fatalf("strumenti.js: %s", str[strings.Index(str, "===== Pacchetti"):])
+	}
+	if _, js := g.statico("/regole/dati.js"); !strings.Contains(js, `"prezzi":{"Bastone ferrato":"2 ma","Giubba imbottita di lana":"8 mo"}`) || !strings.Contains(js, `"equipCat":[{"id":"equipaggiamento-d-avventura","n":"Equipaggiamento d'avventura","voci":[["Lanterna schermata","5 mo","luce 9 m"]`) {
+		t.Fatal("dati.js senza prezzi o catalogo dell'equipaggiamento")
+	}
+	if cod, mostri := m.statico("/carta/mostri.json"); cod != 200 || !strings.Contains(mostri, `"id":"pc-lucciola-di-palude"`) || !strings.Contains(mostri, `"gs":"0 (10 PE)"`) {
+		t.Fatalf("catalogo dei mostri: %d %s", cod, mostri)
+	}
+	if cod, _ := g.statico("/carta/mostri.json"); cod != 404 {
+		t.Fatalf("il catalogo dei mostri è solo del Master: %d", cod)
+	}
+	if !a.s.voceEsiste("pc-lucciola-di-palude") {
+		t.Fatal("il bestiario del server non vede il mostro del pacchetto")
+	}
+	if _, prof := g.statico("/regole/professioni.json"); !strings.Contains(prof, `{"id":"vetraio","n":"Vetraio"}`) {
+		t.Fatalf("catalogo delle professioni: %s", prof)
+	}
+	if p := a.s.catalogoProfessioni().Professioni["vetraio"]; p == nil || p.N != "Vetraio" {
+		t.Fatal("il server non vede la professione del pacchetto")
+	}
+	arch := m.deve(200, "GET", "/oggetti-magici", nil)["oggetti"].([]any)
+	if len(arch) != 1 || arch[0].(map[string]any)["pacchetto"] != "Modello di pacchetto (contenuti inventati)" {
+		t.Fatalf("archivio degli oggetti magici: %v", arch)
+	}
+	if o := m.deve(200, "GET", "/oggetti-magici/modello-lanterna-custode", nil); o["pacchetto"] == "" {
+		t.Fatalf("oggetto del pacchetto: %v", o)
+	}
+	// Una copia modificata nell'archivio ha la precedenza sull'oggetto del pacchetto.
+	m.deve(200, "PUT", "/oggetti-magici/modello-lanterna-custode", map[string]any{"oggetto": map[string]any{"id": "modello-lanterna-custode", "v": 2, "nome": "Lanterna del Custode (mia)", "tipo": "meraviglioso"}})
+	if arch := m.deve(200, "GET", "/oggetti-magici", nil)["oggetti"].([]any); len(arch) != 1 || arch[0].(map[string]any)["pacchetto"] != nil {
+		t.Fatalf("la copia dell'archivio deve sostituire quella del pacchetto: %v", arch)
+	}
+	m.deve(200, "DELETE", "/oggetti-magici/modello-lanterna-custode", nil)
+	// Mostro con una scheda sbagliata.
+	if e := verifica(`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","mostri":[{"nome":"Ombra","scheda":{"car":[10,10,10,10,10,99]}}]}`); !strings.Contains(e, "mostri n. 1 («Ombra»): Le caratteristiche vanno da 1 a 30") {
+		t.Errorf("mostro sbagliato: %s", e)
+	}
+	if e := verifica(`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","mostri":[{"nome":"Ombra","scheda":{"forza":3}}]}`); !strings.Contains(e, `campo sconosciuto "forza"`) {
+		t.Errorf("campo sconosciuto nella scheda: %s", e)
+	}
+	if e := verifica(`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","professioni":{"professioni":{"Cuoco":{"formule":[{"n":"Zuppa"}]}}}}`); !strings.Contains(e, "l'id della professione «Cuoco»") || !strings.Contains(e, "manca «n»") || !strings.Contains(e, "un «id» diverso") {
+		t.Errorf("professione sbagliata: %s", e)
 	}
 
 	// Errori del file, con il punto preciso.

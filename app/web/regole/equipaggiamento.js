@@ -4,8 +4,9 @@
    (WEAPONS, ARMORS, STRUMENTI): qui ci sono solo i prezzi e gli oggetti che lì mancano.
    Voce: [nome, costo, nota]. Monete: mo = oro, ma = argento, mr = rame. */
 (function () {
-  const PREZZI_ARMI = {};
-  const PREZZI_ARMATURE = {};
+  // prezzi dai pacchetti di contenuti (PREZZI in dati.js)
+  const PREZZI_ARMI = typeof PREZZI !== 'undefined' ? PREZZI : {};
+  const PREZZI_ARMATURE = PREZZI_ARMI;
   const W = typeof WEAPONS !== 'undefined' ? WEAPONS : [];
   const A = typeof ARMORS !== 'undefined' ? ARMORS : [];
   const S = typeof STRUMENTI !== 'undefined' ? STRUMENTI : [];
@@ -16,6 +17,14 @@
   const armature = A.map((a) => [a[0], PREZZI_ARMATURE[a[0]] || '—', `${TIPO_ARM[a[1]]} · CA ${a[2]}${a[1] === 'l' ? ' + Des' : a[1] === 'm' ? ' + Des (max 2)' : ''}${a[3] ? ' · For ' + a[3] : ''}${a[4] ? ' · svantaggio a Furtività' : ''}`]);
   const strumenti = S.map((t) => [t.n, t.costo || '—', { artigiano: 'strumenti da artigiano', musica: 'strumento musicale', gioco: 'set da gioco', kit: 'kit', veicolo: 'veicolo' }[t.cat] || '']);
 
+  // armi, armature e strumenti dei pacchetti, poi le altre categorie dei pacchetti (EQUIP_CAT in dati.js)
   const CATALOGO = [];
+  if (armi.length) CATALOGO.push({ id: 'armi', n: 'Armi', voci: armi });
+  if (armature.length) CATALOGO.push({ id: 'armature', n: 'Armature', voci: armature });
+  if (strumenti.length) CATALOGO.push({ id: 'strumenti', n: 'Strumenti', voci: strumenti });
+  (typeof EQUIP_CAT !== 'undefined' ? EQUIP_CAT : []).forEach((c) => {
+    const g = CATALOGO.find((x) => x.id === c.id);
+    if (g) g.voci = g.voci.concat(c.voci); else CATALOGO.push({ id: c.id, n: c.n, voci: c.voci.slice() });
+  });
   if (typeof window !== 'undefined') window.EQUIPAGGIAMENTO = CATALOGO;
 })();

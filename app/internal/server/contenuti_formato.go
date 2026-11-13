@@ -66,6 +66,12 @@ type pacchettoFile struct {
 	Armature         []json.RawMessage `json:"armature"`
 	Talenti          []json.RawMessage `json:"talenti"`
 	Stili            []json.RawMessage `json:"stili"`
+	// passo C3
+	Strumenti       []json.RawMessage `json:"strumenti"`
+	Equipaggiamento []json.RawMessage `json:"equipaggiamento"`
+	Mostri          []json.RawMessage `json:"mostri"`
+	OggettiMagici   []json.RawMessage `json:"oggettiMagici"`
+	Professioni     json.RawMessage   `json:"professioni"`
 }
 
 type incantatoreFile struct {
@@ -93,6 +99,7 @@ type sottoclasseFile struct {
 	StiliDiCombattimento int                 `json:"stiliDiCombattimento"`
 	Incantatore          *incantatoreFile    `json:"incantatore"`
 	Agganci              map[string]int      `json:"agganci"`
+	IncantesimiSempre    *incSempreFile      `json:"incantesimiSempre"`
 }
 
 type classeFile struct {
@@ -138,31 +145,33 @@ type magiaInnataFile struct {
 }
 
 type razzaFile struct {
-	ID                 string            `json:"id"`
-	Nome               string            `json:"nome"`
-	Fonte              string            `json:"fonte"`
-	Caratteristiche    map[string]int    `json:"caratteristiche"`
-	Velocita           *float64          `json:"velocita"`
-	Taglia             string            `json:"taglia"`
-	Scurovisione       float64           `json:"scurovisione"`
-	Lingue             []string          `json:"lingue"`
-	LingueExtra        int               `json:"lingueExtra"`
-	AbilitaFisse       []string          `json:"abilitaFisse"`
-	AbilitaDaScegliere int               `json:"abilitaDaScegliere"`
-	BonusLiberi        *bonusLiberiFile  `json:"bonusLiberi"`
-	BonusLiberiValori  []int             `json:"bonusLiberiValori"`
-	BonusFissi         bool              `json:"bonusFissi"`
-	Tratti             []string          `json:"tratti"`
-	MagiaInnata        *magiaInnataFile  `json:"magiaInnata"`
-	ArmiSpecifiche     []string          `json:"armiSpecifiche"`
-	Armature           []string          `json:"armature"`
-	Strumenti          string            `json:"strumenti"`
-	Talento            bool              `json:"talento"`
-	ArmaturaNaturale   int               `json:"armaturaNaturale"`
-	PFPerLivello       int               `json:"pfPerLivello"`
-	Agganci            map[string]int    `json:"agganci"`
-	Descrizioni        map[string]string `json:"descrizioni"`
-	Sottorazze         []json.RawMessage `json:"sottorazze"`
+	ID                  string            `json:"id"`
+	Nome                string            `json:"nome"`
+	Fonte               string            `json:"fonte"`
+	Caratteristiche     map[string]int    `json:"caratteristiche"`
+	Velocita            *float64          `json:"velocita"`
+	Taglia              string            `json:"taglia"`
+	Scurovisione        float64           `json:"scurovisione"`
+	Lingue              []string          `json:"lingue"`
+	LingueExtra         int               `json:"lingueExtra"`
+	AbilitaFisse        []string          `json:"abilitaFisse"`
+	AbilitaDaScegliere  int               `json:"abilitaDaScegliere"`
+	BonusLiberi         *bonusLiberiFile  `json:"bonusLiberi"`
+	BonusLiberiValori   []int             `json:"bonusLiberiValori"`
+	BonusFissi          bool              `json:"bonusFissi"`
+	Tratti              []string          `json:"tratti"`
+	MagiaInnata         *magiaInnataFile  `json:"magiaInnata"`
+	ArmiSpecifiche      []string          `json:"armiSpecifiche"`
+	Armature            []string          `json:"armature"`
+	Strumenti           string            `json:"strumenti"`
+	Talento             bool              `json:"talento"`
+	ArmaturaNaturale    int               `json:"armaturaNaturale"`
+	PFPerLivello        int               `json:"pfPerLivello"`
+	Agganci             map[string]int    `json:"agganci"`
+	Descrizioni         map[string]string `json:"descrizioni"`
+	Sottorazze          []json.RawMessage `json:"sottorazze"`
+	IncantesimiRazziali *incRazzaFile     `json:"incantesimiRazziali"`
+	TrucchettoAScelta   string            `json:"trucchettoAScelta"`
 }
 
 type backgroundFile struct {
@@ -209,6 +218,7 @@ type armaFile struct {
 	Lancio    bool   `json:"lancio"`
 	Versatile bool   `json:"versatile"`
 	Portata   bool   `json:"portata"`
+	Costo     string `json:"costo"`
 }
 
 type armaturaFile struct {
@@ -217,6 +227,7 @@ type armaturaFile struct {
 	CA                  int    `json:"ca"`
 	Forza               int    `json:"forza"`
 	SvantaggioFurtivita bool   `json:"svantaggioFurtivita"`
+	Costo               string `json:"costo"`
 }
 
 type talentoFile struct {
@@ -257,6 +268,18 @@ type datiScheda struct {
 	FDRace      map[string]string         `json:"fdRace"`
 	FDBg        map[string]string         `json:"fdBg"`
 	FDRes       map[string]string         `json:"fdRes"`
+	// passo C3: incantesimi concessi (incantesimi_auto.js), prezzi e catalogo (equipaggiamento), strumenti (strumenti.js)
+	SubSpells   map[string]map[string]any      `json:"subSpells"`
+	LandSpells  map[string]map[string][]string `json:"landSpells"`
+	RaceSpells  map[string]map[string]any      `json:"raceSpells"`
+	RaceCantrip map[string]string              `json:"raceCantrip"`
+	Prezzi      map[string]string              `json:"prezzi"`
+	EquipCat    []categoriaEquip               `json:"equipCat"`
+	Strumenti   []map[string]any               `json:"-"`
+	// solo per il server (mai nei file della scheda): catalogo dei mostri, oggetti magici, professioni
+	Mostri      []map[string]any      `json:"-"`
+	Oggetti     []oggettoPacchetto    `json:"-"`
+	Professioni *professioniPacchetto `json:"-"`
 }
 
 func nuoviDatiScheda() *datiScheda {
@@ -264,7 +287,10 @@ func nuoviDatiScheda() *datiScheda {
 		Incantesimi: [][]any{}, Armi: [][]any{}, Armature: [][]any{}, Stili: [][]any{}, StiliT: [][]any{}, Talenti: [][]any{},
 		Conosciuti: map[string][]int{}, Trucchetti: map[string][]int{}, Codici: map[string]string{}, NomiListe: map[string]string{},
 		Fonti: map[string]string{}, FDGen: map[string]string{}, FDCls: map[string]string{}, FDSub: map[string][]string{},
-		FDRace: map[string]string{}, FDBg: map[string]string{}, FDRes: map[string]string{}}
+		FDRace: map[string]string{}, FDBg: map[string]string{}, FDRes: map[string]string{},
+		SubSpells: map[string]map[string]any{}, LandSpells: map[string]map[string][]string{}, RaceSpells: map[string]map[string]any{},
+		RaceCantrip: map[string]string{}, Prezzi: map[string]string{}, EquipCat: []categoriaEquip{}, Strumenti: []map[string]any{},
+		Mostri: []map[string]any{}, Oggetti: []oggettoPacchetto{}}
 }
 
 // pacchettoLetto: intestazione, dati convertiti, conteggi per tipo e avvisi (problemi che non impediscono l'importazione).
@@ -512,6 +538,8 @@ func leggiPacchettoOpz(b []byte, vuotoAmmesso bool) (*pacchettoLetto, error) {
 		{"classi", p.Classi, convertiClasse}, {"razze", p.Razze, convertiRazza}, {"background", p.Background, convertiBackground},
 		{"incantesimi", p.Incantesimi, convertiIncantesimo}, {"armi", p.Armi, convertiArma}, {"armature", p.Armature, convertiArmatura},
 		{"talenti", p.Talenti, convertiTalento}, {"stili", p.Stili, convertiStile},
+		{"strumenti", p.Strumenti, convertiStrumento}, {"equipaggiamento", p.Equipaggiamento, convertiEquipaggiamento},
+		{"mostri", p.Mostri, convertiMostro}, {"oggettiMagici", p.OggettiMagici, convertiOggetto},
 	}
 	totale := 0
 	visti := map[string]bool{}
@@ -547,8 +575,15 @@ func leggiPacchettoOpz(b []byte, vuotoAmmesso bool) (*pacchettoLetto, error) {
 		out.Conteggi[t.nome] = len(t.voci)
 		totale += len(t.voci)
 	}
+	if n := c.professioni(p.Professioni, d); n > 0 {
+		out.Conteggi["professioni"] = n
+		totale += n
+	}
+	for i := range d.Oggetti {
+		d.Oggetti[i].Pacchetto = out.Nome
+	}
 	if totale == 0 && len(c.errori) == 0 && !vuotoAmmesso {
-		c.err("il pacchetto non contiene nessuna voce (classi, razze, background, incantesimi, armi, armature, talenti o stili)")
+		c.err("il pacchetto non contiene nessuna voce (classi, razze, background, incantesimi, armi, armature, talenti, stili, strumenti, equipaggiamento, mostri, oggetti magici o professioni)")
 	}
 	// Codici di lista usati dalle classi e dagli incantesimi: devono esistere (base o dichiarati nel pacchetto).
 	for id, cod := range d.Codici {
@@ -684,6 +719,9 @@ func convertiClasse(c *controllore, raw json.RawMessage, d *datiScheda) error {
 			}
 			extra[a] = v
 		}
+		if s.IncantesimiSempre != nil {
+			c.incantesimiSempre(nome, s.IncantesimiSempre, d)
+		}
 		voce := []any{nome, c.testo("sottoclassi.fonte", s.Fonte, false), c.privilegi("sottoclassi.privilegi", s.Privilegi)}
 		if len(extra) > 0 {
 			voce = append(voce, extra)
@@ -811,6 +849,17 @@ func convertiRazza(c *controllore, raw json.RawMessage, d *datiScheda) error {
 		c.err("«id» deve essere fatto di lettere minuscole senza accenti, cifre, - o _ (es. «elfo»)")
 	}
 	r := c.campiRazza(&x, d, false)
+	// incantesimi della razza: chiave «razza/sottorazza» (scheda: RACE_SPELLS[razza+'/'+sottorazza]); quelli della razza
+	// valgono anche per ogni sottorazza che non ne ha di suoi.
+	var incRazza map[string]any
+	if x.IncantesimiRazziali != nil {
+		incRazza = c.incantesimiRazziali(x.IncantesimiRazziali)
+		d.RaceSpells[x.ID+"/"] = incRazza
+	}
+	trRazza := c.testo("trucchettoAScelta", x.TrucchettoAScelta, false)
+	if trRazza != "" {
+		d.RaceCantrip[x.ID+"/"] = trRazza
+	}
 	if len(x.Sottorazze) > 0 {
 		subs := map[string]any{}
 		for i, rs := range x.Sottorazze {
@@ -826,6 +875,16 @@ func convertiRazza(c *controllore, raw json.RawMessage, d *datiScheda) error {
 				c.err("sottorazza n. %d: «id» deve essere fatto di lettere minuscole senza accenti, cifre, - o _", i+1)
 			}
 			subs[s.ID] = c.campiRazza(&s, d, true)
+			if s.IncantesimiRazziali != nil {
+				d.RaceSpells[x.ID+"/"+s.ID] = c.incantesimiRazziali(s.IncantesimiRazziali)
+			} else if incRazza != nil {
+				d.RaceSpells[x.ID+"/"+s.ID] = incRazza
+			}
+			if t := c.testo("trucchettoAScelta", s.TrucchettoAScelta, false); t != "" {
+				d.RaceCantrip[x.ID+"/"+s.ID] = t
+			} else if trRazza != "" {
+				d.RaceCantrip[x.ID+"/"+s.ID] = trRazza
+			}
 		}
 		r["subs"] = subs
 	}
@@ -971,6 +1030,9 @@ func convertiArma(c *controllore, raw json.RawMessage, d *datiScheda) error {
 			fl += f.c
 		}
 	}
+	if x.Costo = strings.TrimSpace(x.Costo); x.Costo != "" {
+		d.Prezzi[strings.TrimSpace(x.Nome)] = c.testo("costo", x.Costo, false)
+	}
 	d.Armi = append(d.Armi, []any{c.testo("nome", x.Nome, true), cat, tipo, danno, c.testo("tipoDanno", x.TipoDanno, false), c.testo("proprieta", x.Proprieta, false), fl})
 	return nil
 }
@@ -987,6 +1049,9 @@ func convertiArmatura(c *controllore, raw json.RawMessage, d *datiScheda) error 
 	sv := 0
 	if x.SvantaggioFurtivita {
 		sv = 1
+	}
+	if x.Costo = strings.TrimSpace(x.Costo); x.Costo != "" {
+		d.Prezzi[strings.TrimSpace(x.Nome)] = c.testo("costo", x.Costo, false)
 	}
 	d.Armature = append(d.Armature, []any{c.testo("nome", x.Nome, true), tipo, c.intervallo("ca", x.CA, 1, 30), c.intervallo("forza", x.Forza, 0, 30), sv})
 	return nil
@@ -1094,5 +1159,6 @@ func (d *datiScheda) unisci(o *datiScheda) []string {
 	for k, v := range o.FDSub {
 		d.FDSub[k] = v
 	}
+	d.unisciAltri(o, &sovr)
 	return sovr
 }

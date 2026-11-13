@@ -12,13 +12,12 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"encoding/json"
-	"io/fs"
+
 	"net/http"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
 
 	"gasterbless/internal/cripto"
 	"gasterbless/internal/db"
@@ -73,7 +72,7 @@ func improntaDati(s string) string {
 // ===== Nomi del bestiario (voci di base dei due cataloghi e voci personali del Master) =====
 
 var (
-	nomiBestUna sync.Once
+	nomiBestUna ricaricabile      // si rilegge quando cambiano i pacchetti di contenuti (contenuti.go)
 	nomiBest    map[string]string // chiave del nome (italiano o inglese) → id della voce di base
 	nomiVoce    map[string]string // id → nome italiano
 )
@@ -82,7 +81,7 @@ func (s *Server) caricaNomiBestiario() {
 	nomiBestUna.Do(func() {
 		nomiBest, nomiVoce = map[string]string{}, map[string]string{}
 		for _, f := range []string{"carta/bestiario.json", "carta/mostri.json"} { // bestiario dell'avventura prima: vince
-			b, err := fs.ReadFile(s.Web, f)
+			b, err := s.leggiWeb(f)
 			if err != nil {
 				continue
 			}

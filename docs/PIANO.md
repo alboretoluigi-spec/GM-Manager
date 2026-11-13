@@ -18,6 +18,7 @@ un avvocato esperto di proprietà intellettuale.
 | 13/11/2026 | Licenza: **1 PC per licenza, a vita** |
 | 13/11/2026 | **Niente gioco da remoto** nella prima versione (MQTT, Cloudflare, VPN restano fuori) |
 | 13/11/2026 | **App generica per diversi giochi di ruolo. Nessun contenuto di gioco incluso né scaricato dall'app** (mostri, manuali, ambientazioni, incantesimi, classi, oggetti, nemmeno dall'SRD): l'utente li **importa da file che si procura** o li **inserisce a mano** |
+| 13/11/2026 | **Interfaccia adattiva**: il Master sceglie il gioco all'accesso; l'app mostra solo pulsanti, sezioni e materiale di quel gioco e abilita le funzioni proprie di quel gioco (passo C4, §5.2) |
 | 13/11/2026 | **Sistema di gioco a scelta fra i più noti**: per ogni campagna il Master sceglie il sistema; l'app ne conosce le meccaniche (dadi, tiri, iniziativa, salute, condizioni, struttura della scheda), sempre senza contenuti né testi dei manuali. Elenco e priorità: proposta al §3.3bis, da confermare |
 | 13/11/2026 | **Nome ufficiale: GASTER BLESS – MASTER SUITE**, slogan **MASTER YOUR WORLD**, sottotitolo **THE UNIVERSAL TABLETOP RPG PLATFORM**; stile dell'immagine di riferimento (oro antico su fondo scuro). Cambiano solo nome, logo testuale e intestazione; funzioni, struttura e contenuti restano. Dettagli: `branding/MARCHIO.md` |
 
@@ -168,7 +169,7 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 | 2 | Inventario dei contenuti e delle licenze (§3) | **fatta** (13/11) |
 | 3a | Repository e struttura di base: istruzioni, stato del lavoro, piano, regole sui contenuti | **fatta** (13/11) |
 | 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | **fatta** (13/11): vedi §5.1 |
-| 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | **in corso** (13/11): C1 e C2 fatti, vedi §5.2 |
+| 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | **in corso** (13/11): C1, C2 e C3 fatti, vedi §5.2 |
 | 3d | Compilazione e prove automatiche verdi (le 19 rosse del §5.1, nuove prove nel browser); elenco delle licenze nell'app | **prove verdi** (13/11): mondo di prova inventato in `app/internal/server/testdata`; manca l'elenco delle licenze nell'app |
 | 4 | Funzioni generiche (mappa, compendio, «Parla con un PNG», mazzo di carte, regole di zona, modelli di scenario) e rete per un cliente qualsiasi | — |
 | 5 | Installatore firmato, licenza, aggiornamenti, lingue (italiano e inglese) | — |
@@ -207,9 +208,13 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 |---|---|---|
 | **C1** | **Pacchetti di contenuti**: formato aperto e documentato «gasterbless-contenuti» (`docs/FORMATO_CONTENUTI.md`) per classi, sottoclassi, razze, sottorazze, background, incantesimi, armi, armature, talenti, stili; controllo del file con errori precisi; anteprima, importazione, attivazione, esportazione, eliminazione; i pacchetti attivi arrivano alla scheda della quinta edizione; modello con contenuti inventati | **fatto** (13/11) |
 | **C2** | **Inserimento a mano**: pacchetti personali (anche vuoti, migrazione 042); moduli nella pagina «Contenuti di gioco» per creare, modificare, copiare ed eliminare ogni tipo di voce (classe con privilegi e sottoclassi, razza con tratti e sottorazze, background, incantesimo, arma, armatura, talento, stile) e i dati del pacchetto; anche sui pacchetti importati, senza perdere i campi non mostrati; stesso controllo dell'importazione | **fatto** (13/11) |
-| C3 | **Altri contenuti nei pacchetti**: incantesimi sempre preparati delle sottoclassi e delle razze, strumenti e professioni, oggetti magici, mostri del bestiario (oggi il bestiario e gli oggetti si riempiono a mano o con «Importa dai manuali») | da fare |
-| C4 | **Modulo di sistema**: il sistema della campagna sceglie scheda, dadi e iniziativa; la quinta edizione è il primo modulo; **scheda libera** (campi e tiri definiti dal Master) per tutti gli altri giochi | da fare |
-| C5 | **Pulizia**: regole legate a sottoclassi con il nome in `web/regole/difese.js`, magie innate scritte nel codice della scheda (diventano dati dei pacchetti), guida aggiornata, prove | da fare |
+| **C3** | **Altri contenuti nei pacchetti**: incantesimi concessi da sottoclassi, razze e terreni; strumenti; prezzi e categorie dell'equipaggiamento; mostri (catalogo del bestiario, solo al Master); oggetti magici (nell'archivio, «dal pacchetto»); professioni (catalogo del server). I cataloghi del server si rileggono quando cambiano i pacchetti. Editor per strumenti, equipaggiamento, mostri e incantesimi concessi | **fatto** (13/11) |
+| C4 | **Modulo di sistema e interfaccia adattiva** (richiesta del Master del 13/11, sotto): il Master sceglie il gioco quando entra nell'app; l'interfaccia mostra solo le sezioni e i pulsanti di quel gioco e nasconde il resto; scheda, dadi e iniziativa seguono il gioco; la quinta edizione è il primo modulo; **scheda libera** (campi e tiri definiti dal Master) per tutti gli altri giochi | da fare |
+| C5 | **Pulizia**: regole legate a sottoclassi con il nome in `web/regole/difese.js`, magie innate scritte nel codice della scheda (diventano dati dei pacchetti); **nomi di manuali di editori ancora visibili nell'app** («Manuale del Giocatore», «Manuale dei Mostri», «Guida del Dungeon Master», «La maledizione dell'antagonista»: in `web/scheda/index.html`, `web/ui/professioni.js`, `web/sezioni/manuali.js`, `bestiario.js`, `impostazioni_sanita.js`, `web/carta/carta.js`, commenti di `web/ui/manuale_*.js`, `internal/server/professioni.go`) da togliere e aggiungere a `docs/parole_vietate.txt`; guida aggiornata, prove | da fare |
+
+**Richiesta del Master (13/11/2026) per C4**: «Gaster Bless cambia l'interfaccia adattandola di volta in volta al gdr
+scelto dal Master. Nasconde pulsanti e materiale non presenti nel gioco scelto e abilita pulsanti e funzioni riguardanti
+esclusivamente il gioco scelto. Il Master seleziona il GDR quando fa accesso all'app.»
 
 I moduli per le altre famiglie di meccaniche (§3.3bis) vengono dopo C4, nell'ordine che sceglie il Master (domanda
 aperta n. 1 del §6).

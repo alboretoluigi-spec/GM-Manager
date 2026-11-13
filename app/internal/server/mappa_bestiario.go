@@ -14,13 +14,12 @@ package server
 import (
 	"encoding/json"
 	"io"
-	"io/fs"
+
 	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
-	"sync"
 
 	"gasterbless/internal/cripto"
 	"gasterbless/internal/db"
@@ -49,7 +48,7 @@ func (s *Server) rotteBestiario(mux *http.ServeMux) {
 // ===== Voci di base (bestiario.json) =====
 
 var (
-	bestUna    sync.Once
+	bestUna    ricaricabile // si rilegge quando cambiano i pacchetti di contenuti (contenuti.go)
 	bestIDs    map[string]bool
 	bestSchede map[string]json.RawMessage // schede di base (SRD), per i modelli dei PNG
 )
@@ -59,7 +58,7 @@ func (s *Server) caricaBestiarioBase() {
 		bestIDs, bestSchede = map[string]bool{}, map[string]json.RawMessage{}
 		// bestiario dell'avventura e catalogo dei mostri (mostri.json, convertito da strumenti/converti_mostri.py)
 		for _, f := range []string{"carta/bestiario.json", "carta/mostri.json"} {
-			b, err := fs.ReadFile(s.Web, f)
+			b, err := s.leggiWeb(f)
 			if err != nil {
 				continue
 			}

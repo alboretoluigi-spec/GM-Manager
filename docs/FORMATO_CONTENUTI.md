@@ -163,6 +163,47 @@ riconosce; altrimenti decide il Master.
   Destrezza), `res` (`["nome", valore]` di una risorsa).
 - **Stili di combattimento** (`stili`): `nome`, `descrizione`, `opzionale` (`true` per gli stili della regola facoltativa).
 
+## Incantesimi concessi da sottoclassi e razze
+- **Sottoclasse** → `incantesimiSempre`: `{"modo": "preparati" | "conosciuti", "livelli": {"3": ["Nome", "Nome"]},
+  "trucchetti": {"3": ["Nome"]}, "perTerreno": {"Palude": {"3": ["Nome"]}}}`. I livelli sono livelli **di classe**; questi
+  incantesimi non contano nei limiti. Con `perTerreno` il giocatore sceglie il terreno nella scheda.
+- **Razza o sottorazza** → `incantesimiRazziali`: `{"caratteristica": "CAR", "livelli": {"1": ["Nome"], "3": ["Nome"]}}`
+  (livelli **del personaggio**); `trucchettoAScelta`: testo che spiega al giocatore quale trucchetto aggiungere. Quelli
+  della razza valgono anche per le sottorazze che non ne hanno di propri.
+- Gli incantesimi si indicano con il nome o l'altro nome di un incantesimo di un pacchetto attivo (anche di un altro
+  pacchetto).
+
+## Strumenti (`strumenti`)
+`id` e `nome` (obbligatori), `categoria` (`artigiano`, `kit`, `gioco`, `musica`, `veicolo`), `costo`, `alias` (altri nomi
+da riconoscere nell'equipaggiamento), `abilita` (con competenza in entrambi la prova si tira con vantaggio), `uso`, `puo`,
+`nonPuo` (elenchi), `operazioni` (`[{"nome", "caratteristica", "cd", "abilita"}]`; senza `cd` la decide il Master),
+`fabbricazione` (`[{"nome", "materiali" (mo), "tempo", "prodotto", "generico"}]`). Nella scheda i giocatori vedono la guida
+degli strumenti che hanno nell'equipaggiamento.
+
+## Equipaggiamento acquistabile
+- Prezzi: campo `costo` di armi e armature (es. `"10 mo"`).
+- Altre categorie (`equipaggiamento`): `[{"categoria": "Equipaggiamento d'avventura", "voci": [{"nome", "costo", "nota"}]}]`.
+  Categorie con lo stesso nome in più pacchetti si uniscono.
+
+## Mostri (`mostri`)
+`nome` e `scheda` (obbligatori), `id` (se manca: `pc-` e il nome), `nomeInglese`, `fonte`, `note`. La `scheda` ha i campi
+del bestiario: `taglia`, `tipo`, `all` (allineamento), `ca`, `pf`, `vel`, `car` (sei numeri da 1 a 30, nell'ordine FOR,
+DES, COS, INT, SAG, CAR), `ts`, `abil`, `vuln`, `res`, `imm`, `immc`, `sensi`, `ling`, `gs`, e gli elenchi `tratti`,
+`azioni`, `reazioni`, `legg` di voci `{"n": "nome", "d": "descrizione"}`. I mostri compaiono nel Bestiario, nella mappa e
+nell'Iniziativa del Master (mai ai giocatori).
+
+## Oggetti magici (`oggettiMagici`)
+Un elenco di oggetti nel formato della «Scheda oggetto magico» (lo stesso del file che l'archivio esporta con «⬆
+Esporta»: `id`, `v`, `nome`, `tipo`, `rar`, `sint`, `testo`, `mod`…). Compaiono nell'archivio «✨ Oggetti magici» con
+«📦 Dal pacchetto»: si consegnano alle schede come gli altri. Modificandone uno, la copia modificata entra nell'archivio
+e vale quella.
+
+## Professioni (`professioni`)
+Un oggetto con la struttura del catalogo delle professioni: `professioni` (`{"id": {"n": "Nome", "raccolta", "estrazione",
+"dosi", "ingredienti", "secrezioni", "speciali", "formule"…}}`), `artigiani` (`[{"id", "n"}]`: mestieri con la regola
+generale di fabbricazione), `disponibilita` (`[{"id", "n", "cd"}]`), e i testi `regoleRaccolta`, `regoleEstrazione`,
+`regoleCreazione`, `regoleUso`. Si scrivono solo nel file del pacchetto.
+
 ## Modifiche future del formato
 Una versione nuova del formato avrà un numero nuovo in `versioneFormato`; l'app continuerà a leggere i pacchetti della
 versione 1. Altri sistemi di gioco avranno un valore diverso in `sistema` e campi propri.

@@ -6,30 +6,78 @@
   "autore": "Gaster Bless",
   "versione": "1.0",
   "licenza": "Esempio libero: copialo e modificalo come vuoi",
-  "descrizione": "Mostra tutti i tipi di voce del formato. Classe, razza, background, incantesimi, armi, armature, talento e stile sono inventati.",
-  "fonti": { "MOD": "Modello di pacchetto" },
-  "listeIncantesimi": { "l": "Custode" },
-  "descrizioniGenerali": { "Vigilanza": "Non puoi essere colto di sorpresa mentre sei sveglio." },
+  "descrizione": "Mostra tutti i tipi di voce del formato. Classe, razza, background, incantesimi, armi, armature, talento, stile, strumento, equipaggiamento, mostro, oggetto magico e professione sono inventati.",
+  "fonti": {
+    "MOD": "Modello di pacchetto"
+  },
+  "listeIncantesimi": {
+    "l": "Custode"
+  },
+  "descrizioniGenerali": {
+    "Vigilanza": "Non puoi essere colto di sorpresa mentre sei sveglio."
+  },
   "classi": [
     {
       "id": "custode",
       "nome": "Custode delle Lanterne",
       "fonte": "MOD",
       "dadoVita": 8,
-      "tiriSalvezza": ["SAG", "CAR"],
-      "armature": ["l", "sc"],
-      "armi": ["s"],
+      "tiriSalvezza": [
+        "SAG",
+        "CAR"
+      ],
+      "armature": [
+        "l",
+        "sc"
+      ],
+      "armi": [
+        "s"
+      ],
       "testoArmature": "Armature leggere, scudi",
       "testoArmi": "Armi semplici",
       "strumenti": "Attrezzi da vetraio",
       "abilitaDaScegliere": 2,
-      "abilita": ["Percezione", "Intuizione", "Medicina", "Storia"],
-      "livelliAumento": [4, 8, 12, 16, 19],
-      "incantatore": { "tipo": "half", "caratteristica": "SAG", "preparazione": "half", "lista": "l" },
+      "abilita": [
+        "Percezione",
+        "Intuizione",
+        "Medicina",
+        "Storia"
+      ],
+      "livelliAumento": [
+        4,
+        8,
+        12,
+        16,
+        19
+      ],
+      "incantatore": {
+        "tipo": "half",
+        "caratteristica": "SAG",
+        "preparazione": "half",
+        "lista": "l"
+      },
       "nomeSottoclasse": "Ordine della Lanterna",
       "livelloSottoclasse": 3,
-      "privilegi": { "1": ["Vigilanza", "Luce Guida"], "2": ["Incantesimi"], "3": ["Ordine della Lanterna"], "5": ["Fiamma Costante"] },
-      "equipaggiamento": ["Una lanterna schermata", "Un bastone ferrato", "Giubba imbottita di lana"],
+      "privilegi": {
+        "1": [
+          "Vigilanza",
+          "Luce Guida"
+        ],
+        "2": [
+          "Incantesimi"
+        ],
+        "3": [
+          "Ordine della Lanterna"
+        ],
+        "5": [
+          "Fiamma Costante"
+        ]
+      },
+      "equipaggiamento": [
+        "Una lanterna schermata",
+        "Un bastone ferrato",
+        "Giubba imbottita di lana"
+      ],
       "descrizioni": {
         "Luce Guida": "Come azione bonus accendi una luce che illumina 6 metri intorno a te per un minuto.",
         "Fiamma Costante": "La tua Luce Guida dura un'ora e non si spegne con il vento."
@@ -38,9 +86,34 @@
         {
           "nome": "Ordine del Faro",
           "fonte": "MOD",
-          "privilegi": { "3": ["Segnale Lontano"], "7": ["Sguardo del Faro"] },
-          "descrizioni": ["Puoi far vedere la tua luce fino a un chilometro di distanza.", "Vantaggio alle prove di Percezione basate sulla vista."],
-          "abilitaFisse": ["Percezione"]
+          "privilegi": {
+            "3": [
+              "Segnale Lontano"
+            ],
+            "7": [
+              "Sguardo del Faro"
+            ]
+          },
+          "descrizioni": [
+            "Puoi far vedere la tua luce fino a un chilometro di distanza.",
+            "Vantaggio alle prove di Percezione basate sulla vista."
+          ],
+          "abilitaFisse": [
+            "Percezione"
+          ],
+          "incantesimiSempre": {
+            "modo": "preparati",
+            "livelli": {
+              "3": [
+                "Velo di Nebbia Chiara"
+              ]
+            },
+            "trucchetti": {
+              "3": [
+                "Scintilla del Custode"
+              ]
+            }
+          }
         }
       ]
     }
@@ -50,24 +123,66 @@
       "id": "muschiati",
       "nome": "Gente del Muschio",
       "fonte": "MOD",
-      "caratteristiche": { "COS": 2 },
+      "caratteristiche": {
+        "COS": 2
+      },
       "velocita": 9,
       "taglia": "Piccola",
       "scurovisione": 18,
-      "lingue": ["Comune", "Lingua delle Radici"],
-      "tratti": ["Pelle di Muschio", "Passo Silenzioso"],
-      "descrizioni": { "Pelle di Muschio": "Nei boschi hai vantaggio alle prove per nasconderti." },
+      "lingue": [
+        "Comune",
+        "Lingua delle Radici"
+      ],
+      "tratti": [
+        "Pelle di Muschio",
+        "Passo Silenzioso"
+      ],
+      "descrizioni": {
+        "Pelle di Muschio": "Nei boschi hai vantaggio alle prove per nasconderti."
+      },
       "sottorazze": [
-        { "id": "valle", "nome": "Muschiati della Valle", "caratteristiche": { "SAG": 1 }, "tratti": ["Radici Profonde"] },
-        { "id": "rupe", "nome": "Muschiati della Rupe", "caratteristiche": { "FOR": 1 }, "abilitaFisse": ["Atletica"], "tratti": ["Presa Salda"] }
-      ]
+        {
+          "id": "valle",
+          "nome": "Muschiati della Valle",
+          "caratteristiche": {
+            "SAG": 1
+          },
+          "tratti": [
+            "Radici Profonde"
+          ]
+        },
+        {
+          "id": "rupe",
+          "nome": "Muschiati della Rupe",
+          "caratteristiche": {
+            "FOR": 1
+          },
+          "abilitaFisse": [
+            "Atletica"
+          ],
+          "tratti": [
+            "Presa Salda"
+          ]
+        }
+      ],
+      "incantesimiRazziali": {
+        "caratteristica": "SAG",
+        "livelli": {
+          "1": [
+            "Scintilla del Custode"
+          ]
+        }
+      }
     }
   ],
   "background": [
     {
       "id": "cartografo",
       "nome": "Cartografo",
-      "abilita": ["Storia", "Sopravvivenza"],
+      "abilita": [
+        "Storia",
+        "Sopravvivenza"
+      ],
       "lingueExtra": 1,
       "strumenti": "Strumenti da cartografo",
       "privilegio": "Occhio per le Strade",
@@ -86,7 +201,9 @@
       "gittata": "18 m",
       "componenti": "V, S",
       "durata": "istantanea",
-      "classi": ["l"],
+      "classi": [
+        "l"
+      ],
       "fonte": "MOD",
       "descrizione": "Una scintilla colpisce una creatura: attacco a distanza con incantesimo, 1d8 danni da fuoco.",
       "livelliSuperiori": "Il danno aumenta di 1d8 al 5°, 11° e 17° livello."
@@ -108,15 +225,163 @@
     }
   ],
   "armi": [
-    { "nome": "Bastone ferrato", "categoria": "semplice", "tipo": "mischia", "danno": "1d6", "tipoDanno": "contundente", "proprieta": "Versatile (1d8)", "versatile": true }
+    {
+      "nome": "Bastone ferrato",
+      "categoria": "semplice",
+      "tipo": "mischia",
+      "danno": "1d6",
+      "tipoDanno": "contundente",
+      "proprieta": "Versatile (1d8)",
+      "versatile": true,
+      "costo": "2 ma"
+    }
   ],
   "armature": [
-    { "nome": "Giubba imbottita di lana", "tipo": "leggera", "ca": 11, "forza": 0, "svantaggioFurtivita": false }
+    {
+      "nome": "Giubba imbottita di lana",
+      "tipo": "leggera",
+      "ca": 11,
+      "forza": 0,
+      "svantaggioFurtivita": false,
+      "costo": "8 mo"
+    }
   ],
   "talenti": [
-    { "nome": "Passo Leggero", "nomeInglese": "Light Step", "fonte": "MOD", "caratteristiche": ["DES"], "effetti": { "speed": 1.5 }, "descrizione": "+1,5 m alla velocità; il terreno difficile non ti rallenta quando corri." }
+    {
+      "nome": "Passo Leggero",
+      "nomeInglese": "Light Step",
+      "fonte": "MOD",
+      "caratteristiche": [
+        "DES"
+      ],
+      "effetti": {
+        "speed": 1.5
+      },
+      "descrizione": "+1,5 m alla velocità; il terreno difficile non ti rallenta quando corri."
+    }
   ],
   "stili": [
-    { "nome": "Guardia Ferma", "descrizione": "+1 alla CA quando non ti sei mosso in questo turno." }
-  ]
+    {
+      "nome": "Guardia Ferma",
+      "descrizione": "+1 alla CA quando non ti sei mosso in questo turno."
+    }
+  ],
+  "strumenti": [
+    {
+      "id": "vetraio",
+      "nome": "Attrezzi da vetraio",
+      "alias": [
+        "strumenti da vetraio"
+      ],
+      "categoria": "artigiano",
+      "costo": "30 mo",
+      "abilita": [
+        "Indagare"
+      ],
+      "uso": "Cannello, pinze e stampi per lavorare il vetro caldo.",
+      "puo": [
+        "riparare una lente o una lanterna",
+        "riconoscere un vetro di qualità"
+      ],
+      "nonPuo": [
+        "lavorare senza una fornace"
+      ],
+      "operazioni": [
+        {
+          "nome": "Riparare una lanterna",
+          "caratteristica": "DES",
+          "cd": 10
+        },
+        {
+          "nome": "Valutare un oggetto di vetro",
+          "caratteristica": "INT",
+          "cd": 12,
+          "abilita": "Indagare"
+        }
+      ],
+      "fabbricazione": [
+        {
+          "nome": "Lente semplice",
+          "materiali": 5,
+          "tempo": "1 giorno",
+          "prodotto": "Una lente"
+        }
+      ]
+    }
+  ],
+  "equipaggiamento": [
+    {
+      "categoria": "Equipaggiamento d'avventura",
+      "voci": [
+        {
+          "nome": "Lanterna schermata",
+          "costo": "5 mo",
+          "nota": "luce 9 m"
+        },
+        {
+          "nome": "Olio (fiasca)",
+          "costo": "1 ma",
+          "nota": ""
+        }
+      ]
+    }
+  ],
+  "mostri": [
+    {
+      "nome": "Lucciola di Palude",
+      "nomeInglese": "Marsh Firefly",
+      "fonte": "MOD",
+      "note": "Creatura inventata per il modello.",
+      "scheda": {
+        "taglia": "Minuscola",
+        "tipo": "bestia",
+        "all": "senza allineamento",
+        "ca": "13",
+        "pf": "3 (1d4 + 1)",
+        "vel": "3 m, volare 12 m",
+        "car": [
+          3,
+          16,
+          12,
+          2,
+          10,
+          4
+        ],
+        "sensi": "Percezione passiva 10",
+        "ling": "—",
+        "gs": "0 (10 PE)",
+        "tratti": [
+          {
+            "n": "Bagliore",
+            "d": "Emette luce fioca in un raggio di 3 metri."
+          }
+        ],
+        "azioni": [
+          {
+            "n": "Puntura",
+            "d": "Attacco con arma da mischia: +5 al tiro per colpire, portata 1,5 m, un bersaglio. Colpito: 1 danno perforante."
+          }
+        ]
+      }
+    }
+  ],
+  "oggettiMagici": [
+    {
+      "id": "modello-lanterna-custode",
+      "v": 1,
+      "nome": "Lanterna del Custode",
+      "tipo": "meraviglioso",
+      "rar": "non_comune",
+      "sint": false,
+      "testo": "Una lanterna che non si spegne con il vento. Oggetto inventato per il modello."
+    }
+  ],
+  "professioni": {
+    "artigiani": [
+      {
+        "id": "vetraio",
+        "n": "Vetraio"
+      }
+    ]
+  }
 }

@@ -40,7 +40,7 @@ async function opzioni(p, sel) { return p.locator(sel + ' option').allTextConten
   await p.setInputFiles('input[type=file]', MODELLO);
   await p.waitForSelector('.dialogo .ct-anteprima');
   const ant = await p.locator('.dialogo .ct-anteprima').textContent();
-  ok(/1 classi · 1 razze · 1 background · 2 incantesimi · 1 armi · 1 armature · 1 talenti · 1 stili/.test(ant), 'anteprima con i conteggi');
+  ok(/1 classi · 1 razze · 1 background · 2 incantesimi · 1 armi · 1 armature · 1 talenti · 1 stili di combattimento · 1 strumenti · 1 categorie di equipaggiamento · 1 mostri · 1 oggetti magici · 1 professioni/.test(ant), 'anteprima con i conteggi');
   await p.click('.dialogo button:has-text("Importa")');
   const scheda = p.locator('.ct-pacchetto').filter({ hasText: 'Modello di pacchetto' });
   await scheda.waitFor({ timeout: 10000 });
@@ -65,6 +65,9 @@ async function opzioni(p, sel) { return p.locator(sel + ' option').allTextConten
   const inc = await p.evaluate(() => SP.filter((s) => s.cl.includes('l')).map((s) => s.it));
   ok(inc.includes('Scintilla del Custode') && inc.includes('Velo di Nebbia Chiara'), 'scheda: incantesimi nella lista del Custode');
   ok(await p.evaluate(() => CLS_CODE.custode === 'l' && CODE_N.l === 'Custode' && !!featInfo('Passo Leggero')), 'scheda: lista della classe e talento');
+  ok(await p.evaluate(() => SUB_SPELLS['Ordine del Faro']['3'][0] === 'Bright Mist Veil' && RACE_SPELLS['muschiati/valle'].ab === 'SAG' &&
+    STRUMENTI.some((s) => s.id === 'vetraio') && EQUIPAGGIAMENTO.some((c) => c.voci.some((v) => v[0] === 'Lanterna schermata')) &&
+    EQUIPAGGIAMENTO.some((c) => c.id === 'armi' && c.voci[0][1] === '2 ma')), 'scheda: incantesimi concessi, strumenti, equipaggiamento con i prezzi');
   await p.screenshot({ path: path.join(__dirname, 'schermate', 'contenuti-scheda.png') });
 
   // Disattivato: la scheda non lo vede più.

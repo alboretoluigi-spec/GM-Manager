@@ -88,7 +88,21 @@ async function salva(p) {
   await salva(p);
   ok(await p.locator('.dialogo .ce-voce', { hasText: 'Gente dei Pontili' }).count() === 1, 'razza salvata');
 
+  // Mostro.
+  await p.click('.dialogo button:has-text("Mostri (0)")');
+  await p.click('.dialogo button:has-text("Nuova voce: mostro")');
+  d = ultimo(p);
+  await (await campo(d, 'Nome *')).fill('Granchio dei Pontili');
+  await (await campo(d, 'Classe Armatura (es. 13 (armatura naturale))')).fill('14');
+  await (await campo(d, 'Punti ferita (es. 22 (4d8 + 4))')).fill('9 (2d8)');
+  await d.locator('button:has-text("Aggiungi un\'azione")').first().click();
+  await d.locator('input[aria-label="Nome"]').last().fill('Chela');
+  await d.locator('textarea[aria-label="Descrizione"]').last().fill('Attacco in mischia: +3 al tiro per colpire. Colpito: 4 (1d6 + 1) danni contundenti.');
+  await salva(p);
+  ok(await p.locator('.dialogo .ce-voce', { hasText: 'Granchio dei Pontili' }).count() === 1, 'mostro inserito a mano');
+
   // Copia ed eliminazione.
+  await p.click('.dialogo button:has-text("Razze (1)")');
   await p.click('.dialogo button[aria-label="Copia Gente dei Pontili"]');
   await salva(p);
   ok(await p.locator('.dialogo .ce-voce', { hasText: 'Gente dei Pontili (copia)' }).count() === 1, 'voce copiata (con un identificativo nuovo)');
@@ -105,7 +119,9 @@ async function salva(p) {
   await p.keyboard.press('Escape');
   await p.waitForTimeout(600);
   const pers = p.locator('.ct-pacchetto', { hasText: 'Le mie aggiunte' });
-  ok(/di Il Master/.test(await pers.textContent()) && /1 classi · 1 razze · 1 incantesimi/.test(await pers.textContent()), 'scheda del pacchetto aggiornata');
+  ok(/di Il Master/.test(await pers.textContent()) && /1 classi · 1 razze · 1 incantesimi · 1 mostri/.test(await pers.textContent()), 'scheda del pacchetto aggiornata');
+  const best = await p.evaluate(() => fetch('/carta/mostri.json').then((r) => r.json()));
+  ok(best.voci.some((v) => v.nome === 'Granchio dei Pontili' && v.scheda.azioni[0].n === 'Chela'), 'il mostro è nel catalogo del bestiario');
   const lista = await chiama(p, '/contenuti');
   const idPers = lista.pacchetti[0].id;
   const f1 = await file(p, idPers);

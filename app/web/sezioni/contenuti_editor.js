@@ -27,6 +27,11 @@ function incantatore(liste, sotto) {
       { k: "trucchetti", t: "numeri", n: "Trucchetti: al 1° livello e i due livelli in cui se ne aggiunge uno (3 numeri)" }] };
 }
 
+function incRazza() {
+  return { k: "incantesimiRazziali", t: "gruppo", n: "Incantesimi concessi dalla razza", campi: [
+    { k: "caratteristica", t: "scelta", n: "Caratteristica", opzioni: CAR }, { k: "livelli", t: "livelli", n: "Per livello del personaggio" }] };
+}
+
 export function schemi(liste) {
   return {
     classi: { nome: "Classe", campi: [
@@ -51,7 +56,11 @@ export function schemi(liste) {
         { k: "privilegi", t: "privilegi", n: "Privilegi", inOrdine: true },
         { k: "abilitaFisse", t: "multi", n: "Abilità con competenza", opzioni: ABILITA },
         { k: "armature", t: "multi", n: "Altre armature con competenza", opzioni: ARMATURE }, { k: "armi", t: "multi", n: "Altre armi con competenza", opzioni: ARMI },
-        { k: "attaccoExtra", t: "si", n: "Attacco extra" }, incantatore(liste, true)] }] },
+        { k: "attaccoExtra", t: "si", n: "Attacco extra" }, incantatore(liste, true),
+        { k: "incantesimiSempre", t: "gruppo", n: "Incantesimi concessi dalla sottoclasse", campi: [
+          { k: "modo", t: "scelta", n: "Come li ottiene", opzioni: [["preparati", "Sempre preparati"], ["conosciuti", "Conosciuti"]] },
+          { k: "livelli", t: "livelli", n: "Per livello di classe (non contano nei limiti)" },
+          { k: "trucchetti", t: "livelli", n: "Trucchetti concessi" }] }] }] },
     razze: { nome: "Razza", campi: [
       { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "id", t: "id", n: "Identificativo" }, { k: "fonte", t: "testo", n: "Fonte (codice)" },
       { k: "caratteristiche", t: "car", n: "Bonus alle caratteristiche" },
@@ -62,12 +71,14 @@ export function schemi(liste) {
       { k: "abilitaFisse", t: "multi", n: "Abilità con competenza", opzioni: ABILITA }, { k: "abilitaDaScegliere", t: "numero", n: "Abilità da scegliere", min: 0, max: 18 },
       { k: "tratti", t: "tratti", n: "Tratti" }, { k: "talento", t: "si", n: "Un talento al 1° livello" },
       { k: "armaturaNaturale", t: "numero", n: "Armatura naturale (CA base + Destrezza)", min: 0, max: 30 },
+      incRazza(), { k: "trucchettoAScelta", t: "area", n: "Trucchetto a scelta (spiegazione per il giocatore)" },
       { k: "sottorazze", t: "sotto", n: "Sottorazze", voce: "sottorazza", campi: [
         { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "id", t: "id", n: "Identificativo" },
         { k: "caratteristiche", t: "car", n: "Bonus alle caratteristiche" },
         { k: "velocita", t: "numero", n: "Velocità (metri)", min: 0, max: 60, passo: 1.5 },
         { k: "scurovisione", t: "numero", n: "Scurovisione (metri)", min: 0, max: 120, passo: 1.5 },
-        { k: "abilitaFisse", t: "multi", n: "Abilità con competenza", opzioni: ABILITA }, { k: "tratti", t: "tratti", n: "Tratti" }] }] },
+        { k: "abilitaFisse", t: "multi", n: "Abilità con competenza", opzioni: ABILITA }, { k: "tratti", t: "tratti", n: "Tratti" },
+        incRazza(), { k: "trucchettoAScelta", t: "area", n: "Trucchetto a scelta (spiegazione per il giocatore)" }] }] },
     background: { nome: "Background", campi: [
       { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "id", t: "id", n: "Identificativo" },
       { k: "abilita", t: "multi", n: "Abilità con competenza", opzioni: ABILITA }, { k: "abilitaDaScegliere", t: "numero", n: "Abilità da scegliere", min: 0, max: 18 },
@@ -90,14 +101,15 @@ export function schemi(liste) {
       { k: "categoria", t: "scelta", n: "Categoria", opzioni: [["semplice", "Semplice"], ["guerra", "Da guerra"]] },
       { k: "tipo", t: "scelta", n: "Tipo", opzioni: [["mischia", "Da mischia"], ["distanza", "A distanza"]] },
       { k: "danno", t: "testo", n: "Danno (es. 1d8)", obbl: true }, { k: "tipoDanno", t: "testo", n: "Tipo di danno", suggerimenti: ["contundente", "perforante", "tagliente"] },
-      { k: "proprieta", t: "testo", n: "Proprietà (testo nella scheda)" },
+      { k: "proprieta", t: "testo", n: "Proprietà (testo nella scheda)" }, { k: "costo", t: "testo", n: "Costo (es. 10 mo)" },
       { k: "accurata", t: "si", n: "Accurata" }, { k: "leggera", t: "si", n: "Leggera" }, { k: "pesante", t: "si", n: "Pesante" }, { k: "dueMani", t: "si", n: "A due mani" },
       { k: "lancio", t: "si", n: "Da lancio" }, { k: "versatile", t: "si", n: "Versatile" }, { k: "portata", t: "si", n: "Portata" }] },
     armature: { nome: "Armatura", campi: [
       { k: "nome", t: "testo", n: "Nome", obbl: true },
       { k: "tipo", t: "scelta", n: "Tipo", opzioni: [["leggera", "Leggera"], ["media", "Media"], ["pesante", "Pesante"]] },
       { k: "ca", t: "numero", n: "Classe Armatura base", min: 1, max: 30, obbl: true, predef: 11 },
-      { k: "forza", t: "numero", n: "Forza minima (0 = nessuna)", min: 0, max: 30 }, { k: "svantaggioFurtivita", t: "si", n: "Svantaggio su Furtività" }] },
+      { k: "forza", t: "numero", n: "Forza minima (0 = nessuna)", min: 0, max: 30 }, { k: "svantaggioFurtivita", t: "si", n: "Svantaggio su Furtività" },
+      { k: "costo", t: "testo", n: "Costo (es. 50 mo)" }] },
     talenti: { nome: "Talento", campi: [
       { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "nomeInglese", t: "testo", n: "Altro nome (facoltativo)" }, { k: "fonte", t: "testo", n: "Fonte (codice)" },
       { k: "caratteristiche", t: "carTalento", n: "+1 a una caratteristica" }, { k: "descrizione", t: "area", n: "Descrizione" },
@@ -111,6 +123,38 @@ export function schemi(liste) {
     stili: { nome: "Stile di combattimento", campi: [
       { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "descrizione", t: "area", n: "Descrizione" },
       { k: "opzionale", t: "si", n: "Stile della regola facoltativa" }] },
+    strumenti: { nome: "Strumento", campi: [
+      { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "id", t: "id", n: "Identificativo" },
+      { k: "categoria", t: "scelta", n: "Categoria", opzioni: [["artigiano", "Strumenti da artigiano"], ["kit", "Kit"], ["gioco", "Set da gioco"], ["musica", "Strumento musicale"], ["veicolo", "Veicolo"]] },
+      { k: "costo", t: "testo", n: "Costo (es. 25 mo)" }, { k: "alias", t: "elenco", n: "Altri nomi da riconoscere (separati da virgole)" },
+      { k: "abilita", t: "multi", n: "Abilità collegate (vantaggio con entrambe le competenze)", opzioni: ABILITA },
+      { k: "uso", t: "area", n: "Come si usa" }, { k: "puo", t: "righe", n: "Cosa si può fare (una riga per voce)" }, { k: "nonPuo", t: "righe", n: "Cosa non si può fare (una riga per voce)" },
+      { k: "operazioni", t: "sotto", n: "Operazioni con un tiro", voce: "un'operazione", campi: [
+        { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "caratteristica", t: "scelta", n: "Caratteristica", opzioni: CAR },
+        { k: "cd", t: "numero", n: "CD indicativa (vuota: la decide il Master)", min: 1, max: 40 },
+        { k: "abilita", t: "scelta", n: "Abilità che dà vantaggio", opzioni: [["", "—"], ...ABILITA] }] },
+      { k: "fabbricazione", t: "sotto", n: "Lavori di fabbricazione", voce: "un lavoro", campi: [
+        { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "materiali", t: "numero", n: "Materiali (mo)", min: 0, max: 1000000, passo: 0.01 },
+        { k: "tempo", t: "testo", n: "Tempo" }, { k: "prodotto", t: "testo", n: "Prodotto" }, { k: "generico", t: "si", n: "Oggetto a scelta con la regola generale" }] }] },
+    equipaggiamento: { nome: "Categoria dell'equipaggiamento", campi: [
+      { k: "categoria", t: "testo", n: "Categoria (es. Equipaggiamento d'avventura)", obbl: true },
+      { k: "voci", t: "tabella", n: "Oggetti acquistabili", voce: "un oggetto", colonne: [["nome", "Nome"], ["costo", "Costo"], ["nota", "Nota"]] }] },
+    mostri: { nome: "Mostro", campi: [
+      { k: "nome", t: "testo", n: "Nome", obbl: true }, { k: "nomeInglese", t: "testo", n: "Altro nome (facoltativo)" },
+      { k: "fonte", t: "testo", n: "Fonte" }, { k: "note", t: "area", n: "Note per il Master" },
+      { k: "scheda", t: "gruppo", n: "Scheda della creatura", sempre: true, campi: [
+        { k: "taglia", t: "testo", n: "Taglia", suggerimenti: ["Minuscola", "Piccola", "Media", "Grande", "Enorme", "Mastodontica"] },
+        { k: "tipo", t: "testo", n: "Tipo (es. bestia, umanoide)" }, { k: "all", t: "testo", n: "Allineamento" },
+        { k: "ca", t: "testo", n: "Classe Armatura (es. 13 (armatura naturale))" }, { k: "pf", t: "testo", n: "Punti ferita (es. 22 (4d8 + 4))" },
+        { k: "vel", t: "testo", n: "Velocità (es. 9 m)" }, { k: "car", t: "sei", n: "Caratteristiche" },
+        { k: "ts", t: "testo", n: "Tiri salvezza" }, { k: "abil", t: "testo", n: "Abilità" },
+        { k: "vuln", t: "testo", n: "Vulnerabilità" }, { k: "res", t: "testo", n: "Resistenze" }, { k: "imm", t: "testo", n: "Immunità ai danni" },
+        { k: "immc", t: "testo", n: "Immunità alle condizioni" }, { k: "sensi", t: "testo", n: "Sensi" }, { k: "ling", t: "testo", n: "Linguaggi" },
+        { k: "gs", t: "testo", n: "Grado di sfida (es. 1/2 (100 PE))" },
+        { k: "tratti", t: "tabella", n: "Tratti", voce: "un tratto", colonne: [["n", "Nome"], ["d", "Descrizione", true]] },
+        { k: "azioni", t: "tabella", n: "Azioni", voce: "un'azione", colonne: [["n", "Nome"], ["d", "Descrizione", true]] },
+        { k: "reazioni", t: "tabella", n: "Reazioni", voce: "una reazione", colonne: [["n", "Nome"], ["d", "Descrizione", true]] },
+        { k: "legg", t: "tabella", n: "Azioni leggendarie", voce: "un'azione", colonne: [["n", "Nome"], ["d", "Descrizione", true]] }] }] },
   };
 }
 
@@ -203,6 +247,42 @@ export function modulo(campi, o = {}) {
         return el("div", { class: "ce-campo ce-largo" }, etichetta(c, s), box);
       }
       case "privilegi": case "tratti": return righeNomi(c, o, lettori);
+      case "tabella": { // elenco di oggetti con le stesse colonne (voci dell'equipaggiamento, tratti e azioni dei mostri)
+        const righe = el("div", { class: "ce-righe" });
+        const aggiungiRiga = (x = {}) => {
+          const celle = c.colonne.map(([k, n, area]) => {
+            const i = area ? el("textarea", { rows: 2, "aria-label": n, placeholder: n }) : el("input", { type: "text", "aria-label": n, placeholder: n });
+            i.value = x[k] ?? ""; return [k, i];
+          });
+          const r = el("div", { class: "ce-riga" }, celle.map(([, i]) => i), el("button", { type: "button", class: "ce-x", "aria-label": "Togli", testo: "✕", on: { click: () => r.remove() } }));
+          r.__leggi = () => Object.fromEntries(celle.map(([k, i]) => [k, i.value.trim()]));
+          righe.append(r);
+        };
+        (Array.isArray(v) ? v : []).forEach(aggiungiRiga);
+        lettori.push((r) => { r[c.k] = [...righe.children].map((x) => x.__leggi()).filter((x) => Object.values(x).some(Boolean)); });
+        return el("fieldset", { class: "ce-campo ce-largo" }, el("legend", { testo: c.n }), righe,
+          el("button", { type: "button", testo: "＋ Aggiungi " + (c.voce || "una riga"), on: { click: () => aggiungiRiga() } }));
+      }
+      case "livelli": { // {"3": ["A", "B"]}: livello e nomi separati da virgole
+        const righe = el("div", { class: "ce-righe" });
+        const aggiungiRiga = (liv = "", nomi = "") => {
+          const l = el("input", { type: "number", min: 1, max: 20, valore: liv, "aria-label": "Livello", class: "ce-liv" });
+          const n = el("input", { type: "text", valore: nomi, "aria-label": "Incantesimi (separati da virgole)", placeholder: "Incantesimi, separati da virgole" });
+          const r = el("div", { class: "ce-riga" }, l, n, el("button", { type: "button", class: "ce-x", "aria-label": "Togli", testo: "✕", on: { click: () => r.remove() } }));
+          r.__leggi = () => [l.value, n.value.split(",").map((x) => x.trim()).filter(Boolean)];
+          righe.append(r);
+        };
+        Object.entries(v || {}).sort((a, b) => a[0] - b[0]).forEach(([liv, nomi]) => aggiungiRiga(liv, (nomi || []).join(", ")));
+        lettori.push((r) => { const out = {}; [...righe.children].forEach((x) => { const [l, n] = x.__leggi(); if (l && n.length) out[l] = (out[l] || []).concat(n); }); r[c.k] = out; });
+        return el("fieldset", { class: "ce-campo ce-largo" }, el("legend", { testo: c.n }), righe,
+          el("button", { type: "button", testo: "＋ Aggiungi un livello", on: { click: () => aggiungiRiga() } }));
+      }
+      case "sei": { // sei caratteristiche in ordine (schede dei mostri)
+        const val = Array.isArray(v) && v.length === 6 ? v : [10, 10, 10, 10, 10, 10];
+        const ii = CAR.map(([k, n], i) => ({ i: el("input", { type: "number", min: 1, max: 30, valore: val[i], "aria-label": c.n + ": " + n }), k }));
+        lettori.push((r) => { r[c.k] = ii.map(({ i }) => Number(i.value) || 10); });
+        return el("fieldset", { class: "ce-campo ce-largo ce-car" }, el("legend", { testo: c.n }), ii.map(({ i, k }) => el("label", {}, el("span", { testo: k }), i)));
+      }
       case "coppie": {
         const righe = el("div", { class: "ce-righe" });
         const aggiungiRiga = (k = "", val = "") => {
@@ -230,9 +310,9 @@ export function modulo(campi, o = {}) {
         const elenco = el("div", { class: "ce-sotto" });
         const aggiungiVoce = (x = {}, aperta = false) => {
           const m = modulo(c.campi, x);
-          const titolo = el("summary", { testo: x.nome || "Nuova " + c.voce });
+          const titolo = el("summary", { testo: x.nome || "(nuova voce)" });
           const d = el("details", { class: "ce-voce-sotto", open: aperta }, titolo, m.nodo,
-            el("button", { type: "button", class: "pericolo", testo: "🗑 Togli questa " + c.voce, on: { click: () => d.remove() } }));
+            el("button", { type: "button", class: "pericolo", testo: "🗑 Togli", on: { click: () => d.remove() } }));
           d.__leggi = m.leggi;
           elenco.append(d);
         };
@@ -293,7 +373,7 @@ function righeNomi(c, o, lettori) {
 
 // ----- Finestra delle voci di un pacchetto -----
 const TIPI = [["classi", "Classi"], ["razze", "Razze"], ["background", "Background"], ["incantesimi", "Incantesimi"], ["armi", "Armi"],
-  ["armature", "Armature"], ["talenti", "Talenti"], ["stili", "Stili"]];
+  ["armature", "Armature"], ["talenti", "Talenti"], ["stili", "Stili"], ["strumenti", "Strumenti"], ["equipaggiamento", "Equipaggiamento"], ["mostri", "Mostri"]];
 
 async function leggiFile(id) {
   const r = await fetch("/api/v1/contenuti/" + encodeURIComponent(id) + "/file", { credentials: "same-origin" });
@@ -329,6 +409,7 @@ export async function apriEditor(p, listeNote, dopo) {
       return; }
     const voci = pac[tipo] || [];
     const sch = schemi(liste())[tipo];
+    const solaLettura = el("p", { class: "tenue piccolo ce-altro", testo: altriContenuti(pac) });
     svuota(corpo,
       el("button", { type: "button", class: "primario", testo: "＋ Nuova voce: " + sch.nome.toLowerCase(), on: { click: () => moduloVoce(-1) } }),
       voci.length ? el("ul", { class: "ce-voci" }, voci.map((v, i) => el("li", { class: "ce-voce" },
@@ -341,7 +422,7 @@ export async function apriEditor(p, listeNote, dopo) {
             if (!(await conferma("Eliminare la voce?", "«" + (v.nome || v.id) + "» sparisce dal pacchetto e dalle schede.", "Elimina", true))) return;
             const nuovo = JSON.parse(JSON.stringify(pac)); nuovo[tipo].splice(i, 1);
             try { await salva(nuovo); avviso("Voce eliminata."); disegna(); } catch (e) { avviso(e.message, "errore"); }
-          } } }))))) : el("p", { class: "tenue", testo: "Nessuna voce di questo tipo nel pacchetto." }));
+          } } }))))) : el("p", { class: "tenue", testo: "Nessuna voce di questo tipo nel pacchetto." }), solaLettura.textContent ? solaLettura : null);
   }
 
   function finestraModulo(titolo, m, applica) {
@@ -382,6 +463,14 @@ export async function apriEditor(p, listeNote, dopo) {
     schede, corpo), { largo: true });
 }
 
+// Oggetti magici e professioni si inseriscono con il file del pacchetto (o, per gli oggetti, nell'archivio «Oggetti magici»).
+function altriContenuti(pac) {
+  const o = (pac.oggettiMagici || []).length, p = pac.professioni ? Object.keys(pac.professioni.professioni || {}).length : 0;
+  if (!o && !p) return "";
+  return "Il pacchetto contiene anche " + [o && o + " oggetti magici (si vedono e si consegnano nell'archivio «Oggetti magici»)", p && p + " professioni"].filter(Boolean).join(" e ") +
+    ": si modificano nel file del pacchetto.";
+}
+
 function descrizioneBreve(tipo, v) {
   switch (tipo) {
     case "classi": return "d" + (v.dadoVita || "?") + ((v.sottoclassi || []).length ? " · " + v.sottoclassi.length + " sottoclassi" : "");
@@ -389,6 +478,8 @@ function descrizioneBreve(tipo, v) {
     case "incantesimi": return v.livello === 0 ? "trucchetto" : v.livello !== undefined ? v.livello + "° livello" : "";
     case "armi": return [v.danno, v.tipoDanno].filter(Boolean).join(" ");
     case "armature": return v.ca ? "CA " + v.ca : "";
+    case "equipaggiamento": return (v.voci || []).length + " oggetti";
+    case "mostri": return v.scheda && v.scheda.gs ? "GS " + v.scheda.gs : "";
     default: return "";
   }
 }

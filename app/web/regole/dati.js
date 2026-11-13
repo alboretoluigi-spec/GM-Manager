@@ -46,6 +46,10 @@ const BGS={};
 const NOMI_LISTE={};
 const CODICI_LISTE={};
 const FONTI={};
+/* Prezzi di armi e armature (nome → costo) e categorie in più dell'equipaggiamento acquistabile ({id, n, voci:[[nome, costo, nota]]}):
+   vengono dai pacchetti di contenuti; li usa web/regole/equipaggiamento.js. */
+const PREZZI={};
+const EQUIP_CAT=[];
 const ALIGN=['Legale Buono','Neutrale Buono','Caotico Buono','Legale Neutrale','Neutrale','Caotico Neutrale','Legale Malvagio','Neutrale Malvagio','Caotico Malvagio'];
 /* ===== INCANTESIMI: trucchetti e 1° livello =====
  formato: [nome IT, nome EN, livello, scuola, tempo, gittata, componenti, durata, classi, fonte, descrizione, livelli superiori]

@@ -16,14 +16,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"math"
 	"net/http"
 	"regexp"
 	"slices"
 	"strconv"
 	"strings"
-	"sync"
 
 	"gasterbless/internal/db"
 )
@@ -92,13 +90,14 @@ type catalogoProf struct {
 }
 
 var (
-	profUna sync.Once
+	profUna ricaricabile // si rilegge quando cambiano i pacchetti di contenuti (contenuti.go)
 	profCat catalogoProf
 )
 
 func (s *Server) catalogoProfessioni() *catalogoProf {
 	profUna.Do(func() {
-		b, err := fs.ReadFile(s.Web, "regole/professioni.json")
+		profCat = catalogoProf{}
+		b, err := s.leggiWeb("regole/professioni.json")
 		if err == nil {
 			json.Unmarshal(b, &profCat)
 		}

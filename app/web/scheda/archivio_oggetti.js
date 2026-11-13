@@ -77,14 +77,14 @@ function arcDisegna() {
     '<div class="arch-az"><button class="btn pri" id="arcNuovo">＋ Nuovo oggetto</button><button class="btn" id="arcImporta">⬇ Importa da file</button><button class="btn" id="arcEsporta">⬆ Esporta tutti</button></div></div>' +
     '<div class="arch-filtri"><input id="arcQ" type="search" placeholder="Cerca per nome…" value="' + esc(ARC.q) + '" aria-label="Cerca per nome">' +
     sel('arcRar', 'Tutte le rarità', MGO.RARITA, ARC.rar) + sel('arcTipo', 'Tutte le tipologie', MGO.TIPI, ARC.tipo) +
-    sel('arcOrig', 'Tutte le origini', [['manuale', '📥 Dai manuali'], ['mano', '✎ Creati da te']], ARC.orig) + '</div>' +
+    sel('arcOrig', 'Tutte le origini', [['manuale', '📥 Dai manuali'], ['pacchetto', '📦 Dai pacchetti'], ['mano', '✎ Creati da te']], ARC.orig) + '</div>' +
     '<div id="arcLista"></div>';
   arcDisegnaLista();
 }
 function arcFiltrati() {
   const q = ARC.q.trim().toLowerCase();
   return ARC.oggetti.filter((x) => (!q || (x.o.nome + ' ' + x.o.sottotipo).toLowerCase().includes(q)) && (!ARC.rar || x.o.rar === ARC.rar) && (!ARC.tipo || x.o.tipo === ARC.tipo) &&
-    (!ARC.orig || (ARC.orig === 'manuale') === !!x.manualeNome));
+    (!ARC.orig || (x.pacchetto ? 'pacchetto' : x.manualeNome ? 'manuale' : 'mano') === ARC.orig));
 }
 function arcRiga(x) {
   const o = x.o;
@@ -99,17 +99,18 @@ function arcRiga(x) {
     (MGO.slotInfo(o.slot)[1] !== nomeDi(MGO.TIPI, o.tipo) ? ' · slot: ' + esc(MGO.slotInfo(o.slot)[1]) : '') + (o.sint ? ' · richiede sintonizzazione' : '') +
     (MGO.haEffettiCalcolabili(o) ? '' : ' · <span class="warn" title="Equipaggiato non cambia nessun numero della scheda: ✎ Modifica → sezione D o «✨ Suggerisci dai testi»">⚠ nessun bonus calcolato</span>') + '</div>' +
     (x.manualeNome ? '<div class="sm mut">📥 ' + esc(x.manualeNome) + (x.pagina ? ', pagina ' + esc(x.pagina) + ' del PDF' : '') + '</div>' : '') +
+    (x.pacchetto ? '<div class="sm mut arch-pacchetto" title="Modificandolo, la copia modificata entra nel tuo archivio e vale quella">📦 Dal pacchetto «' + esc(x.pacchetto) + '»</div>' : '') +
     '<div class="sm arch-chi">' + chi + (vecchi.length ? ' <button class="linkbtn" data-a="agg">↻ Aggiorna nelle schede</button>' : '') + '</div></div>' +
     '<div class="arch-btns"><button class="linkbtn" data-a="card">📄 Scheda</button><button class="linkbtn" data-a="edit">✎ Modifica</button>' +
     '<button class="linkbtn" data-a="give">🎁 Consegna…</button><button class="linkbtn" data-a="dup" title="Duplica come variante">⧉ Duplica</button>' +
     '<button class="linkbtn" data-a="exp" title="Esporta in un file">⬆ Esporta</button>' + (x.manualeNome ? '<button class="linkbtn" data-a="txt">📖 Testo</button>' : '') +
-    '<button class="linkbtn" data-a="del" title="Togli dall\'archivio (le schede lo tengono)">🗑</button></div></div>';
+    (x.pacchetto ? '' : '<button class="linkbtn" data-a="del" title="Togli dall\'archivio (le schede lo tengono)">🗑</button>') + '</div></div>';
 }
 function arcDisegnaLista() {
   const box = $('arcLista'); if (!box) return;
   const L = arcFiltrati();
   if (!ARC.oggetti.length) {
-    box.innerHTML = '<div class="arch-vuoto">Nessun oggetto ancora. Crea il primo con «＋ Nuovo oggetto», importa un file .json oppure leggi la Guida del Dungeon Master con «📥 Importa dai manuali».</div>';
+    box.innerHTML = '<div class="arch-vuoto">Nessun oggetto ancora. Crea il primo con «＋ Nuovo oggetto», importa un file .json, leggi i tuoi manuali con «📥 Importa dai manuali» oppure importa un pacchetto di contenuti.</div>';
     return;
   }
   box.innerHTML = '<div class="sm mut arch-conta">' + (L.length === ARC.oggetti.length ? L.length + ' oggetti' : L.length + ' di ' + ARC.oggetti.length + ' oggetti') + '</div>' +
