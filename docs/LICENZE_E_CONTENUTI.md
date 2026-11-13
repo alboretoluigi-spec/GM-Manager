@@ -42,7 +42,7 @@ Coast.
 
 Le dipendenze indirette di Go si elencano con `go list -m all` e si controllano prima della versione di prova (fase 6).
 
-## 4. Elementi di Barovia esclusi o in attesa
-L'elenco completo è in `docs/PIANO.md` §3. In attesa di risposta del Master (domande al §6 del piano): icone delle
-classi, video di benvenuto, immagini di saluto, del «povero» e del Monte Ghakis. Finché non c'è una risposta scritta,
-**non entrano**.
+## 4. Elementi di Barovia esclusi
+L'elenco completo è in `docs/PIANO.md` §3. Il 13/11/2026 il Master ha deciso di **togliere per ora** anche: icone delle
+classi, video di benvenuto, immagini di saluto, del «povero» e del Monte Ghakis. Si sostituiscono con materiale nuovo,
+con licenza annotata al §3.

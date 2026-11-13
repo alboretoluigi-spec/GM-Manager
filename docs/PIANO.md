@@ -12,7 +12,11 @@ un avvocato esperto di proprietà intellettuale.
 | 13/11/2026 | Seconda app commerciale, separata da Barovia, con tutte le sue funzioni rese generiche |
 | 13/11/2026 | Vendita come **app sul PC del Master con licenza** (nessun abbonamento online) |
 | 13/11/2026 | **Barovia resta** la copia personale del Master e non viene modificata da questo progetto |
-| 13/11/2026 | Nome: **GM Manager** (prima, come nome di lavoro, «GM Desktop»); repository privato `alboretoluigi-spec/gm-manager` |
+| 13/11/2026 | Nome: **GM Manager** (prima, come nome di lavoro, «GM Desktop»); repository privato `alboretoluigi-spec/GM-Manager` |
+| 13/11/2026 | Icone delle classi, video di benvenuto, immagini di saluto, del «povero» e del Monte Ghakis: **tolti per ora** (si sostituiscono con materiale nuovo) |
+| 13/11/2026 | Sistemi: **Windows e macOS** |
+| 13/11/2026 | Licenza: **1 PC per licenza, a vita** |
+| 13/11/2026 | **Niente gioco da remoto** nella prima versione (MQTT, Cloudflare, VPN restano fuori) |
 
 ### Nota sul nome
 Una ricerca sul web (13/11/2026) non ha trovato un'app chiamata esattamente «GM Manager», ma il settore ha nomi vicini:
@@ -144,8 +148,7 @@ vietate (Barovia, Strahd, Ravenloft, Vallaki, Tarokka, Madame Eva, Curse of Stra
 le prove se ne trova.
 
 ## 6. Domande aperte
-1. Le icone delle classi, il video di benvenuto e le immagini `saluto`, `povero` e del Ghakis: chi li ha creati? Si
-   possono usare in un prodotto in vendita?
-2. Solo Windows, oppure anche macOS?
-3. Quanti PC per licenza; licenza a vita o per versione principale.
-4. Il gioco da remoto serve già nella prima versione?
+Le quattro domande del 13/11 hanno avuto risposta (vedi §1). Restano:
+1. Accesso dei giocatori da fuori casa (Internet) nella prima versione: solo rete di casa, oppure anche da Internet?
+2. Prezzo e piattaforma di vendita (dopo il parere del commercialista).
+3. Lingua di partenza: italiano e inglese insieme, oppure prima l'italiano.
