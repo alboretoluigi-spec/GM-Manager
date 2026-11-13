@@ -1,0 +1,3 @@
+Suoni dell'app, creati per Gaster Bless (sintesi con ffmpeg, 13/11/2026): nessun materiale di terzi.
+- corvo.mp3: avviso «è il tuo turno» nel tracker dell'iniziativa (due toni brevi).
+- attesa.mp3: musica d'attesa facoltativa del tracker (accordo lento, 24 secondi).

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scheda del personaggio – GASTER BLESS – MASTER SUITE</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="quick" id="quick"><div class="qn"><b id="qName"></b><small id="qSub"></small></div><div class="qs" id="qStats"></div></div>
+<div class="wrap">
+<div class="topbar">
+ <div class="logo"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e0574c" stroke-width="1.6"><path d="M12 2l8.5 5v10L12 22l-8.5-5V7z"/><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10"/></svg><span>Scheda <b>5e</b></span></div>
+ <div class="sp"></div>
+ <button class="btn themebtn" id="bTheme" title="Tema">☀</button>
+ <button class="btn" id="bPrint">🖨 Stampa</button>
+ <button class="btn" id="bNew">Nuovo personaggio</button>
+ <button class="btn" id="bExp">Esporta</button>
+ <button class="btn" id="bImp">Importa</button>
+</div>
+
+<div class="tabs">
+ <button class="tab on" data-tab="p1">Personaggio</button>
+ <button class="tab" data-tab="p2">Aspetto &amp; Storia</button>
+ <button class="tab" data-tab="p3">Incantesimi</button>
+</div>
+
+<!-- ================= PAGINA 1 ================= -->
+<section class="page on" id="p1">
+<div class="banner">
+ <div class="namebox nb1"><label class="portrait p1" id="portrait1" title="Carica un'immagine del personaggio"><span>＋<br>Ritratto</span><input type="file" accept="image/*" id="fImg1" hidden></label><div class="nbn"><input data-f="nome" placeholder="Nome del personaggio"><div class="lbl" style="margin-top:4px">Nome personaggio</div></div></div>
+ <div class="hdr">
+  <div class="hf"><div class="in"><span id="oClsIco" class="cls-ico" aria-hidden="true"></span><select id="sCls"></select><select id="sLvl" class="lv"></select></div><span class="lbl">Classe &amp; livello</span></div>
+  <div class="hf"><div class="in"><select id="sBg"></select></div><span class="lbl">Background</span></div>
+  <div class="hf"><div class="in"><input data-f="giocatore" placeholder="—"></div><span class="lbl">Nome giocatore</span></div>
+  <div class="hf"><div class="in"><select id="sSub"></select></div><span class="lbl" id="lSub">Sottoclasse</span></div>
+  <div class="hf"><div class="in"><select id="sRace"></select><select id="sSr"></select></div><span class="lbl">Razza</span></div>
+  <div class="hf"><div class="in"><select id="sAl"></select></div><span class="lbl">Allineamento</span></div>
+  <div class="hf" style="grid-column:3"><div class="in"><input data-f="pe" id="iXp" placeholder="0" inputmode="numeric"></div><span class="lbl" id="lXp">Punti esperienza</span></div>
+ </div>
+</div>
+
+<details class="cfg" id="cfg" open>
+ <summary>Scelte del personaggio <small id="cfgSum"></small></summary>
+ <div class="cfgbody" id="cfgBody"></div>
+</details>
+
+<div class="grid3">
+ <!-- colonna 1 -->
+ <div class="col">
+  <div class="abwrap">
+   <div><div class="abcol" id="abCol"></div><button class="btn" id="bPb" style="width:100%;margin-top:8px;font-size:11px;padding:6px 4px">Acquisto a punti</button></div>
+   <div class="col" style="gap:10px">
+    <div class="pill"><input type="checkbox" class="insp" id="cInsp"><span class="pl">ISPIRAZIONE</span></div>
+    <div class="pill"><div class="pv" id="oProf">+2</div><span class="pl">BONUS DI COMPETENZA</span></div>
+    <div class="box"><div class="rows" id="savesRows"></div><div class="cap">TIRI SALVEZZA</div></div>
+    <div class="box"><div class="rows" id="skRows"></div><div class="cnt" id="skCnt"></div><div class="cap">ABILITÀ</div></div>
+   </div>
+  </div>
+  <div class="pill"><div class="pv" id="oPass">10</div><span class="pl">SAGGEZZA (PERCEZIONE) PASSIVA</span></div>
+  <div class="box exhbox"><div class="exh-r"><select id="sExh" aria-label="Livello di indebolimento"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><span class="exh-d" id="oExhD"></span></div><div class="cap">INDEBOLIMENTO</div></div>
+  <div class="box" id="difBox"><div class="dif-list" id="oDif"></div><div class="cap">DIFESE</div></div>
+  <div class="box"><div class="prof-list" id="oProfs"></div><textarea class="txt" data-f="altreComp" placeholder="Altre competenze e linguaggi…" style="min-height:50px;margin-top:6px"></textarea><div class="cap">ALTRE COMPETENZE &amp; LINGUAGGI</div></div>
+  <div class="box" id="tlBoxW"><div id="tlBox"></div><div class="cap">STRUMENTI &amp; PROFESSIONI</div></div>
+ </div>
+
+ <!-- colonna 2 -->
+ <div class="col">
+  <div class="box" style="padding:10px">
+   <div class="trio">
+    <div class="stat shield"><div class="sv" id="oAC">10</div><div class="sl">CA</div><div class="ss" id="oACs"></div></div>
+    <div class="stat"><div class="sv" id="oInit">+0</div><div class="sl">INIZIATIVA</div><div class="ss" id="oInits"></div></div>
+    <div class="stat"><div class="sv" id="oSpd">9 m</div><div class="sl">VELOCITÀ</div><div class="ss" id="oSpds"></div></div>
+   </div>
+   <div class="box hpbox" style="margin-top:10px;background:var(--panel2)">
+    <div class="hpmax"><span>Massimo dei Punti Ferita <b id="oHpMax">—</b></span><button class="linkbtn" id="bHp">metodo: <span id="oHpM">media</span> · modifica</button></div>
+    <input class="big" id="iHpCur" placeholder="—" inputmode="numeric">
+    <div class="cap">PUNTI FERITA ATTUALI</div>
+   </div>
+   <div class="box" style="margin-top:8px;background:var(--panel2)"><input class="big" id="iHpTmp" style="font-size:20px;font-weight:700;text-align:center;width:100%" placeholder="—"><div class="cap">PUNTI FERITA TEMPORANEI</div></div>
+   <div class="duo" style="margin-top:8px">
+    <div class="box" style="background:var(--panel2)"><div style="font-size:11px;color:var(--mut)">Totale <b id="oHD" style="color:var(--text)">1d8</b></div><input data-f="hdUsati" placeholder="usati" style="width:100%;text-align:center;font-weight:700;font-size:18px;padding:4px 0"><div class="cap">DADI VITA</div></div>
+    <div class="box" style="background:var(--panel2)">
+     <div class="ds">SUCCESSI <input type="checkbox" data-ds="s0"><input type="checkbox" data-ds="s1"><input type="checkbox" data-ds="s2"></div>
+     <div class="ds f">FALLIMENTI <input type="checkbox" data-ds="f0"><input type="checkbox" data-ds="f1"><input type="checkbox" data-ds="f2"></div>
+     <div class="cap">TS CONTRO MORTE</div>
+    </div>
+   </div>
+  </div>
+  <div class="box">
+   <table class="atk"><thead><tr><th>NOME</th><th>CAR.</th><th>MAG.</th><th style="text-align:center">BONUS ATT.</th><th>DANNI/TIPO</th></tr></thead><tbody id="atkBody"></tbody></table>
+   <div id="atkNotes" class="sm" style="font-size:11px;color:var(--mut);margin-top:4px"></div>
+   <textarea class="txt" data-f="attNote" placeholder="Note su attacchi e incantesimi…" style="min-height:44px;margin-top:6px"></textarea>
+   <div class="cap">ATTACCHI &amp; INCANTESIMI</div>
+  </div>
+  <div class="box" id="magBox"></div>
+  <div class="box" id="invBox"></div>
+  <div class="box">
+   <div class="coins">
+    <div class="c" id="coins"></div>
+    <textarea class="txt" id="tEq" style="min-height:220px"></textarea>
+   </div>
+   <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px"><button class="linkbtn" id="bEqC">🛒 aggiungi dall'elenco</button><button class="linkbtn" id="bTrasf" title="Dai monete a un altro personaggio">💸 Trasferisci</button><button class="linkbtn" id="bEq">ricarica equipaggiamento iniziale</button></div>
+   <div class="cap"><button class="capbtn" id="capEq" title="Apri l'elenco completo dell'equipaggiamento acquistabile">EQUIPAGGIAMENTO 🛒</button></div>
+  </div>
+ </div>
+
+ <!-- colonna 3 -->
+ <div class="col">
+  <div class="box"><textarea class="txt" data-f="tratti" style="min-height:62px"></textarea><div class="cap">TRATTI CARATTERIALI</div></div>
+  <div class="box"><textarea class="txt" data-f="ideali" style="min-height:48px"></textarea><div class="cap">IDEALI</div></div>
+  <div class="box"><textarea class="txt" data-f="legami" style="min-height:48px"></textarea><div class="cap">LEGAMI</div></div>
+  <div class="box"><textarea class="txt" data-f="difetti" style="min-height:48px"></textarea><div class="cap">DIFETTI</div></div>
+  <div class="box"><div class="feat-list" id="oFeat"></div><textarea class="txt" data-f="privNote" placeholder="Note aggiuntive su privilegi e tratti…" style="min-height:50px;margin-top:8px"></textarea><div class="cap">PRIVILEGI &amp; TRATTI</div></div>
+ </div>
+</div>
+</section>
+
+<!-- ================= PAGINA 2 ================= -->
+<section class="page" id="p2">
+<div class="p2top">
+ <div class="namebox"><input data-f="nome" placeholder="Nome del personaggio"><div class="lbl" style="margin-top:4px">Nome personaggio</div></div>
+ <div class="hdr">
+  <div class="hf"><div class="in"><input data-f="eta"></div><span class="lbl">Età</span></div>
+  <div class="hf"><div class="in"><input data-f="altezza"></div><span class="lbl">Altezza</span></div>
+  <div class="hf"><div class="in"><input data-f="peso"></div><span class="lbl">Peso</span></div>
+  <div class="hf"><div class="in"><input data-f="occhi"></div><span class="lbl">Occhi</span></div>
+  <div class="hf"><div class="in"><input data-f="carnagione"></div><span class="lbl">Carnagione</span></div>
+  <div class="hf"><div class="in"><input data-f="capelli"></div><span class="lbl">Capelli</span></div>
+ </div>
+</div>
+<div class="box bgsec"><div class="bgh"><div><div class="bgtitle">Background del personaggio</div><div class="hint">Carica il documento con la storia del tuo personaggio. Lo potrete leggere solo tu e il Master.</div></div></div><div id="bgBox"></div></div>
+<div class="box bgsec" id="bgMaster" style="display:none"><div class="bgtitle">Background dei giocatori <span class="src">solo Master</span></div><div id="bgList"></div></div>
+<div class="p2grid">
+ <div class="col">
+  <div class="box"><label class="portrait" id="portrait"><span>Clicca per caricare un'immagine del personaggio</span><input type="file" accept="image/*" id="fImg" hidden></label><div style="text-align:right;margin-top:4px"><button class="linkbtn" id="bImgDel">rimuovi immagine</button></div><div class="cap">ASPETTO DEL PERSONAGGIO</div></div>
+  <div class="box"><textarea class="txt" data-f="storia" style="min-height:320px"></textarea><div class="cap">STORIA DEL PERSONAGGIO</div></div>
+ </div>
+ <div class="col">
+  <div class="box">
+   <div style="display:grid;grid-template-columns:1fr 160px;gap:12px">
+    <textarea class="txt" data-f="alleati" style="min-height:200px"></textarea>
+    <div><div class="hf" style="margin-bottom:8px"><div class="in"><input data-f="orgNome"></div><span class="lbl">Nome</span></div><label class="portrait sym" id="symbol"><span>Simbolo</span><input type="file" accept="image/*" id="fSym" hidden></label></div>
+   </div>
+   <div class="cap">ALLEATI &amp; ORGANIZZAZIONI</div>
+  </div>
+  <div class="box"><textarea class="txt" data-f="trattiAgg" style="min-height:200px"></textarea><div class="cap">TRATTI &amp; PRIVILEGI AGGIUNTIVI</div></div>
+  <div class="box"><textarea class="txt" data-f="tesoro" style="min-height:140px"></textarea><div class="cap">TESORO</div></div>
+ </div>
+</div>
+</section>
+
+<!-- ================= PAGINA 3 ================= -->
+<section class="page" id="p3">
+<div class="sphead">
+ <div class="namebox"><div style="font-family:var(--fh);font-size:20px;font-weight:700;border-bottom:1px solid var(--line2);padding:4px 0" id="oSpCls">—</div><div class="lbl" style="margin-top:4px">Classe da incantatore</div></div>
+ <div class="hdr">
+  <div class="hf"><div class="hv" id="oSpAb">—</div><span class="lbl">Caratteristica da incantatore</span></div>
+  <div class="hf"><div class="hv" id="oSpDC">—</div><span class="lbl">CD tiro salvezza incantesimi</span></div>
+  <div class="hf"><div class="hv" id="oSpAtk">—</div><span class="lbl">Bonus di attacco incantesimi</span></div>
+  <div class="hf"><div class="hv" id="oSpN">—</div><span class="lbl" id="lSpN">Incantesimi conosciuti</span></div>
+ </div>
+</div>
+<div id="spInfo" class="warn" style="margin:-4px 0 10px"></div>
+<div class="spgrid" id="spGrid"></div>
+</section>
+</div>
+
+<div class="modal" id="mHp"><div class="mbox">
+ <h2>Aumento dei Punti Ferita</h2>
+ <p id="mHpTxt"></p>
+ <div class="mrows" id="mHpRows"></div>
+ <div class="mact"><button class="btn" id="mHpAvg">Usa il valore medio</button><button class="btn pri" id="mHpMan">Conferma valori inseriti</button></div>
+</div></div>
+<div class="modal" id="mIO"><div class="mbox">
+ <h2 id="mIOt">Esporta</h2><p id="mIOp"></p>
+ <textarea id="mIOtx"></textarea>
+ <div class="mact"><label class="btn" id="mIOf" style="display:none">Carica file .json<input type="file" accept=".json,application/json" id="fJson" hidden></label><button class="btn" id="mIOc">Chiudi</button><button class="btn pri" id="mIOok">Copia</button></div>
+</div></div>
+<div class="modal" id="mNew"><div class="mbox"><h2>Nuovo personaggio</h2><p>La scheda attuale verrà cancellata. Esportala prima se vuoi conservarla.</p><div class="mact"><button class="btn" id="mNewNo">Annulla</button><button class="btn pri" id="mNewOk">Cancella e ricomincia</button></div></div></div>
+<div class="modal" id="mEqC"><div class="mbox wide">
+ <h2>Equipaggiamento acquistabile</h2><p class="hint">Prezzi del Manuale del Giocatore. Scegli quantità e «+»: l'oggetto si aggiunge all'equipaggiamento del personaggio e il prezzo si toglie dalle monete (gratis se lo aggiunge il Master).</p>
+ <div class="pkbar"><input id="eqQ" placeholder="Cerca per nome…"><select id="eqCat"></select></div>
+ <div class="pklist" id="eqList"></div>
+ <div class="pkfoot"><span class="hint" id="eqCnt"></span><button class="btn pri" id="eqClose">Fatto</button></div>
+</div></div>
+<div class="modal" id="mSp"><div class="mbox wide">
+ <h2 id="pkT">Aggiungi incantesimo</h2><p id="pkSub"></p>
+ <div class="pkbar"><input id="pkQ" placeholder="Cerca per nome (italiano o inglese)…"><select id="pkSch"></select><label class="tog" id="pkAllL"><input type="checkbox" id="pkAll"> tutte le classi</label></div>
+ <div class="pklist" id="pkList"></div>
+ <div class="pkfoot"><span class="hint" id="pkCnt"></span><input id="pkCustom" placeholder="Incantesimo personalizzato…"><button class="btn" id="pkCustomAdd">Aggiungi</button><button class="btn pri" id="pkClose">Fatto</button></div>
+</div></div>
+<div class="modal" id="mSd"><div class="mbox sd">
+ <div class="sdh"><h2 id="sdN"></h2><span id="sdE"></span></div><div class="sdl" id="sdL"></div>
+ <div class="sdg" id="sdG"></div><div class="sdd" id="sdD"></div><div class="sdc" id="sdC"></div>
+ <div class="mact"><button class="btn" id="sdClose">Chiudi</button><button class="btn" id="sdRit" style="display:none">Rituale</button><button class="btn pri" id="sdCast" style="display:none">Lancia incantesimo</button><button class="btn pri" id="sdAct">Aggiungi</button></div>
+</div></div>
+<div class="modal" id="mTl"><div class="mbox wide"><div id="tlBody"></div><div class="tlfoot"><button class="linkbtn" id="tlClose">Chiudi</button></div></div></div>
+<div class="modal" id="mPb"><div class="mbox wide">
+ <h2>Calcolatore acquisto a punti</h2>
+ <p>Regole del Manuale del Giocatore: 27 punti, punteggi da 8 a 15 prima dei bonus razziali. Puoi modificare le regole qui sotto per le regole della casa.</p>
+ <div class="pbset"><label>Punti disponibili <input type="number" id="pbB" min="0"></label><label>Minimo <input type="number" id="pbMin" min="3" max="18"></label><label>Massimo <input type="number" id="pbMax" min="3" max="18"></label><button class="linkbtn" id="pbResetRules">regole standard</button></div>
+ <details id="pbCustom" class="pbcd"><summary>Costi dei punteggi (personalizzabili)</summary><div id="pbCost" class="pbcost"></div></details>
+ <div class="pbbarw"><div id="pbBar" class="pbbar"></div></div><div id="pbSpent" class="pbspent"></div>
+ <table class="bd pbt"><thead><tr><th>CARATTERISTICA</th><th>PUNTEGGIO</th><th>BONUS RAZZIALE</th><th>TOTALE</th><th>MOD.</th><th>COSTO</th></tr></thead><tbody id="pbRows"></tbody></table>
+ <div class="hint" id="pbRace" style="margin:6px 0 10px"></div>
+ <div class="pbsaves"><span class="lbl">Serie salvate</span><div id="pbSaves"></div></div>
+ <div class="mact"><button class="btn" id="pbReset">Tutti a 8</button><button class="btn" id="pbStd">Serie standard per la classe</button><button class="btn" id="pbSave">Salva serie</button><span style="flex:1"></span><button class="btn" id="pbClose">Annulla</button><button class="btn pri" id="pbApply">Applica alla scheda</button></div>
+</div></div>
+<div class="modal" id="mFi"><div class="mbox sd"><h2 id="fiT"></h2><div class="sdl" id="fiS"></div><div class="sdd" id="fiD"></div><div class="mact"><button class="btn pri" id="fiClose">Chiudi</button></div></div></div>
+<div class="modal" id="mBv"><div class="mbox bv"><div class="bvh"><div><h2 id="bvT"></h2><div class="sdl" id="bvS"></div></div><button class="btn" id="bvClose">Chiudi</button></div><div class="bvb" id="bvB"></div></div></div>
+<div class="modal" id="mPr"><div class="mbox">
+ <h2>Stampa la scheda</h2>
+ <p id="prNote">In questa finestra il browser non permette la stampa diretta: crea un PDF, poi aprilo e stampalo.</p>
+ <div class="hint" style="margin-bottom:6px">Pagine da includere</div>
+ <label class="tog"><input type="checkbox" id="pr_p1" checked> Personaggio</label>
+ <label class="tog"><input type="checkbox" id="pr_p2" checked> Aspetto &amp; Storia</label>
+ <label class="tog"><input type="checkbox" id="pr_p3" checked> Incantesimi</label>
+ <div class="hint" id="prMsg" style="min-height:18px;margin:8px 0"></div>
+ <div class="mact"><button class="btn" id="prClose">Chiudi</button><button class="btn" id="prPdf">Scarica PDF</button><button class="btn pri" id="prNow">Stampa ora</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script src="/regole/dati.js"></script>
+<script src="/regole/motore.js"></script>
+<script src="/regole/talenti.js"></script>
+<script src="/regole/incantesimi_auto.js"></script>
+<script src="/regole/strumenti.js"></script>
+<script src="/regole/equipaggiamento.js"></script>
+<script src="/regole/oggetti.js"></script>
+<script src="/regole/incantesimi_effetti.js"></script>
+<script src="/regole/difese.js"></script>
+<script src="scheda.js"></script>
+<script src="oggetti_ui.js"></script>
+<script src="armi_ui.js"></script>
+<script src="incantesimi_ui.js"></script>
+<script src="importa_pdf.js"></script>
+<script src="avvio.js"></script>
+</body></html>

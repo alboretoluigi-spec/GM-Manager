@@ -6,6 +6,11 @@
 da Barovia è la fase 3b.
 
 ## Fase attuale (aggiornamento)
+**13/11/2026 sera: fase 3b fatta.** Il programma ripulito è in `app/`: compila, il controllo delle parole vietate passa, il
+marchio è su tutte le schermate, provato nel browser senza errori. **19 prove del server sono ancora rosse** perché
+usano dati che non ci sono più (elenco in `docs/PIANO.md` §5.1): da sistemare nella fase 3d. La scheda del personaggio
+si apre ma senza classi, razze e incantesimi: arriveranno con l'importazione (fase 3c).
+
 **13/11/2026: marchio deciso.** Nome ufficiale **GASTER BLESS – MASTER SUITE**, slogan **MASTER YOUR WORLD**, sottotitolo
 **THE UNIVERSAL TABLETOP RPG PLATFORM**, stile dell'immagine del Master (oro `#d8b978` su `#191923`). Pronti in `branding/`:
 `marchio.css`, `intestazione.html` (anteprima), `logo.svg`, `MARCHIO.md`, carattere Source Sans 3. **App generica per diversi giochi di ruolo, senza
@@ -36,6 +41,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
+0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
+   per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
+   edizione come primo «modulo di sistema», scheda libera per gli altri giochi; poi **3d**: le 19 prove rosse e nuove
+   prove nel browser. Comandi: `cd app && go build ./... && go test ./...` (oggi `internal/server` fallisce per le 19).
 1. **Fase 3b** (dopo la conferma del Master): copia ripulita del codice da Barovia (`04_nuova_app`) in una cartella di
    lavoro fuori dal repository; tolti i contenuti dell'inventario; nome cambiato (`barovia` → `gasterbless`) e marchio applicato
    a tutte le schermate secondo `branding/MARCHIO.md`; controllo
@@ -44,12 +53,12 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **Fase 3b**: copia di Barovia (`04_nuova_app`, senza storia Git) ripulita in una cartella di lavoro e portata in `app/`. Tolte le funzioni legate alla campagna, svuotati i dati di gioco, nomi cambiati (`gasterbless`, «Parla con l'antagonista», «Archivista delle fonti»), istruzioni dell'IA neutre, media e icone rifatti, marchio applicato. Nuovi `app/internal/controlli/parole_test.go`, `docs/parole_vietate.txt`, `app/web/stile/marchio.css`, `app/web/ui/marchio.js`, `app/README.md`. Corretto `branding/` (carattere del logo SVG, intestazione con div). Prove: build e vet puliti, parole vietate ok, 19 prove del server rosse (elenco in `docs/PIANO.md` §5.1), pagine principali provate nel browser. |
 | 2026-11-13 | Claude Code (cloud) | Decisione del Master: app generica per diversi giochi di ruolo, nessun contenuto di gioco incluso (importazione o inserimento a mano da parte dell'utente). Aggiornati `CLAUDE.md`, `README.md`, `docs/PIANO.md` (§1, §3.2, §3.3, fase 3c, §6), `docs/LICENZE_E_CONTENUTI.md`. |
 | 2026-11-13 | Claude Code (cloud) | Marchio: nome GASTER BLESS – MASTER SUITE, slogan e sottotitolo dall'immagine del Master (colori ricavati dall'immagine). Creati `branding/MARCHIO.md`, `marchio.css`, `intestazione.html`, `logo.svg`, `font/` (Source Sans 3, OFL); aggiornati `CLAUDE.md`, `README.md`, `docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md`. Anteprima controllata su PC e telefono. |
 | 2026-11-13 | Claude Code (cloud) | Registrate le risposte del Master alle quattro domande (immagini tolte, anche macOS, 1 PC a vita, niente gioco da remoto) in `docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md` e qui. |
 | 2026-11-13 | Claude Code (cloud) | Fase 3a: repository collegato alla sessione; creati `CLAUDE.md`, `README.md`, `.gitignore`, `STATO_LAVORO.md`, `docs/PIANO.md` (dall'inventario di Barovia, con il nome GM Manager e le fasi 3a-3d), `docs/LICENZE_E_CONTENUTI.md` (regole, attribuzione SRD 5.1, componenti di terzi). |
 
 ## File creati o modificati nell'ultima sessione
-`branding/MARCHIO.md`, `branding/marchio.css`, `branding/intestazione.html`, `branding/logo.svg`,
-`branding/font/source-sans-3.woff2`, `branding/font/LICENZA-source-sans-3.txt` (nuovi); `CLAUDE.md`, `README.md`,
-`docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md`, `STATO_LAVORO.md`.
+`app/` (nuovo: tutto il programma), `docs/parole_vietate.txt` (nuovo), `docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md`,
+`branding/MARCHIO.md`, `branding/intestazione.html`, `branding/logo.svg`, `.gitignore`, `STATO_LAVORO.md`.

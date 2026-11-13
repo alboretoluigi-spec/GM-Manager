@@ -1,0 +1,2 @@
+Dati della mappa: localita, maschera delle strade, grafo dei percorsi precalcolato.
+Vuota: i dati della mappa li crea il Master.

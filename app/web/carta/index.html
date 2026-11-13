@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mappa dei viaggi – GASTER BLESS – MASTER SUITE</title>
+<meta name="theme-color" content="#191923">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/img/icona-192.png">
+<link rel="apple-touch-icon" href="/img/icona-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gaster Bless">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="/stile/marchio.css">
+<link rel="stylesheet" href="carta.css">
+</head>
+<body>
+<div id="gate">
+<div id="gLoad" class="gp" data-caricamento><div class="gb-intestazione"><h1 class="gb-nome">Gaster Bless</h1><div class="gb-suite">Master Suite</div><hr class="gb-filetto"><div class="gb-slogan">Master your world</div><div class="gb-sottotitolo">The universal tabletop RPG platform</div></div><p>La nebbia si dirada…</p></div>
+<div id="gPl" class="gp" hidden><div class="gb-intestazione"><h1 class="gb-nome">Gaster Bless</h1><div class="gb-suite">Master Suite</div><hr class="gb-filetto"><div class="gb-slogan">Master your world</div><div class="gb-sottotitolo">The universal tabletop RPG platform</div></div><p>La mappa è ancora coperta dalla nebbia.</p>
+<form id="fLogin"><input id="lpw" type="password" autocomplete="current-password" placeholder="Password della sessione" style="width:100%;text-align:center" required><button class="cta" type="submit">Entra in Gaster Bless</button></form>
+<p class="err" id="lerr"></p><p class="mut" style="color:#bdb39b">Chiedi al Master il link e la password del tuo gruppo.</p></div>
+<div id="gMa" class="gp wide" hidden><div class="gb-intestazione"><h1 class="gb-nome">Gaster Bless</h1><div class="gb-suite">Master Suite</div><hr class="gb-filetto"><div class="gb-slogan">Master your world</div><div class="gb-sottotitolo">The universal tabletop RPG platform</div></div><h2>Scegli la sessione di gioco</h2>
+<ul class="gl" id="glist"></ul>
+<details id="gnew"><summary style="cursor:pointer;color:#d9a441;margin:6px 0 10px">＋ Nuovo gruppo</summary>
+<form class="gf" id="fGroup"><input type="hidden" id="gid"><label class="full">Nome del gruppo<input id="gname" maxlength="60" placeholder="Es. I Cacciatori del martedì" required></label>
+<label>Giorno<select id="gday"><option>Lunedì</option><option>Martedì</option><option>Mercoledì</option><option>Giovedì</option><option>Venerdì</option><option>Sabato</option><option>Domenica</option><option value="">Variabile</option></select></label>
+<label>Password per i giocatori<input id="gpw" maxlength="40" placeholder="Es. corvo" required autocomplete="off"></label>
+<div class="full" style="display:flex;gap:8px"><button type="submit" class="go" style="background:#8a1c1c;color:#fff;border-color:#d9a441">Salva gruppo</button><button type="button" id="gcancel">Annulla</button></div></form></details>
+<p class="err" id="gerr"></p>
+<details><summary style="cursor:pointer;color:#bdb39b;margin-top:10px">Impostazioni del Master</summary>
+<div class="gf" style="margin-top:8px"><div class="full"><b style="color:#d9a441">📦 Crea pacchetto</b><br><span style="color:#bdb39b">Prepara una cartella con GasterBlessSetup.exe e tutti i contenuti (video, musica, immagini, località, schede, impostazioni): installando da lì su un altro PC le cartelle e i contenuti vengono creati da soli.</span></div>
+<label style="flex-direction:row"><input type="checkbox" id="pkm"> includi i manuali PDF</label><label style="flex-direction:row"><input type="checkbox" id="pkg"> includi gruppi e progressi</label>
+<div class="full"><button type="button" id="pkgo">📦 Crea pacchetto</button> <span id="pkst" style="color:#bdb39b"></span></div></div>
+<form class="gf" id="fMpw" style="margin-top:8px"><label class="full">Password Master (per usare i comandi da tablet o da un altro dispositivo; vuota = solo da questo PC)<input id="mpw" type="text" autocomplete="off" placeholder="Nessuna"></label><div class="full"><button type="submit">Salva</button> <span id="mpwok" class="mut"></span></div></form></details>
+</div>
+</div>
+<div id="main">
+<header>
+<h1 class="barra-marchio"><div class="gb-logo" role="img" aria-label="GASTER BLESS – MASTER SUITE"><span class="gb-nome">Gaster Bless</span><span class="gb-suite">Master Suite</span></div></h1><span id="rb" class="mut"></span>
+<label>Andatura <select id="pace"><option value="2">Lenta (2 mph)</option><option value="3" selected>Normale (3 mph)</option><option value="4">Veloce (4 mph)</option></select></label>
+<label title="Fuori dalle strade la velocità dipende dal terreno: foresta, collina, montagna e acqua la dimezzano, la pianura no."><input id="off" type="checkbox"> Fuori strada</label>
+<label class="mo" title="La legenda della mappa indica 1 esagono = ¼ di miglio (scala ufficiale). Il valore è salvato per il gruppo e condiviso con i giocatori.">Miglia/esagono <input id="mh" type="number" min="0.05" max="10" step="0.05" value="0.25"><button id="mh0" title="Torna alla scala ufficiale">↺</button></label>
+<span class="po mut" id="mhp"></span>
+<label class="mo"><input id="lb" type="checkbox" checked> Nomi</label>
+<button id="undo">↶ Annulla tappa</button><button id="clr">Azzera</button>
+<button id="zo" aria-label="Rimpicciolisci">−</button><button id="zi" aria-label="Ingrandisci">+</button>
+<span class="sp"></span>
+<span class="songs" role="group" aria-label="Canti"><button class="sg" data-song="viandante" title="Riproduci il canto Viandante per tutto il tavolo">🎻 Canto Viandante</button><button class="lk mo" data-lock="viandante" title="Blocca/sblocca il canto Viandante per i giocatori">🔓</button><button class="sg" data-song="bardo" title="Riproduci il canto bardico per tutto il tavolo">🪕 Canto bardico</button><button class="lk mo" data-lock="bardo" title="Blocca/sblocca il canto bardico per i giocatori">🔓</button></span>
+<button id="bst" class="mo">📖 PNG e mostri</button><button id="inv" class="mo">👥 Invita giocatori</button><button id="prj" class="mo">📺 Proiezione</button><button id="ses" class="mo">Sessioni</button>
+<button id="trk" class="po" title="Apri il tracker di iniziativa in una nuova finestra">⚔ Iniziativa</button><button id="ex" class="po">Esci</button>
+</header>
+<div id="mt"><button id="fogm" title="Attiva lo strumento nebbia: mentre è attivo puoi solo svelare o coprire la mappa">🌫 Rimuovi nebbia</button>
+<span id="fogt" class="fogt" hidden><span class="seg" role="group" aria-label="Pennello"><button id="fgr" class="on" title="Il pennello svela la mappa">Svela</button><button id="fgc" title="Il pennello copre la mappa">Copri</button></span><label>Pennello <input id="br" type="range" min="1" max="8" value="3"></label><button id="ra">Rivela tutto</button><button id="ca">Copri tutto</button><button id="fgx" class="fin">✔ Fine</button><span class="mut">Trascina sulla mappa per dipingere · rotellina o +/− per lo zoom · Esc per uscire</span></span><span id="sv" class="mut"></span><span class="sp"></span><span id="pjs" class="mut"></span>
+<span class="mus" role="group" aria-label="Musica"><button id="mpp" title="Riproduci / pausa">▶</button><button id="mnx" title="Brano successivo">⏭</button><button id="mfi" title="Tracker di iniziativa (si apre in una nuova finestra)">⚔ Combattimento</button><input id="mvo" type="range" min="0" max="100" value="60" title="Volume" aria-label="Volume" style="width:90px"><button id="mpn" title="Pannello musica">🎵 <span id="mnm">Musica</span></button></span></div>
+<div id="gkb" class="gkb" role="status" hidden></div>
+<div id="app">
+<div id="vp"><div id="map"><img id="bg" alt="Mappa" decoding="async"><svg id="ov" viewBox="0 0 1618 1048"></svg><canvas id="fog" width="809" height="524"></canvas><svg id="ov2" viewBox="0 0 1618 1048"></svg></div><div id="ld">Caricamento della mappa…</div></div>
+<aside id="side"><div id="pv" hidden></div><div id="ft"><h2>Da … a …</h2><label>Da <select id="fa"></select><button id="ia" title="Apri la scheda">ℹ</button></label><label>A <select id="fb"></select><button id="ib" title="Apri la scheda">ℹ</button></label><div style="margin-top:6px"><button id="go">Calcola</button> <button id="sw" title="Inverti partenza e arrivo">⇄ Inverti</button></div></div><div id="res"></div></aside>
+</div>
+</div>
+<div id="pj"><div id="pjt"><div class="gb-intestazione"><h1 class="gb-nome">Gaster Bless</h1><div class="gb-suite">Master Suite</div><hr class="gb-filetto"><div class="gb-slogan">Master your world</div><div class="gb-sottotitolo">The universal tabletop RPG platform</div></div></div><div id="pjgo"><div>📺 Premi Invio (o clicca qui) per avviare la proiezione</div><small>Se questa finestra non è sul proiettore: premi <b>Win + Shift + →</b> (freccia destra o sinistra) e Windows la sposta sull'altro schermo, poi Invio. Il proiettore deve essere «esteso» (Win + P → Estendi), non «duplicato».</small></div></div>
+<div id="toast" role="status"></div>
+<script src="/ui/salvavita.js"></script>
+<script src="proiettore.js"></script>
+<script src="carta.js"></script>
+</body>
+</html>

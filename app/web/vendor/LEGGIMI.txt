@@ -1,0 +1,7 @@
+Librerie esterne servite in locale (niente CDN), ognuna con il suo file di licenza.
+- pdfjs 3.11.174 (Apache 2.0): visualizzazione dei PDF (background, manuali)
+- mammoth 1.6.0 (BSD-2): conversione dei documenti Word .docx in HTML
+- dompurify 3.2.6 (Apache 2.0 / MPL 2.0): pulizia dell'HTML prodotto da mammoth
+- html2canvas 1.4.1 (MIT) e jspdf 2.5.1 (MIT): pulsante "Scarica PDF" della scheda
+Scaricate dal registro npm il 2026-11-04.
+- three 0.170.0 (MIT): dadi 3D (web/ui/dadi3d.js), solo three.module.min.js; scaricata dal registro npm il 2026-11-12.

@@ -41,6 +41,10 @@ Coast.
 | Font Cinzel, Pirata One, Source Sans 3 | — | SIL OFL 1.1 | caratteri (Source Sans 3 è anche il carattere del marchio: `branding/font/`, con la licenza) |
 | ffmpeg | — | (non incluso) | l'app lo cerca sul PC; se un giorno si includesse, rivedere LGPL/GPL |
 
+Materiale creato per il progetto (13/11/2026), nessuna licenza di terzi: icone dell'app «GB» (`app/web/img/icona-*.png`),
+video di benvenuto e immagine di saluto (dal marchio), immagine «borsa vuota», simbolo di stanchezza (`stanco.svg`),
+suoni `corvo.mp3` e `attesa.mp3` (sintesi con ffmpeg), immagine provvisoria della mappa, guide PDF provvisorie.
+
 Le dipendenze indirette di Go si elencano con `go list -m all` e si controllano prima della versione di prova (fase 6).
 
 ## 4. Elementi di Barovia esclusi

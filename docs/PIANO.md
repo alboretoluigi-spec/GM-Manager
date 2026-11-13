@@ -138,12 +138,40 @@ licenza da accertare).
 | 1 | Decisioni (nome, modello di vendita, Barovia separata) | **fatta** (13/11) |
 | 2 | Inventario dei contenuti e delle licenze (§3) | **fatta** (13/11) |
 | 3a | Repository e struttura di base: istruzioni, stato del lavoro, piano, regole sui contenuti | **fatta** (13/11) |
-| 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | da fare |
+| 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | **fatta** (13/11): vedi §5.1 |
 | 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | da fare |
-| 3d | Compilazione e prove automatiche verdi; elenco delle licenze nell'app | da fare |
+| 3d | Compilazione e prove automatiche verdi (le 19 rosse del §5.1, nuove prove nel browser); elenco delle licenze nell'app | da fare |
 | 4 | Funzioni generiche (mappa, compendio, «Parla con un PNG», mazzo di carte, regole di zona, modelli di scenario) e rete per un cliente qualsiasi | — |
 | 5 | Installatore firmato, licenza, aggiornamenti, lingue (italiano e inglese) | — |
 | 6 | Versione di prova privata, poi il lancio | — |
+
+### 5.1 Esito della fase 3b (13/11/2026)
+- Il programma è in `app/` (modulo Go `gasterbless`, eseguibile `cmd/gasterbless`). Compila, `go vet` pulito.
+- **Tolti**: tarocchi della veggente, regole del Monte (Gelo/Ghakis), integrazione Arcana, modello di bilanciamento
+  dell'orfanotrofio, mappa, luoghi e terreni di Barovia, guide di Barovia, kit della scheda esterna, prove nel browser
+  e prove delle regole (dipendevano dai dati), script Python di conversione, icone delle classi, suoni e immagini di
+  origine incerta.
+- **Svuotati** (struttura e nomi restano, contenuto vuoto): classi, sottoclassi, razze, background, incantesimi, talenti,
+  strumenti, equipaggiamento, difese per razza/classe, professioni, bestiario (`mostri.json`, `bestiario.json`),
+  luoghi (`locs.json`) e terreni (`terreno.json`) della mappa. La scheda si apre ma senza classi né razze: si
+  riempirà con l'importazione (fase 3c).
+- **Resi generici**: «Parla con Strahd» → **«Parla con l'antagonista»** (istruzioni predefinite neutre, modificabili dal
+  Master); istruzioni dell'assistente neutre (non più la campagna di Barovia); «Archivista del canone» → **«Archivista
+  delle fonti»**. Nei testi e nelle prove i nomi di luoghi e personaggi sono stati sostituiti con nomi inventati.
+- **Rifatti con materiale nostro**: icone dell'app «GB», video di benvenuto e immagine di saluto con il marchio,
+  immagine «borsa vuota», simbolo di stanchezza, suoni del turno e della musica d'attesa (sintesi), immagine
+  provvisoria della mappa, guide PDF provvisorie con copertina del marchio.
+- **Marchio applicato**: titoli delle pagine, manifest, icone, intestazione completa (accesso, caricamento, mappa,
+  proiettore), logo breve nel menu e nella barra della mappa (`app/web/stile/marchio.css`, `app/web/ui/marchio.js`).
+- **Controllo automatico** delle parole vietate: `app/internal/controlli/parole_test.go` con l'elenco
+  `docs/parole_vietate.txt` (passa).
+- Provato nel browser: accesso, creazione del Master, menu, mappa, scheda, sessioni, impostazioni senza errori.
+- **Prove del server ancora rosse: 19** (tutte usano dati che non ci sono più): TestBestiarioImmaginiMostrateAiGiocatori, TestCodiceNellAssistente, TestImportazioneManuali, TestImportazioneNomeDallIntestazione, TestManualiSoloMaster, TestMappaConsultazione, TestMappaProiezioneSvelaAiGiocatori, TestMappaVisibilitaPerGiocatore, TestMappeLocaliSoloSeSvelate, TestMigrazioneDaGasterBlessDati, TestMusicaECanti, TestPreparazioneSessione, TestProfessioni, TestPromemoriaDelCodice, TestRaccoltaPNG, TestSchedePlugin, TestSezionePNGeMostri, TestStradeSulServer, TestViaggi.
+  Si sistemano nella fase 3d con dati di prova creati dentro le prove stesse, oppure si riscrivono quando mappa,
+  bestiario e professioni diventano generici (fasi 3c e 4).
+- Da fare ancora: `web/regole/difese.js` contiene due regole legate a sottoclassi con il nome (3c); gioco da remoto
+  (MQTT, Cloudflare, VPN) ancora nel codice ma spento (si toglie nella fase 4, decisione «niente gioco da remoto»);
+  script PowerShell di `app/strumenti/` ereditati (si rifanno nella fase 5).
 
 ### Metodo per la fase 3b
 La copia si prepara **fuori dal repository** (cartella di lavoro temporanea), si ripulisce, si compila e si prova; solo

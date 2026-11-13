@@ -1,0 +1,9 @@
+{
+ "versione": 1,
+ "nota": "Zone di terreno della mappa: le definisce il Master. Dove non c'è una zona vale il terreno predefinito.",
+ "predefinito": {
+  "tipo": "foresta",
+  "nome": "Selvascura Woods"
+ },
+ "zone": []
+}

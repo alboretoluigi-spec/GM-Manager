@@ -1,0 +1,60 @@
+# Configurazione di Gaster Bless (nuova app)
+# Una riga "chiave = valore". Le righe che iniziano con # sono commenti.
+# Si modifica con il Blocco note; vale dal riavvio successivo di Gaster Bless.
+# L'installazione (strumenti\installa.ps1) crea C:\ProgramData\GasterBless\gasterbless.conf da questo file.
+
+# Dove stanno database, chiave dei dati, certificati e backup.
+cartella_dati = C:\ProgramData\GasterBless
+
+# Video, Immagini, Musica, Manuali e Canti. L'installazione ci copia tutto il contenuto della vecchia
+# cartella Documenti\GasterBless\GasterBlessDati (che poi si può eliminare).
+cartella_media = C:\ProgramData\GasterBless\Media
+
+# Porta dell'app (https://<indirizzo del PC>:7600) e porta della pagina per installare il certificato
+# sui telefoni (http://<indirizzo del PC>:7601; 0 = disattivata).
+porta_https = 7600
+porta_benvenuto = 7601
+
+# Interfaccia di ascolto: vuoto = tutte (Wi-Fi e cavo).
+indirizzo =
+
+# Accesso da fuori casa: "casa" (solo rete di casa, consigliato) oppure "vpn" (anche dalla VPN, vedi
+# guide\vpn.md). Anche con "vpn" l'accesso esterno si apre e si chiude dalle Impostazioni del Master e
+# richiede il secondo fattore. Mai aprire porte sul router.
+accesso_esterno = casa
+reti_vpn = 100.64.0.0/10
+# Nomi in più per il certificato, separati da virgola: con Tailscale il nome completo del PC
+# (per esempio nome-pc.tail1a2b.ts.net), quello che i giocatori remoti aprono. Vuoto = nessuno.
+nomi_certificato =
+
+# Accesso da Internet senza installare nulla sui telefoni (Tailscale Funnel, vedi guide\internet.md).
+# 0 = spento. porta_pubblica ascolta solo sul PC (127.0.0.1): ci arriva Tailscale. nome_pubblico è il nome
+# .ts.net del PC. Anche configurato, l'accesso si apre e si chiude dalle Impostazioni del Master.
+porta_pubblica = 0
+nome_pubblico =
+
+# Pannello del Master (iscrizioni, impostazioni...) raggiungibile solo dal PC su cui gira Gaster Bless.
+pannello_solo_pc = no
+
+# Backup cifrati: quanti giorni tenerli e a che ora farli.
+backup_giorni = 30
+backup_ora = 4
+
+# Dopo quanti mesi senza accessi un account viene segnalato come inattivo (privacy).
+inattivi_mesi = 12
+
+# Modifiche dei giocatori alle schede (2026-11-11). sì (predefinito): i giocatori cambiano da soli solo i dati di
+# gioco (PF, slot, ispirazione, oggetti equipaggiati...); il resto con «Modifica manuale», che vale dopo
+# l'approvazione del Master. no: schede modificabili liberamente. Il Master lo cambia anche dalle Impostazioni
+# dell'app, e quella scelta ha la precedenza su questa riga.
+# approvazione_schede = sì
+
+# Gioco da remoto (spento finché il Master non lo attiva in una sessione): server MQTT pubblici
+# usati per il tracker dei giocatori lontani, separati da virgola. Solo indirizzi wss://.
+# I dati passano cifrati: i server vedono solo un canale casuale e byte illeggibili.
+broker_mqtt = wss://broker.hivemq.com:8884/mqtt, wss://broker.emqx.io:8084/mqtt
+
+# Video più leggeri per i telefoni (2026-11-11): Gaster Bless usa ffmpeg per preparare da sola, in sottofondo, una versione
+# 720p dei video per i telefoni dei giocatori e copie leggere di video e immagini (gli originali non si toccano).
+# Vuoto: lo cerca in C:\Progetti\Strumenti\ffmpeg (anche in sottocartelle), in Program Files e nel PATH.
+# ffmpeg = C:\Progetti\Strumenti\ffmpeg\bin\ffmpeg.exe

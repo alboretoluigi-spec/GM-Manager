@@ -1,0 +1,11 @@
+{
+ "versione": 1,
+ "nota": "Catalogo delle professioni (raccolta e fabbricazione): vuoto, lo riempie il Master con l'importazione o a mano.",
+ "disponibilita": [],
+ "regoleRaccolta": [],
+ "regoleEstrazione": [],
+ "regoleCreazione": [],
+ "regoleUso": [],
+ "professioni": {},
+ "artigiani": []
+}

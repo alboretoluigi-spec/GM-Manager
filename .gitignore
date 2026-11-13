@@ -1,6 +1,7 @@
 # eseguibili e compilazione
-/gm-manager
-/gm-manager.exe
+/app/gasterbless
+/app/gasterbless.exe
+/app/GasterBless.exe
 *.exe
 /dist/
 # dati locali dell'app (database, file caricati, backup)

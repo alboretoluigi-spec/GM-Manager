@@ -1,0 +1,6 @@
+Controllo dei tipi Go senza scaricare librerie (per le sessioni cloud, dove Go 1.27.3 e i moduli non si scaricano).
+Le librerie esterne (anthropic, websocket, sqlite, qr, x/sys...) vengono saltate: gli errori che le riguardano vanno ignorati.
+Uso (da 04_nuova_app):
+  cd test/controllo_tipi && GOTOOLCHAIN=local go build -o /tmp/tc . && cd ../..
+  /tmp/tc $PWD gasterbless/internal/server t | grep -v "esterno\|could not import" | grep -vE "undefined: (anthropic|websocket|qr|sqlite)\b"
+Il terzo argomento (qualsiasi, es. "t") include i file _test.go. Non sostituisce go build / go test sul PC.

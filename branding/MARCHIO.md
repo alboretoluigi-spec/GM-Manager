@@ -39,13 +39,13 @@ riferimento.
 
 Intestazione completa:
 ```html
-<header class="gb-intestazione">
+<div class="gb-intestazione">
   <h1 class="gb-nome">Gaster Bless</h1>
-  <p class="gb-suite">Master Suite</p>
+  <div class="gb-suite">Master Suite</div>
   <hr class="gb-filetto">
-  <p class="gb-slogan">Master your world</p>
-  <p class="gb-sottotitolo">The universal tabletop RPG platform</p>
-</header>
+  <div class="gb-slogan">Master your world</div>
+  <div class="gb-sottotitolo">The universal tabletop RPG platform</div>
+</div>
 ```
 Logo breve (barra in alto): `<a class="gb-logo" href="/"><span class="gb-nome">Gaster Bless</span><span class="gb-suite">Master Suite</span></a>`
 

@@ -1,0 +1,39 @@
+# Parole che non devono mai comparire nel prodotto (cartella app/), escluse le librerie di terzi in web/vendor.
+# Una per riga, senza distinzione tra maiuscole e minuscole; è un'espressione regolare (sintassi di Go).
+# Le legge la prova app/internal/controlli/parole_test.go. Motivo: docs/LICENZE_E_CONTENUTI.md.
+barovia
+strahd
+ravenloft
+vallaki
+\bkrezk\b
+ireena
+ismark
+\bkolyan
+tarokka
+madame eva
+vistan[ai]
+ravenkind
+argynvost
+ghakis
+tsolenka
+\btser\b
+svalich
+osybus
+markovia
+tempio d.ambra
+amber temple
+\bsergei\b
+tatyana
+rahadin
+\bizek\b
+lysaga
+van richten
+zarovich
+dungeons\s*&\s*dragons
+\bd&d\b
+d&amp;d
+xanathar
+\btasha
+monster manual
+wizards of the coast
+\bliraen\b

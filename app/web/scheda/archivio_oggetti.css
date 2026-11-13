@@ -1,0 +1,24 @@
+/* Archivio degli oggetti magici del Master (archivio_oggetti.html, 2026-11-11). Il resto viene da style.css della scheda. */
+body.arch .wrap { max-width: 1000px; padding-top: 12px; }
+.arch-testa { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 10px; }
+.arch-tit { font-family: var(--fh); font-size: 16px; letter-spacing: .06em; color: var(--gold); }
+.arch-az { display: flex; gap: 8px; flex-wrap: wrap; }
+.arch-filtri { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.arch-filtri input, .arch-filtri select { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; min-width: 0; }
+.arch-filtri input { flex: 1 1 220px; }
+.arch-filtri select { flex: 0 1 190px; }
+.arch-conta { margin: 4px 0; }
+.arch-vuoto { border: 1px dashed var(--line2); border-radius: 10px; padding: 18px; text-align: center; color: var(--mut); margin-top: 10px; }
+.arch-riga .mgo-th { width: 56px; height: 56px; }
+.arch-chi { margin-top: 3px; line-height: 1.5; }
+.arch-btns { display: flex; flex-wrap: wrap; gap: 4px 12px; flex: none; justify-content: flex-end; align-content: flex-start; max-width: 290px; }
+.arch-btns .linkbtn { white-space: nowrap; }
+.arch-pgs { display: flex; flex-direction: column; gap: 4px; max-height: 50vh; overflow: auto; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--panel2); }
+.arch-pg { display: flex; gap: 6px; align-items: baseline; font-size: 13px; cursor: pointer; }
+.arch-pg input { flex: none; }
+.arch-testo { white-space: normal; font-size: 13px; line-height: 1.55; margin: 10px 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel2); max-height: 60vh; overflow: auto; }
+@media (max-width: 640px) {
+  .arch-riga { flex-wrap: wrap; }
+  .arch-btns { flex-direction: row; flex-wrap: wrap; width: 100%; justify-content: flex-start; gap: 6px; }
+  .arch-btns .linkbtn { min-height: 40px; padding: 0 8px; border: 1px solid var(--line); border-radius: 8px; }
+}

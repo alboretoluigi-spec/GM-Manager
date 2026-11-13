@@ -1,0 +1,63 @@
+/* Tracker per il gioco da remoto: pagina autonoma (funziona anche salvata come file), solo font di sistema. */
+:root {
+  --sfondo: #f1e9d6; --pannello: #e6dbc0; --pannello-2: #fbf6ea; --testo: #2a2118; --tenue: #6b5a44;
+  --bordo: #bfae86; --accento: #8a1c1c; --accento-testo: #fff8ec; --oro: #9a6b12; --ok: #2f6b3c; --errore: #a3261b;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sfondo: #15120e; --pannello: #221c15; --pannello-2: #2b231a; --testo: #e8dfcc; --tenue: #b3a58c;
+    --bordo: #4a3d2b; --accento: #b3202e; --accento-testo: #fff; --oro: #d9a441; --ok: #5a9566; --errore: #ff8a7a;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--sfondo); color: var(--testo); }
+body { font: 17px/1.45 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; padding: 12px 16px calc(24px + env(safe-area-inset-bottom)); }
+main { max-width: 640px; margin: 0 auto; }
+h1 { font: 700 1.25rem/1.2 Georgia, serif; letter-spacing: .06em; color: var(--oro); margin: 4px 0; }
+h2 { font: 700 1.05rem Georgia, serif; margin: 0 0 8px; }
+.tenue { color: var(--tenue); }
+.piccolo { font-size: .88rem; }
+.errore { color: var(--errore); }
+.testata { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.stato-rete { font-size: .85rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--bordo); }
+.stato-rete.ok { color: var(--ok); border-color: var(--ok); }
+.stato-rete.no { color: var(--errore); border-color: var(--errore); }
+.scheda { background: var(--pannello); border: 1px solid var(--bordo); border-radius: 10px; padding: 12px; margin: 10px 0; }
+ol.ordine { list-style: none; padding: 0; margin: 0; }
+ol.ordine li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 8px; align-items: center; padding: 8px 6px; border-bottom: 1px solid var(--bordo); }
+ol.ordine li:last-child { border-bottom: 0; }
+ol.ordine li.turno { background: var(--pannello-2); border-left: 4px solid var(--accento); border-radius: 6px; }
+ol.ordine li.mio .nome { font-weight: 700; }
+.ini { font-weight: 700; text-align: center; color: var(--oro); }
+.dettagli { font-size: .85rem; color: var(--tenue); }
+.cond { display: inline-block; font-size: .78rem; border: 1px solid var(--bordo); border-radius: 999px; padding: 0 7px; margin: 2px 2px 0 0; }
+.pf { font-weight: 700; white-space: nowrap; }
+.pf.basso { color: var(--errore); }
+button, input { font: inherit; color: inherit; }
+button { background: var(--pannello-2); border: 1px solid var(--bordo); border-radius: 8px; padding: 10px 14px; min-height: 44px; cursor: pointer; }
+button.primario { background: var(--accento); color: var(--accento-testo); border-color: var(--accento); }
+button:disabled { opacity: .5; cursor: default; }
+input[type=number] { width: 6em; padding: 9px; border: 1px solid var(--bordo); border-radius: 8px; background: var(--pannello-2); min-height: 44px; }
+.riga { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+.griglia-cond { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px 10px; margin: 8px 0; }
+.griglia-cond label { display: flex; gap: 6px; align-items: center; min-height: 36px; }
+.avviso { padding: 8px 12px; border-radius: 8px; margin: 8px 0; background: var(--pannello-2); border: 1px solid var(--bordo); }
+.avviso.errore { border-color: var(--errore); }
+details summary { cursor: pointer; min-height: 36px; display: flex; align-items: center; }
+
+/* Attacchi, azioni del turno ed esiti (2026-11-12) */
+select { font: inherit; color: inherit; background: var(--pannello-2); border: 1px solid var(--bordo); border-radius: 8px; padding: 9px; min-height: 44px; max-width: 100%; }
+.attacca { margin: 10px 0; border-top: 1px solid var(--bordo); padding-top: 6px; }
+.attacca select { flex: 1 1 12em; }
+button.eco { min-height: 36px; padding: 6px 10px; font-size: .9rem; color: var(--ok); }
+button.eco.usata { color: var(--tenue); text-decoration: line-through; }
+button.ira.attiva { border-color: var(--errore); color: var(--errore); }
+.esito-attacco { background: var(--pannello-2); border: 1px solid var(--bordo); border-radius: 8px; padding: 8px 12px; margin-top: 10px; }
+.esito-attacco p { margin: 4px 0; }
+.esito-attacco ul { margin: 4px 0; padding-left: 20px; }
+.esito { font-weight: 700; font-size: 1.3rem; letter-spacing: .04em; }
+.esito.mancato { color: var(--tenue); }
+.esito.colpito { color: var(--ok); }
+.esito.critico { color: var(--errore); }

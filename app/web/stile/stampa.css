@@ -1,0 +1,5 @@
+/* Stampa: solo il contenuto, niente menu e barre. La scheda aggiunge le sue regole. */
+.menu, .barra-basso, .intestazione, .avvisi, .non-stampare { display: none !important; }
+.guscio { display: block; }
+body { background: #fff; color: #000; }
+.scheda-ui { box-shadow: none; border-color: #999; }
