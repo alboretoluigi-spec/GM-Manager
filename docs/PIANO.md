@@ -18,6 +18,7 @@ un avvocato esperto di proprietà intellettuale.
 | 13/11/2026 | Licenza: **1 PC per licenza, a vita** |
 | 13/11/2026 | **Niente gioco da remoto** nella prima versione (MQTT, Cloudflare, VPN restano fuori) |
 | 13/11/2026 | **App generica per diversi giochi di ruolo. Nessun contenuto di gioco incluso né scaricato dall'app** (mostri, manuali, ambientazioni, incantesimi, classi, oggetti, nemmeno dall'SRD): l'utente li **importa da file che si procura** o li **inserisce a mano** |
+| 13/11/2026 | **Sistema di gioco a scelta fra i più noti**: per ogni campagna il Master sceglie il sistema; l'app ne conosce le meccaniche (dadi, tiri, iniziativa, salute, condizioni, struttura della scheda), sempre senza contenuti né testi dei manuali. Elenco e priorità: proposta al §3.3bis, da confermare |
 | 13/11/2026 | **Nome ufficiale: GASTER BLESS – MASTER SUITE**, slogan **MASTER YOUR WORLD**, sottotitolo **THE UNIVERSAL TABLETOP RPG PLATFORM**; stile dell'immagine di riferimento (oro antico su fondo scuro). Cambiano solo nome, logo testuale e intestazione; funzioni, struttura e contenuti restano. Dettagli: `branding/MARCHIO.md` |
 
 ### Nota sul nome
@@ -65,6 +66,34 @@ licenza da accertare).
 | Scheda del personaggio | GENERICO | Scheda per sistema di gioco; oltre alla quinta edizione, una scheda libera (campi definiti dall'utente) per gli altri giochi |
 | Tracker dell'iniziativa, dadi, condizioni | GENERICO | Regole di iniziativa e dadi scelte dal sistema (es. d20, pool di d6, d100) |
 | Sanità mentale, terrore, indebolimento | GENERICO | Moduli facoltativi, attivabili per campagna |
+
+### 3.3bis Sistemi di gioco (proposta del 13/11/2026, da confermare)
+**Come funziona.** Un «modulo di sistema» descrive solo le meccaniche: tipo di dadi e di tiro (d20 + modificatore,
+percentuale d100, riserve di d6 o d10, dadi esplosivi, dadi Fate, 2d6 + modificatore), caratteristiche e abilità come
+*campi* (senza descrizioni dei manuali), iniziativa, salute e condizioni, avanzamento, campi della scheda. I contenuti
+(classi, incantesimi, mostri…) restano all'utente. Il Master può anche creare o importare un modulo suo.
+
+**Famiglie di meccaniche** (un motore per famiglia copre più giochi):
+| Famiglia | Esempi di giochi |
+|---|---|
+| d20 + modificatore contro una difficoltà | quinta edizione 2014 e 2024, Pathfinder 1ª e 2ª edizione, Starfinder, giochi OSR |
+| Percentuale d100 sotto l'abilità | Il Richiamo di Cthulhu 7ª edizione, Warhammer Fantasy Roleplay 4ª, RuneQuest, Pendragon |
+| Riserva di d10 con successi | Vampiri (V5) e Mondo di Tenebra |
+| Riserva di d6 con successi | Shadowrun 6ª, Year Zero Engine (Alien, Vaesen), Blades in the Dark |
+| 2d6 + modificatore a fasce | Powered by the Apocalypse (Dungeon World, Monster of the Week), Traveller |
+| d10 + caratteristica + abilità | Cyberpunk RED |
+| Dadi a passi ed esplosivi | Savage Worlds |
+| Dadi Fate (dF) | Fate Core, Fate Accelerato |
+| 3d6 sotto il valore | GURPS |
+| d20 sotto il valore | Dragonbane, Mörk Borg |
+| Dadi narrativi con simboli | Genesys / Star Wars (FFG) |
+| Giochi italiani | Sine Requie (tarocchi), Lex Arcana |
+| Scheda libera | qualsiasi altro gioco: campi e tiri definiti dal Master |
+
+**Nomi dei giochi.** I nomi sono marchi dei rispettivi editori: nell'app si potrebbero usare solo come «compatibile
+con…», se e come l'avvocato lo conferma (alcuni editori hanno licenze di compatibilità: Paizo ORC, Chaosium, Free
+League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi («d20 fantasy 5ª edizione»,
+«percentuale d100 orrore»…).
 
 ### 3.4 Mappa
 | Elemento | Esito | Note |
@@ -181,8 +210,9 @@ le prove se ne trova.
 
 ## 6. Domande aperte
 Le quattro domande del 13/11 hanno avuto risposta (vedi §1). Restano:
-1. **Sistemi di gioco nella prima versione**: quinta edizione completa più una scheda libera per gli altri giochi,
-   oppure altri sistemi completi fin da subito (quali)?
+1. **Sistemi di gioco nella prima versione** (13/11: il Master vuole poterli scegliere fra i più noti): quali famiglie
+   del §3.3bis entrano nella prima versione e in che ordine.
+5. **Nomi dei giochi nell'app**: verifica con l'avvocato delle licenze di compatibilità dei singoli editori.
 2. Accesso dei giocatori da Internet (fuori casa) nella prima versione, oppure solo dalla rete di casa?
 3. Lingua di partenza: italiano e inglese insieme, oppure prima l'italiano?
 4. Prezzo e piattaforma di vendita (dopo il parere del commercialista).

@@ -18,6 +18,8 @@ contenuti di gioco inclusi** (mostri, manuali, ambientazioni li importa o inseri
 tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il repository non ha ancora schermate).
 
 ## Decisioni prese
+- **13/11/2026, sistemi di gioco**: il Master vuole poter scegliere il sistema fra i più noti. Proposta di moduli per
+  famiglia di meccaniche in `docs/PIANO.md` §3.3bis; da confermare elenco e priorità della prima versione.
 - **13/11/2026, app generica**: utilizzabile con diversi giochi di ruolo; **nessun contenuto di gioco** incluso né scaricato
   dall'app (nemmeno l'SRD): mostri, manuali e ambientazioni li importa da file o li inserisce a mano l'utente. Il motore della
   quinta edizione resta come primo «modulo di sistema». Aggiornati piano (§3.2, §3.3, fase 3c), licenze e istruzioni.
@@ -34,7 +36,8 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   `docs/LICENZE_E_CONTENUTI.md`.
 
 ## Problemi aperti
-- Da decidere: quali sistemi di gioco nella prima versione (quinta edizione più scheda libera, oppure altri completi).
+- Da decidere: quali famiglie di sistemi di gioco nella prima versione e in che ordine (`docs/PIANO.md` §3.3bis);
+  nomi dei giochi nell'app solo dopo il parere dell'avvocato sulle licenze di compatibilità.
 - Domande ancora aperte (`docs/PIANO.md` §6): accesso da Internet nella prima versione, prezzo e piattaforma di vendita,
   lingua di partenza.
 - Verifica del nome «Gaster Bless» con l'avvocato (banche dati dei marchi; «Gaster» è anche un personaggio di *Undertale*)
@@ -53,6 +56,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | Richiesta del Master: sistema di gioco a scelta fra i più noti. Scritta la proposta (moduli di sistema per famiglia di meccaniche, elenco dei giochi, nodo dei marchi) in `docs/PIANO.md` §3.3bis; in attesa della scelta delle priorità. |
 | 2026-11-13 | Claude Code (cloud) | **Fase 3b**: copia di Barovia (`04_nuova_app`, senza storia Git) ripulita in una cartella di lavoro e portata in `app/`. Tolte le funzioni legate alla campagna, svuotati i dati di gioco, nomi cambiati (`gasterbless`, «Parla con l'antagonista», «Archivista delle fonti»), istruzioni dell'IA neutre, media e icone rifatti, marchio applicato. Nuovi `app/internal/controlli/parole_test.go`, `docs/parole_vietate.txt`, `app/web/stile/marchio.css`, `app/web/ui/marchio.js`, `app/README.md`. Corretto `branding/` (carattere del logo SVG, intestazione con div). Prove: build e vet puliti, parole vietate ok, 19 prove del server rosse (elenco in `docs/PIANO.md` §5.1), pagine principali provate nel browser. |
 | 2026-11-13 | Claude Code (cloud) | Decisione del Master: app generica per diversi giochi di ruolo, nessun contenuto di gioco incluso (importazione o inserimento a mano da parte dell'utente). Aggiornati `CLAUDE.md`, `README.md`, `docs/PIANO.md` (§1, §3.2, §3.3, fase 3c, §6), `docs/LICENZE_E_CONTENUTI.md`. |
 | 2026-11-13 | Claude Code (cloud) | Marchio: nome GASTER BLESS – MASTER SUITE, slogan e sottotitolo dall'immagine del Master (colori ricavati dall'immagine). Creati `branding/MARCHIO.md`, `marchio.css`, `intestazione.html`, `logo.svg`, `font/` (Source Sans 3, OFL); aggiornati `CLAUDE.md`, `README.md`, `docs/PIANO.md`, `docs/LICENZE_E_CONTENUTI.md`. Anteprima controllata su PC e telefono. |
