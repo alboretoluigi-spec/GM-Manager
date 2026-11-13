@@ -1,0 +1,22 @@
+/* RPG RULEBOOK LIBRARY (sezioni/regolamenti.js): colori del marchio (stile/marchio.css) */
+.rl-banda { background: var(--gb-fondo); border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; border-bottom: 1px solid var(--gb-filetto); }
+.rl-titolo { margin: 0; color: var(--gb-oro); font-family: var(--gb-carattere); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: clamp(1.2rem, 3vw, 1.6rem); }
+.rl-sotto { margin: 4px 0 0; color: var(--gb-grigio); font-family: var(--gb-carattere); font-size: .9rem; }
+.rl-filtri { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; }
+.rl-filtro { display: flex; flex-direction: column; gap: 2px; min-width: 140px; flex: 1 1 140px; }
+.rl-filtro span { font-size: .8rem; }
+.rl-nome { flex: 2 1 200px; }
+.rl-gratis { align-items: center; gap: 6px; }
+.rl-elenco { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 12px; }
+.rl-gioco { margin: 0; }
+.rl-testa h3 { margin: 0; }
+.rl-testa p { margin: 2px 0 6px; }
+.rl-etichette { display: flex; flex-wrap: wrap; gap: 4px; }
+.rl-documenti { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 8px; }
+.rl-doc { border-left: 3px solid var(--gb-oro); padding: 4px 0 4px 10px; }
+.rl-doc p { margin: 2px 0; }
+.rl-doc-testa { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.rl-gratis-et { background: #2f5d3a; color: #fff; }
+.rl-diretto { background: var(--gb-fondo); color: var(--gb-oro); }
+.rl-fonte { font-weight: 600; }
+.rl-avviso { margin-top: 16px; }

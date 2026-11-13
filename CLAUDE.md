@@ -24,6 +24,10 @@ Il codice di partenza viene dal repository `alboretoluigi-spec/Progetto_Barovia`
 - Mai nel prodotto (codice, pagine, dati, immagini, guide): nomi, testi, mappe, immagini o personaggi di prodotti di
   Wizards of the Coast o di altri editori (per esempio Curse of Strahd, Barovia, Strahd, Ravenloft, Tarokka); i marchi
   «Dungeons & Dragons» e «D&D». I documenti interni in `docs/` possono nominarli solo per spiegare cosa escludere.
+  **Unica eccezione** (decisione del Master, 13/11/2026): il catalogo della RPG RULEBOOK LIBRARY
+  (`app/internal/server/catalogo_regolamenti.json`) usa i nomi ufficiali di giochi ed editori come riferimento, con
+  l'avviso «marchi dei rispettivi proprietari, nessuna affiliazione»; da verificare con l'avvocato prima della vendita.
+  Il catalogo contiene solo riferimenti alle fonti ufficiali, mai i documenti.
 - **Nessun contenuto di gioco nell'app** (decisione del Master, 13/11/2026): niente mostri, incantesimi, classi, oggetti,
   manuali, ambientazioni o avventure inclusi o scaricati automaticamente dall'app, nemmeno dall'SRD. L'app offre gli
   strumenti perché l'utente li **importi da file che si procura lui** o li **inserisca a mano**.

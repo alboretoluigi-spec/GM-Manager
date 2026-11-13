@@ -13,7 +13,9 @@ import (
 
 // TestParoleVietate fa fallire le prove se nel prodotto (cartella app/) compare un nome di prodotti di terzi o della
 // campagna da cui l'app è nata. L'elenco è in docs/parole_vietate.txt; le librerie di terzi (web/vendor) non si
-// controllano. Regole: docs/LICENZE_E_CONTENUTI.md.
+// controllano, e nemmeno il catalogo della RPG RULEBOOK LIBRARY (catalogo_regolamenti.json), dove i nomi ufficiali
+// dei giochi compaiono come riferimento con l'avviso sui marchi (decisione del Master del 13/11/2026).
+// Regole: docs/LICENZE_E_CONTENUTI.md.
 func TestParoleVietate(t *testing.T) {
 	radice, _ := filepath.Abs(filepath.Join("..", ".."))
 	f, err := os.Open(filepath.Join(radice, "..", "docs", "parole_vietate.txt"))
@@ -46,6 +48,9 @@ func TestParoleVietate(t *testing.T) {
 			}
 			return nil
 		}
+		if d.Name() == fileCatalogo {
+			return nil
+		}
 		for _, r := range parole {
 			if r.MatchString(rel) {
 				t.Errorf("%s: il nome del file contiene %q", rel, r.String())
@@ -72,6 +77,9 @@ func TestParoleVietate(t *testing.T) {
 		t.Errorf("in tutto %d parole vietate", trovate)
 	}
 }
+
+// fileCatalogo: il catalogo dei regolamenti, escluso dal controllo (vedi sopra).
+const fileCatalogo = "catalogo_regolamenti.json"
 
 // testuale dice se un file è di testo (niente byte nulli nei primi 8 KB).
 func testuale(b []byte) bool {

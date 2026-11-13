@@ -1,8 +1,7 @@
 # RPG RULEBOOK LIBRARY e MY RULEBOOKS: analisi e piano tecnico
 
 Richiesta del Master del 13/11/2026 («Implementazione della libreria universale dei regolamenti»). Questo documento è
-la parte «prima presenta» della richiesta: analisi, piano, componenti, dipendenze, decisioni aperte. **Nessun codice è
-stato ancora scritto per questo modulo.**
+la parte «prima presenta» della richiesta: analisi, piano, componenti, dipendenze, decisioni (§5) e avanzamento (§7).
 
 ## 1. Analisi dell'architettura esistente (cartella `app/`)
 
@@ -77,6 +76,12 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
 2. **Campagne.** Introdurre l'entità «campagna» (§3, L4), con i gruppi esistenti spostati in una «Campagna principale».
 3. **Ordine dei passi**: L1 → L6 come sopra, oppure prima MY RULEBOOKS (L3) e poi catalogo e download.
 
+## 5bis. Decisioni prese (13/11/2026)
+1. **Nomi ufficiali** dei giochi ed editori **solo nel catalogo**, con l'avviso sui marchi; `CLAUDE.md` aggiornato; il file
+   del catalogo è escluso dal controllo delle parole vietate. Da verificare con l'avvocato prima della vendita.
+2. **Entità campagna**: sì, con i gruppi esistenti in una «Campagna principale».
+3. **Ordine**: L1 → L6.
+
 ## 6. Limiti noti fin d'ora
 - Molti giochi dell'elenco non hanno materiale gratuito scaricabile liberamente: per questi il catalogo darà solo il
   collegamento ufficiale. Alcuni editori pubblicano i documenti gratuiti solo dopo l'accesso a un negozio online
@@ -85,3 +90,19 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
   controllo automatico che segnala i collegamenti non più raggiungibili senza scaricare nulla).
 - La ricerca nel contenuto funziona sui documenti con testo; i PDF scansionati richiedono il testo OCR.
 - Le 19 prove del server ancora rosse dalla fase 3b (`docs/PIANO.md` §5.1) restano un lavoro separato (fase 3d).
+
+## 7. Avanzamento
+### L1 – Catalogo: fatto (13/11/2026)
+- `app/internal/server/catalogo_regolamenti.json`: 20 giochi, 16 documenti. Fonti cercate il 13/11/2026: per ogni
+  documento la data di verifica (vuota = indirizzo da verificare). Download diretto consentito solo per 2 PDF gratuiti
+  ospitati dall'editore senza accesso (SRD di Daggerheart, Quickstart di Basic Roleplaying). Nessun documento gratuito
+  verificato per: Warhammer Fantasy Roleplay, Werewolf: The Apocalypse, RuneQuest, The One Ring, Fabula Ultima,
+  Starfinder, Traveller, Alien RPG (solo il sito dell'editore, da verificare).
+- `app/internal/server/regolamenti_catalogo.go`: lettura e controllo del catalogo (id unici, tipologie, solo https, date,
+  download diretto solo per documenti gratuiti e verificati); copia locale aggiornabile in `Dati\regolamenti\catalogo.json`
+  (se non valida si ignora); `GET /api/v1/regolamenti/catalogo` con i filtri gioco, genere, editore, lingua, tipologia,
+  edizione, gratuito; solo il Master.
+- `app/web/sezioni/regolamenti.js`, `app/web/stile/regolamenti.css`, voce «RPG Rulebook Library» nel menu (Campagna).
+- Prove: `TestCatalogoRegolamenti` (Go) verde; `bash test/browser/esegui.sh regolamenti` 13/13 (catalogo, ricerca,
+  filtri, fonti ufficiali in nuova scheda, telefono senza scorrimento orizzontale, nessun errore JavaScript). Nuova
+  cartella delle prove nel browser: `app/test/browser/` (`esegui.sh`, `comune.js`).

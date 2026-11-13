@@ -169,6 +169,7 @@ func (s *Server) Handler() http.Handler {
 	s.rottePreparazione(mux)       // preparazione della sessione (fase L5, 2026-11-12)
 	s.rotteBilanciamento(mux)      // bilanciamento delle avventure (2026-11-12)
 	s.rotteLore(mux)               // Codice della campagna: la lore del Master (2026-11-12)
+	s.rotteRegolamenti(mux)        // RPG RULEBOOK LIBRARY e MY RULEBOOKS (docs/RULEBOOK_LIBRARY.md, 2026-11-13)
 	s.rotteBiblioteca(mux)         // biblioteca dei testi per le due identità dell'assistente IA (2026-11-13)
 	mux.Handle("GET /ws", http.HandlerFunc(s.Hub.Gestisci))
 	mux.Handle("/api/", api(func(http.ResponseWriter, *http.Request) (any, error) { return nil, errNonTrovato }))

@@ -46,6 +46,7 @@ const SEZIONI = [
   { p: "/dadi", t: "Dadi", i: "🎲", chi: "tutti", m: "dadi", g: "gioco" },
   { p: "/riassunti", t: "Riassunti", i: "📝", chi: "tutti", m: "riassunti", g: "campagna" },
   { p: "/manuali", t: "Manuali", i: "📚", chi: "tutti", m: "manuali", g: "campagna" },
+  { p: "/regolamenti", t: "RPG Rulebook Library", i: "🏛", chi: "master", m: "regolamenti", g: "campagna" }, // libreria dei regolamenti (2026-11-13)
   { p: "/iscrizioni", t: "Iscrizioni", i: "👥", chi: "master", m: "iscrizioni", g: "campagna" },
   { p: "/avvisi", t: "Avvisi", i: "📣", chi: "master", m: "avvisi", g: "campagna" },
   { p: "/preparazione", t: "Preparazione sessione", i: "🧭", chi: "master", m: "preparazione", g: "campagna" }, // fase L5 del Codice (2026-11-12)

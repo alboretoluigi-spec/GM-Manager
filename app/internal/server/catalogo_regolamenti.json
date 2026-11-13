@@ -1,0 +1,546 @@
+{
+ "versione": 1,
+ "aggiornatoIl": "2026-11-13",
+ "avviso": "I nomi dei giochi e degli editori sono marchi dei rispettivi proprietari. Gaster Bless non è affiliato né approvato da nessuno di loro. Il catalogo contiene solo riferimenti alle fonti ufficiali: nessun documento è incluso nell'app.",
+ "tipologie": {
+  "regolamento": "Regolamento base",
+  "srd": "SRD (System Reference Document)",
+  "quickstart": "Quickstart",
+  "introduttivo": "Manuale introduttivo",
+  "scheda": "Schede personaggio",
+  "supplemento": "Documentazione supplementare"
+ },
+ "giochi": [
+  {
+   "id": "dnd5e",
+   "nome": "Dungeons & Dragons",
+   "editore": "Wizards of the Coast",
+   "generi": [
+    "fantasy"
+   ],
+   "edizioni": [
+    "5e (2014)",
+    "5e (2024)"
+   ],
+   "sito": "https://www.dndbeyond.com/srd",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "dnd5e-srd52",
+     "titolo": "System Reference Document 5.2",
+     "edizione": "5e (2024)",
+     "tipologia": "srd",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://www.dndbeyond.com/srd",
+     "licenza": "CC-BY-4.0",
+     "condizioni": "Uso anche commerciale con attribuzione. Le «Basic Rules» non sono coperte da questa licenza. Pagina ufficiale da cui scaricare: il PDF diretto non è stato verificato.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
+  },
+  {
+   "id": "pf2e",
+   "nome": "Pathfinder",
+   "editore": "Paizo",
+   "generi": [
+    "fantasy"
+   ],
+   "edizioni": [
+    "2e (Remaster)"
+   ],
+   "sito": "https://paizo.com/pathfinder/2e/freeresources",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "pf2e-risorse",
+     "titolo": "Pathfinder Second Edition – risorse gratuite (personaggi pronti, avventure)",
+     "edizione": "2e (Remaster)",
+     "tipologia": "supplemento",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://paizo.com/pathfinder/2e/freeresources",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Download dal sito Paizo, per uso personale. Le regole sono pubblicate con licenza ORC; il Beginner Box è a pagamento.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "daggerheart",
+   "nome": "Daggerheart",
+   "editore": "Darrington Press",
+   "generi": [
+    "fantasy"
+   ],
+   "edizioni": [
+    "1.0"
+   ],
+   "sito": "https://darringtonpress.com/license",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "dh-srd10",
+     "titolo": "Daggerheart SRD 1.0",
+     "edizione": "1.0",
+     "tipologia": "srd",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://www.daggerheart.com/wp-content/uploads/2025/05/DH-SRD-May202025.pdf",
+     "licenza": "Darrington Press Community Gaming License (DPCGL)",
+     "condizioni": "Gratuito dall'editore. Uso dei contenuti nelle proprie creazioni alle condizioni della DPCGL, che l'editore può aggiornare: leggere la versione corrente sulla pagina della licenza.",
+     "gratuito": true,
+     "downloadDiretto": true,
+     "verificatoIl": "2026-11-13"
+    },
+    {
+     "id": "dh-licenza",
+     "titolo": "Darrington Press Community Gaming License",
+     "edizione": "",
+     "tipologia": "supplemento",
+     "lingua": "en",
+     "formato": "web",
+     "url": "https://darringtonpress.com/license",
+     "licenza": "DPCGL",
+     "condizioni": "Testo della licenza e logo per i contenuti della comunità.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "coc",
+   "nome": "Call of Cthulhu",
+   "editore": "Chaosium",
+   "generi": [
+    "horror",
+    "investigativo"
+   ],
+   "edizioni": [
+    "7e"
+   ],
+   "sito": "https://www.chaosium.com/cthulhu-quickstart/",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "coc7-qs",
+     "titolo": "Call of Cthulhu 7th Edition – Quick-Start Rules",
+     "edizione": "7e",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://www.chaosium.com/cthulhu-quickstart/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Download gratuito dal sito Chaosium, per uso personale; non redistribuire. Ne esistono più versioni: usare la più recente.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "cpred",
+   "nome": "Cyberpunk RED",
+   "editore": "R. Talsorian Games",
+   "generi": [
+    "cyberpunk",
+    "fantascienza"
+   ],
+   "edizioni": [
+    "RED"
+   ],
+   "sito": "https://rtalsoriangames.com/2021/02/26/cyberpunk-red-alert-single-shot-pack/",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "cpred-single",
+     "titolo": "Cyberpunk RED Alert – Single Shot Pack",
+     "edizione": "RED",
+     "tipologia": "introduttivo",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://rtalsoriangames.com/2021/02/26/cyberpunk-red-alert-single-shot-pack/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Gratuito dalla pagina dell'editore; non è un quickstart completo. Il Jumpstart Kit è a pagamento; esiste anche «Easy Mode» gratuito (indirizzo ufficiale da verificare).",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "wfrp",
+   "nome": "Warhammer Fantasy Roleplay",
+   "editore": "Cubicle 7",
+   "generi": [
+    "fantasy",
+    "grimdark"
+   ],
+   "edizioni": [
+    "4e"
+   ],
+   "sito": "https://cubicle7games.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "vtm",
+   "nome": "Vampire: The Masquerade",
+   "editore": "Paradox Interactive / Renegade Game Studios",
+   "generi": [
+    "horror",
+    "urban fantasy"
+   ],
+   "edizioni": [
+    "V5"
+   ],
+   "sito": "https://www.paradoxinteractive.com/games/world-of-darkness/community/free-content",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "wod5-meccaniche",
+     "titolo": "World of Darkness 5ª edizione – schede delle meccaniche (Vampire, Werewolf, Hunter)",
+     "edizione": "V5",
+     "tipologia": "scheda",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://www.paradoxinteractive.com/games/world-of-darkness/community/free-content",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Contenuti gratuiti della pagina ufficiale di World of Darkness; uso personale.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
+  },
+  {
+   "id": "wta",
+   "nome": "Werewolf: The Apocalypse",
+   "editore": "Paradox Interactive / Renegade Game Studios",
+   "generi": [
+    "horror",
+    "urban fantasy"
+   ],
+   "edizioni": [
+    "W5"
+   ],
+   "sito": "https://www.paradoxinteractive.com/games/world-of-darkness/community/free-content",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "runequest",
+   "nome": "RuneQuest",
+   "editore": "Chaosium",
+   "generi": [
+    "fantasy",
+    "mitico"
+   ],
+   "edizioni": [
+    "Roleplaying in Glorantha"
+   ],
+   "sito": "https://www.chaosium.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "savage",
+   "nome": "Savage Worlds",
+   "editore": "Pinnacle Entertainment Group",
+   "generi": [
+    "generico",
+    "pulp"
+   ],
+   "edizioni": [
+    "Adventure Edition (SWADE)"
+   ],
+   "sito": "https://peginc.com/",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "swade-test",
+     "titolo": "Savage Worlds Test Drive",
+     "edizione": "SWADE",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://peginc.com/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Gratuito (regole di prova, personaggi pronti, carte dei poteri). Pagina diretta del download da verificare: aprire il sito dell'editore.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
+  },
+  {
+   "id": "gurps",
+   "nome": "GURPS",
+   "editore": "Steve Jackson Games",
+   "generi": [
+    "generico"
+   ],
+   "edizioni": [
+    "4e"
+   ],
+   "sito": "https://sjgames.com/gurps/Lite",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "gurps-lite4",
+     "titolo": "GURPS Lite (Fourth Edition)",
+     "edizione": "4e",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://warehouse23.com/products/gurps-lite-fourth-edition",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "PDF di 32 pagine, prezzo zero sul negozio ufficiale Warehouse 23 (serve il passaggio dal negozio).",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    },
+    {
+     "id": "gurps-ultralite",
+     "titolo": "GURPS Ultra-Lite",
+     "edizione": "4e",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://warehouse23.com/products/gurps-ultra-lite",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "PDF gratuito di 2 pagine sul negozio ufficiale.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "fate",
+   "nome": "Fate Core",
+   "editore": "Evil Hat Productions",
+   "generi": [
+    "generico",
+    "narrativo"
+   ],
+   "edizioni": [
+    "Core",
+    "Accelerated",
+    "Condensed"
+   ],
+   "sito": "https://fate-srd.com/",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "fate-srd",
+     "titolo": "Fate System Reference Documents (Core, Accelerated, Condensed)",
+     "edizione": "",
+     "tipologia": "srd",
+     "lingua": "en",
+     "formato": "web",
+     "url": "https://fate-srd.com/downloads",
+     "licenza": "CC-BY-3.0 oppure OGL",
+     "condizioni": "Sito SRD indicato dall'editore come fonte ufficiale. Il marchio «Fate» non è coperto dalla licenza.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    },
+    {
+     "id": "fate-core-pwyw",
+     "titolo": "Fate Core System (PDF)",
+     "edizione": "Core",
+     "tipologia": "regolamento",
+     "lingua": "en",
+     "formato": "zip",
+     "url": "https://evilhat.itch.io/fate-core",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Download a offerta libera («pay what you want») dalla pagina ufficiale dell'editore.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "brp",
+   "nome": "Basic Roleplaying",
+   "editore": "Chaosium",
+   "generi": [
+    "generico"
+   ],
+   "edizioni": [
+    "Universal Game Engine"
+   ],
+   "sito": "https://www.chaosium.com/content/orclicense/",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "brp-qs",
+     "titolo": "Basic Roleplaying – Quickstart",
+     "edizione": "Universal Game Engine",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://downloads.chaosium.com/basic-roleplaying/cha2040-brp-quickstart/CHA2040_Basic_Roleplaying_Quickstart.pdf",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Gratuito dal sito dell'editore, per uso personale.",
+     "gratuito": true,
+     "downloadDiretto": true,
+     "verificatoIl": "2026-11-13"
+    },
+    {
+     "id": "brp-orc",
+     "titolo": "Basic Roleplaying: Universal Game Engine (licenza ORC)",
+     "edizione": "Universal Game Engine",
+     "tipologia": "srd",
+     "lingua": "en",
+     "formato": "web",
+     "url": "https://www.chaosium.com/content/orclicense/",
+     "licenza": "ORC License",
+     "condizioni": "Regole complete gratuite in PDF o RTF con licenza ORC, dalla pagina ufficiale.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
+  },
+  {
+   "id": "tor",
+   "nome": "The One Ring",
+   "editore": "Free League Publishing",
+   "generi": [
+    "fantasy"
+   ],
+   "edizioni": [
+    "2e"
+   ],
+   "sito": "https://freeleaguepublishing.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "dragonbane",
+   "nome": "Dragonbane",
+   "editore": "Free League Publishing",
+   "generi": [
+    "fantasy"
+   ],
+   "edizioni": [
+    "1e"
+   ],
+   "sito": "https://freeleaguepublishing.com/shop/dragonbane/quickstart-guide/",
+   "sitoVerificatoIl": "2026-11-13",
+   "documenti": [
+    {
+     "id": "db-riddermound",
+     "titolo": "Dragonbane – Quickstart Guide (Riddermound)",
+     "edizione": "1e",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://freeleaguepublishing.com/shop/dragonbane/quickstart-guide/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Gratuito; il link di download arriva da DriveThruRPG dopo un acquisto a prezzo zero (serve un account): l'app apre solo la pagina.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": "2026-11-13"
+    }
+   ]
+  },
+  {
+   "id": "fabula",
+   "nome": "Fabula Ultima",
+   "editore": "Need Games / Rooster Games",
+   "generi": [
+    "fantasy",
+    "JRPG"
+   ],
+   "edizioni": [
+    "1e"
+   ],
+   "sito": "https://www.needgames.it/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "shadowrun",
+   "nome": "Shadowrun",
+   "editore": "Catalyst Game Labs",
+   "generi": [
+    "cyberpunk",
+    "fantasy urbano"
+   ],
+   "edizioni": [
+    "Sixth World"
+   ],
+   "sito": "https://www.shadowrunsixthworld.com/",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "sr6-qs",
+     "titolo": "Shadowrun Sixth World – Quick-Start Rules",
+     "edizione": "Sixth World",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://www.shadowrunsixthworld.com/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Gratuite per uso personale, non redistribuire. Pagina ufficiale del download da verificare.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
+  },
+  {
+   "id": "starfinder",
+   "nome": "Starfinder",
+   "editore": "Paizo",
+   "generi": [
+    "fantascienza",
+    "science fantasy"
+   ],
+   "edizioni": [
+    "2e"
+   ],
+   "sito": "https://paizo.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "traveller",
+   "nome": "Traveller",
+   "editore": "Mongoose Publishing",
+   "generi": [
+    "fantascienza"
+   ],
+   "edizioni": [
+    "2e (2022)"
+   ],
+   "sito": "https://www.mongoosepublishing.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  },
+  {
+   "id": "alien",
+   "nome": "Alien RPG",
+   "editore": "Free League Publishing",
+   "generi": [
+    "fantascienza",
+    "horror"
+   ],
+   "edizioni": [
+    "1e"
+   ],
+   "sito": "https://freeleaguepublishing.com/",
+   "sitoVerificatoIl": "",
+   "documenti": []
+  }
+ ]
+}
