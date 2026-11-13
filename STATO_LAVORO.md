@@ -44,6 +44,8 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (richiesta del Master del 13/11): analisi e piano in `docs/RULEBOOK_LIBRARY.md`.
+   In attesa delle tre decisioni del §5 (nomi dei giochi nel catalogo, entità campagna, ordine dei passi), poi L1 → L6.
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
    edizione come primo «modulo di sistema», scheda libera per gli altri giochi; poi **3d**: le 19 prove rosse e nuove
@@ -56,6 +58,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | Richiesta «Libreria universale dei regolamenti»: analisi dell'architettura e piano tecnico (passi L1-L6, componenti, dipendenze, conflitti, decisioni) in `docs/RULEBOOK_LIBRARY.md`. Nessun codice scritto. |
 | 2026-11-13 | Claude Code (cloud) | Richiesta del Master: sistema di gioco a scelta fra i più noti. Scritta la proposta (moduli di sistema per famiglia di meccaniche, elenco dei giochi, nodo dei marchi) in `docs/PIANO.md` §3.3bis; in attesa della scelta delle priorità. |
 | 2026-11-13 | Claude Code (cloud) | **Fase 3b**: copia di Barovia (`04_nuova_app`, senza storia Git) ripulita in una cartella di lavoro e portata in `app/`. Tolte le funzioni legate alla campagna, svuotati i dati di gioco, nomi cambiati (`gasterbless`, «Parla con l'antagonista», «Archivista delle fonti»), istruzioni dell'IA neutre, media e icone rifatti, marchio applicato. Nuovi `app/internal/controlli/parole_test.go`, `docs/parole_vietate.txt`, `app/web/stile/marchio.css`, `app/web/ui/marchio.js`, `app/README.md`. Corretto `branding/` (carattere del logo SVG, intestazione con div). Prove: build e vet puliti, parole vietate ok, 19 prove del server rosse (elenco in `docs/PIANO.md` §5.1), pagine principali provate nel browser. |
 | 2026-11-13 | Claude Code (cloud) | Decisione del Master: app generica per diversi giochi di ruolo, nessun contenuto di gioco incluso (importazione o inserimento a mano da parte dell'utente). Aggiornati `CLAUDE.md`, `README.md`, `docs/PIANO.md` (§1, §3.2, §3.3, fase 3c, §6), `docs/LICENZE_E_CONTENUTI.md`. |
