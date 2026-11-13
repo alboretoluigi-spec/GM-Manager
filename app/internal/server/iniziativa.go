@@ -104,6 +104,7 @@ type vistaCombattente struct {
 		F int `json:"f"`
 	} `json:"tsMorte,omitempty"`
 	BonusIniz   *int   `json:"bonusIniziativa,omitempty"`
+	formulaIniz string // scheda libera: formula dell'iniziativa (scheda_libera.go)
 	PercPassiva *int   `json:"percezionePassiva,omitempty"`
 	Terrore     int    `json:"terrore,omitempty"` // livello di Terrore (Sanità mentale, se la scala è attiva)
 	TerroreNome string `json:"terroreNome,omitempty"`
@@ -229,6 +230,7 @@ func (s *Server) caricaCombattenti(comb string) ([]*vistaCombattente, error) {
 			json.Unmarshal([]byte(riep), &r)
 			v.impostaAttacchi("", &r)
 			v.CA, v.PFMax, v.BonusIniz, v.PercPassiva = intP(r.CA), intP(r.PFMax), intP(r.Iniziativa), intP(r.PercPass)
+			v.formulaIniz = r.IniziativaFormula
 			v.Classe = r.Classe
 			v.Ira = r.Ira != nil
 			v.IncAuto, v.slotTot = r.IncAuto, r.Slot
@@ -668,8 +670,7 @@ func (s *Server) azioneIniziativa(u *Utente, tipo, sessione string, raw json.Raw
 			} else if cb.Tipo == "mostro" {
 				b = (cb.spareggio - 10) / 2
 			}
-			d20 := dado(20)
-			v, nat, testoNat = d20+b, d20, " (d20 "+itoa(d20)+")"+testoNaturale(d20)
+			v, nat, testoNat = tiroIniziativa(cb.formulaIniz, b)
 		} else if d.Valore != nil && *d.Valore >= -10 && *d.Valore <= 50 {
 			v = *d.Valore
 			if d.Naturale != nil && *d.Naturale >= 1 && *d.Naturale <= 20 {
@@ -700,9 +701,9 @@ func (s *Server) azioneIniziativa(u *Utente, tipo, sessione string, raw json.Raw
 				} else if c.Tipo == "mostro" {
 					b = (c.spareggio - 10) / 2
 				}
-				d20 := dado(20)
-				s.DB.Exec(`UPDATE combattenti SET iniziativa = ?, iniz_naturale = ?, ordine_pari = 0 WHERE id = ?`, d20+b, d20, c.ID)
-				registro("iniziativa di " + c.Nome + ": d20 (" + itoa(d20) + ") " + conSegno(b) + " = " + itoa(d20+b) + testoNaturale(d20))
+				v, nat, testo := tiroIniziativa(c.formulaIniz, b)
+				s.DB.Exec(`UPDATE combattenti SET iniziativa = ?, iniz_naturale = ?, ordine_pari = 0 WHERE id = ?`, v, nat, c.ID)
+				registro("iniziativa di " + c.Nome + ": " + itoa(v) + testo)
 			}
 		}
 		tutti, _ = s.caricaCombattenti(comb)

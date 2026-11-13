@@ -64,9 +64,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
-0000. **Fase 3c** (`docs/PIANO.md` §5.2): C1, C2, C3 fatti; **C4a fatto** (interfaccia adattiva: scelta della campagna
-   all'accesso, menu e barra filtrati per il gioco, giocatori in tempo reale). Prossimo **C4b – scheda libera** (campi e
-   tiri decisi dal Master, dadi liberi, iniziativa libera, valute), poi C4c–C4e (`docs/INTERFACCIA_ADATTIVA.md` §6). Ancora aperta la scelta del Master sulle famiglie di sistemi di gioco
+0000. **Fase 3c** (`docs/PIANO.md` §5.2): C1, C2, C3, **C4a e C4b fatti** (interfaccia adattiva; scheda libera con il
+   modello della campagna, `docs/SCHEDA_LIBERA.md`). Prossimo **C4c – motore dei tiri per famiglia** (d100 sotto il valore,
+   riserve con successi, 2d6 a fasce, Fate, passi esplosivi…), poi C4d (modelli di scheda per famiglia, valute) e C4e
+   (`docs/INTERFACCIA_ADATTIVA.md` §6). Ancora aperta la scelta del Master sulle famiglie di sistemi di gioco
    (§3.3bis, domanda n. 1 del §6). Prove: `cd app && go test ./internal/server -run TestPacchetti` e
    `bash test/browser/esegui.sh "contenuti contenuti_editor"`.
 000. **App di base installabile (richiesta del Master del 13/11)**: script sistemati (porta 7700/7701, servizio e cartelle
@@ -90,6 +91,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **C4b fatto**: scheda libera. Migrazione 044 (modello della scheda della campagna; un gruppo nuovo va nella campagna attiva), `internal/server/scheda_libera.go` (modello con controlli, formule dei dadi, `/campagne/{id}/modello-scheda`, `/personaggi/{id}/modello-scheda`, iniziativa con la formula nel tracker), riepilogo con `initiativeFormula`, `/personaggi/{id}` con il gioco; pagina `web/scheda_libera/` (stesso protocollo della scheda 5e: salvataggi, approvazione, punti ferita del tracker, tiri sul server), sezione Schede che sceglie la scheda in base al gioco della campagna del personaggio, editor del modello (`web/sezioni/modello_scheda.js`, esporta/importa/base); Finanze solo nella quinta edizione; pulsante Sanità mentale solo nei giochi che la hanno. Prove: Go verdi (`TestFormuleSchedaLibera`, `TestSchedaLibera`, `TestGiocoAttivo` ampliata); browser scheda_libera 14/14. |
 | 2026-11-13 | Claude Code (cloud) | **C4a fatto**: registro dei giochi `app/web/sistemi/moduli.json` (12 moduli: quinta edizione, scheda libera e 10 famiglie, nomi descrittivi), migrazione 043 (gioco di ogni campagna), `internal/server/gioco.go` (campagna attiva, `/api/v1/gioco`, avviso a tutti), `/io` con il gioco; nelle pagine: «Che cosa giochiamo oggi?» dopo l'accesso del Master, campagna e gioco sotto il logo con «Cambia campagna», menu e barra filtrati, sezioni nascoste anche dall'indirizzo, giocatori aggiornati in tempo reale; gioco nella pagina Campagne. Prove: Go verdi (nuova `TestGiocoAttivo`); browser gioco 14/14 e tutte le altre verdi. |
 | 2026-11-13 | Claude Code (cloud) | **Arcana tolta del tutto** (decisione del Master: «Non includere Arcana in GasterBless»): pulsante e finestra «scheda esterna» in `web/sezioni/schede.js`, etichette in `iniziativa.js` e `combattente.js`, avviso in `web/ui/app.js`, stile in `base.css`, impostazione `origini_arcana` in `internal/config/config.go`, migrazioni 009 e 011 svuotate (rinominate `009_vuota.sql`, `011_vuota.sql`; rollback tolti), commenti; parole aggiunte a `docs/parole_vietate.txt`; regola in `CLAUDE.md`. Prove Go verdi. C4: decisioni del Master registrate in `docs/INTERFACCIA_ADATTIVA.md`. |
 | 2026-11-13 | Claude Code (cloud) | **Fase 3c, C3 fatto**: nei pacchetti incantesimi concessi (sottoclassi, razze, terreni; nomi convertiti in quelli inglesi dell'archivio), strumenti, prezzi e categorie dell'equipaggiamento, mostri (catalogo `carta/mostri.json` unito, solo al Master), oggetti magici (archivio «dal pacchetto»; la copia dell'archivio vince), professioni (catalogo unito). Cataloghi del server ricaricabili (`ricaricabile`, `leggiWeb`). Editor: strumenti, equipaggiamento, mostri, incantesimi concessi, costi. Modello aggiornato. Tolto «Guida del Dungeon Master» dall'archivio oggetti; trovati altri nomi di manuali da togliere (C5). Registrata la richiesta del Master sull'interfaccia adattiva (C4). Prove Go verdi; browser contenuti 19/19, contenuti_editor 17/17. |
@@ -113,7 +115,8 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 | 2026-11-13 | Claude Code (cloud) | Fase 3a: repository collegato alla sessione; creati `CLAUDE.md`, `README.md`, `.gitignore`, `STATO_LAVORO.md`, `docs/PIANO.md` (dall'inventario di Barovia, con il nome GM Manager e le fasi 3a-3d), `docs/LICENZE_E_CONTENUTI.md` (regole, attribuzione SRD 5.1, componenti di terzi). |
 
 ## File creati o modificati nell'ultima sessione
-C4a – nuovi: `app/web/sistemi/moduli.json`, `app/internal/db/schema/043_campagne_modulo.sql`, `app/internal/db/rollback/043_campagne_modulo_rollback.sql`,
-`app/internal/server/gioco.go`, `gioco_test.go`, `app/test/browser/gioco.js`, `docs/INTERFACCIA_ADATTIVA.md`. Modificati: `app/internal/server/campagne.go`,
-`accesso.go`, `server.go`, `aiuto_test.go`, `app/web/embed.go`, `app/web/ui/app.js`, `app/web/sezioni/accesso.js`, `campagne.js`,
-`app/web/stile/marchio.css`, `docs/PIANO.md`, `STATO_LAVORO.md`.
+C4b – nuovi: `docs/SCHEDA_LIBERA.md`, `app/internal/db/schema/044_modello_scheda.sql`, `app/internal/db/rollback/044_modello_scheda_rollback.sql`,
+`app/internal/server/scheda_libera.go`, `scheda_libera_test.go`, `app/web/scheda_libera/` (index.html, scheda_libera.js, stile.css),
+`app/web/sezioni/modello_scheda.js`, `app/test/browser/scheda_libera.js`. Modificati: `app/internal/server/personaggi.go`, `iniziativa.go`,
+`server.go`, `gioco_test.go`, `app/web/embed.go`, `app/web/sistemi/moduli.json`, `app/web/sezioni/schede.js`, `campagne.js`, `contenuti_editor.js`,
+`docs/INTERFACCIA_ADATTIVA.md`, `docs/PIANO.md`, `STATO_LAVORO.md`.

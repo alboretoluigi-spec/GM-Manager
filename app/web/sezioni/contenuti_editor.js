@@ -185,7 +185,12 @@ export function modulo(campi, o = {}) {
       case "testo": case "id": {
         const i = el("input", { type: "text", name: c.k, valore: v ?? c.predef ?? "", autocomplete: "off", list: c.suggerimenti ? "ce-dl-" + c.k : null });
         if (c.t === "id") { i.placeholder = "calcolato dal nome"; i.pattern = "[a-z0-9][a-z0-9_\\-]{0,39}"; }
-        lettori.push((r) => { const x = i.value.trim(); if (c.t === "id") r[c.k] = x || idDa(r.nome); else r[c.k] = x; });
+        lettori.push((r) => {
+          const x = i.value.trim();
+          if (c.t !== "id") { r[c.k] = x; return; }
+          // c.sep: separatore diverso dal trattino (es. «_» per i campi del modello della scheda libera)
+          r[c.k] = x || (c.sep ? idDa(r.nome).replace(/-/g, c.sep).replace(/^(\d)/, "c$1").slice(0, 30) : idDa(r.nome));
+        });
         return etichetta(c, i, c.suggerimenti ? el("datalist", { id: "ce-dl-" + c.k }, c.suggerimenti.map((s) => el("option", { value: s }))) : null);
       }
       case "area": {
@@ -310,7 +315,7 @@ export function modulo(campi, o = {}) {
         const elenco = el("div", { class: "ce-sotto" });
         const aggiungiVoce = (x = {}, aperta = false) => {
           const m = modulo(c.campi, x);
-          const titolo = el("summary", { testo: x.nome || "(nuova voce)" });
+          const titolo = el("summary", { testo: x.nome || x.titolo || "(nuova voce)" });
           const d = el("details", { class: "ce-voce-sotto", open: aperta }, titolo, m.nodo,
             el("button", { type: "button", class: "pericolo", testo: "🗑 Togli", on: { click: () => d.remove() } }));
           d.__leggi = m.leggi;

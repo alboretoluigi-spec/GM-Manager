@@ -1,23 +1,138 @@
 {
   "versione": 1,
-  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. «pronto»: false = la scheda, i dadi e l'iniziativa del modulo arrivano nei passi C4b-C4e; fino ad allora vale la scheda libera.",
-  "comuni": ["sessioni", "documenti", "mappa", "iniziativa", "schede", "background", "dadi", "riassunti", "manuali", "campagne", "regolamenti",
-    "miei_regolamenti", "analisi_regole", "iscrizioni", "avvisi", "preparazione", "assistente", "lore", "bestiario", "finanze", "impostazioni",
-    "profilo", "privacy"],
+  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. «pronto»: false = la scheda, i dadi e l'iniziativa del modulo arrivano nei passi C4b-C4e; fino ad allora vale la scheda libera. Le Finanze (monete della quinta edizione) restano solo nel suo modulo finché non arrivano le valute del gioco.",
+  "comuni": [
+    "sessioni",
+    "documenti",
+    "mappa",
+    "iniziativa",
+    "schede",
+    "background",
+    "dadi",
+    "riassunti",
+    "manuali",
+    "campagne",
+    "regolamenti",
+    "miei_regolamenti",
+    "analisi_regole",
+    "iscrizioni",
+    "avvisi",
+    "preparazione",
+    "assistente",
+    "lore",
+    "bestiario",
+    "impostazioni",
+    "profilo",
+    "privacy"
+  ],
   "moduli": [
-    { "id": "d20-5e", "nome": "Quinta edizione (d20)", "meccanica": "d20 + modificatore contro una difficoltà", "pronto": true,
-      "sezioni": ["contenuti", "oggetti_magici", "strumenti", "professioni", "sanita", "combattente"], "barra": ["riposi"] },
-    { "id": "libera", "nome": "Scheda libera (qualsiasi gioco)", "meccanica": "campi, dadi e iniziativa decisi dal Master", "pronto": true,
-      "sezioni": [], "barra": [] },
-    { "id": "d100", "nome": "Percentuale d100", "meccanica": "d100 sotto il valore dell'abilità", "pronto": false, "sezioni": ["sanita"], "barra": [] },
-    { "id": "riserva-d10", "nome": "Riserva di d10", "meccanica": "riserva di d10, si contano i successi", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "riserva-d6", "nome": "Riserva di d6", "meccanica": "riserva di d6, si contano i successi", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "2d6-fasce", "nome": "2d6 a fasce", "meccanica": "2d6 + modificatore: fallimento, successo parziale, successo pieno", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "d10-somma", "nome": "d10 + caratteristica + abilità", "meccanica": "d10 più caratteristica e abilità contro una difficoltà", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "passi-esplosivi", "nome": "Dadi a passi esplosivi", "meccanica": "un dado da d4 a d12 per tratto, il massimo si ritira e si somma", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "fate", "nome": "Dadi Fate", "meccanica": "4dF (−, vuoto, +) più l'abilità sulla scala degli aggettivi", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "3d6-sotto", "nome": "3d6 sotto il valore", "meccanica": "3d6 uguale o sotto l'abilità", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "d20-sotto", "nome": "d20 sotto il valore", "meccanica": "d20 uguale o sotto la caratteristica o l'abilità", "pronto": false, "sezioni": [], "barra": [] },
-    { "id": "narrativi", "nome": "Dadi narrativi con simboli", "meccanica": "dadi con simboli di successo, vantaggio e minaccia", "pronto": false, "sezioni": [], "barra": [] }
+    {
+      "id": "d20-5e",
+      "nome": "Quinta edizione (d20)",
+      "meccanica": "d20 + modificatore contro una difficoltà",
+      "pronto": true,
+      "sezioni": [
+        "finanze",
+        "contenuti",
+        "oggetti_magici",
+        "strumenti",
+        "professioni",
+        "sanita",
+        "combattente"
+      ],
+      "barra": [
+        "riposi"
+      ]
+    },
+    {
+      "id": "libera",
+      "nome": "Scheda libera (qualsiasi gioco)",
+      "meccanica": "campi, dadi e iniziativa decisi dal Master",
+      "pronto": true,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "d100",
+      "nome": "Percentuale d100",
+      "meccanica": "d100 sotto il valore dell'abilità",
+      "pronto": false,
+      "sezioni": [
+        "sanita"
+      ],
+      "barra": []
+    },
+    {
+      "id": "riserva-d10",
+      "nome": "Riserva di d10",
+      "meccanica": "riserva di d10, si contano i successi",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "riserva-d6",
+      "nome": "Riserva di d6",
+      "meccanica": "riserva di d6, si contano i successi",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "2d6-fasce",
+      "nome": "2d6 a fasce",
+      "meccanica": "2d6 + modificatore: fallimento, successo parziale, successo pieno",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "d10-somma",
+      "nome": "d10 + caratteristica + abilità",
+      "meccanica": "d10 più caratteristica e abilità contro una difficoltà",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "passi-esplosivi",
+      "nome": "Dadi a passi esplosivi",
+      "meccanica": "un dado da d4 a d12 per tratto, il massimo si ritira e si somma",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "fate",
+      "nome": "Dadi Fate",
+      "meccanica": "4dF (−, vuoto, +) più l'abilità sulla scala degli aggettivi",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "3d6-sotto",
+      "nome": "3d6 sotto il valore",
+      "meccanica": "3d6 uguale o sotto l'abilità",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "d20-sotto",
+      "nome": "d20 sotto il valore",
+      "meccanica": "d20 uguale o sotto la caratteristica o l'abilità",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    },
+    {
+      "id": "narrativi",
+      "nome": "Dadi narrativi con simboli",
+      "meccanica": "dadi con simboli di successo, vantaggio e minaccia",
+      "pronto": false,
+      "sezioni": [],
+      "barra": []
+    }
   ]
 }

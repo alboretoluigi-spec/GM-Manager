@@ -57,6 +57,18 @@ func TestGiocoAttivo(t *testing.T) {
 	if !strings.Contains(cs[1].(map[string]any)["modulo"].(string), "d100") {
 		t.Fatalf("il gioco della campagna si vede nell'elenco: %v", cs)
 	}
+	// Un gruppo nuovo va nella campagna attiva.
+	gn := m.deve(200, "POST", "/gruppi", map[string]any{"nome": "Venerdì"})["id"].(string)
+	trovato := false
+	for _, c := range m.deve(200, "GET", "/campagne", nil)["campagne"].([]any) {
+		for _, x := range c.(map[string]any)["gruppi"].([]any) {
+			trovato = trovato || x.(map[string]any)["id"] == gn && c.(map[string]any)["id"] == id
+		}
+	}
+	if !trovato {
+		t.Fatal("il gruppo nuovo deve andare nella campagna attiva")
+	}
+	m.deve(200, "PUT", "/gruppi/"+gn+"/campagna", map[string]any{"campagna": "principale"})
 	// Eliminata la campagna attiva: si torna alla prima, da scegliere di nuovo.
 	m.deve(200, "DELETE", "/campagne/"+id, nil)
 	if y := gioco(m); y["scelta"] != false || y["campagna"].(map[string]any)["id"] != "principale" {

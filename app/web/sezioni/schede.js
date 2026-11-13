@@ -171,7 +171,8 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
   const btnManuale = approvazione ? el("button", { class: "piccolo", on: { click: () => (manuale ? spegniManuale() : accendiManuale()) } }) : null;
   const fascia = el("div", { class: "mm-fascia", hidden: true, "aria-live": "polite" });
   svuota(azioni, statoSalv, btnManuale,
-    el("button", { class: "piccolo", testo: "🧠 Sanità mentale", title: "Valore, tiro salvezza, Terrore, follia e condizioni", on: { click: () => apriMiniSanita(pg.id) } }),
+    // solo nei giochi che hanno la Sanità mentale (interfaccia adattiva, C4a)
+    !(io.gioco && !io.gioco.sezioni.includes("sanita")) && el("button", { class: "piccolo", testo: "🧠 Sanità mentale", title: "Valore, tiro salvezza, Terrore, follia e condizioni", on: { click: () => apriMiniSanita(pg.id) } }),
     el("button", { class: "piccolo", testo: "Storico", on: { click: storico } }),
     el("button", { class: "piccolo", testo: "Stato…", on: { click: cambiaStato } }),
     io_.ruolo === "master" ? el("button", { class: "piccolo", testo: "👤 Assegna…", title: "Assegna la scheda a un giocatore", on: { click: assegna } }) : null,
@@ -186,9 +187,12 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
       el("p", { class: "tenue", testo: io_.ruolo === "master" ? "Abilitala in Impostazioni → Schede alternative, oppure cambia il tipo di scheda con «Tipo di scheda…» (i dati salvati restano)." : "Chiedi al Master di abilitarla." }))));
     return;
   }
+  const libera = !plugin && !!(info.gioco && info.gioco.modulo && info.gioco.modulo !== "d20-5e");
   const frame = plugin
     ? el("iframe", { class: "riquadro-scheda", title: "Scheda di " + pg.nome + " (" + plugin.nome + ")", src: plugin.url, sandbox: "allow-scripts allow-modals allow-forms allow-downloads" })
-    : el("iframe", { class: "riquadro-scheda", title: "Scheda di " + pg.nome, src: "/scheda/?host=" + encodeURIComponent(location.origin) });
+    : el("iframe", { class: "riquadro-scheda", title: "Scheda di " + pg.nome,
+      // gioco diverso dalla quinta edizione: la scheda libera con il modello della campagna (fase 3c, C4b)
+      src: (libera ? "/scheda_libera/" : "/scheda/") + "?host=" + encodeURIComponent(location.origin) });
   svuota(corpo, fascia, frame);
   disegnaManuale();
   // Il plugin ha un'origine opaca ("null"): i messaggi si accettano solo dal suo riquadro e gli si rispondono
@@ -234,6 +238,13 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
             }
           } catch { /* scheda non raggiungibile: al primo salvataggio si salveranno anche i predefiniti */ }
         }, 50);
+        break;
+      }
+      case "scheda:tiroLibero": { // scheda libera: formula già con i valori (es. «2d6 + 3»), tirata dal server
+        const t = dadiDaFormula(String(m.formula || ""));
+        if (t.errore) { invia({ type: "scheda:tiroErrore", errore: t.errore }); break; }
+        tempoReale.chiedi("dadi.tira", { dadi: t.dadi, mod: t.mod, modo: "normale", etichetta: String(m.etichetta || "").slice(0, 40), scheda: true, personaggio: pg.id })
+          .then((r) => invia({ type: "scheda:tiroRisultato", r })).catch((e) => invia({ type: "scheda:tiroErrore", errore: e.message }));
         break;
       }
       case "scheda:tiro": // clic su un tiro salvezza, un'abilità o una prova: si chiede come tirare (sceltaTiro)
@@ -819,4 +830,29 @@ function riassumiCampi(c) {
   if (c[0] === "*") return "ripristino";
   const n = [...new Set(c.map((k) => nomeCampo(k.split(".")[0] === "f" ? k : k.split(".")[0])))];
   return n.slice(0, 4).join(", ") + (n.length > 4 ? " e altro" : "");
+}
+
+/** Formula della scheda libera («2d6 + 1d4 - 2») → gruppi di dadi e modificatore per il server (dadi.tira). */
+export function dadiDaFormula(f) {
+  const s = f.toLowerCase().replace(/\s+/g, "").replace(/−/g, "-");
+  if (!s) return { errore: "Formula vuota." };
+  const per = new Map();
+  let mod = 0, dadi = 0;
+  for (const t of (/^[+-]/.test(s) ? s : "+" + s).match(/[+-][^+-]+/g) || []) {
+    const segno = t[0] === "-" ? -1 : 1, x = t.slice(1);
+    const d = /^(\d{0,2})d(\d{1,3})$/.exec(x);
+    if (d) {
+      const n = d[1] ? +d[1] : 1, facce = +d[2];
+      if (![4, 6, 8, 10, 12, 20, 100].includes(facce) || n < 1 || n > 20) return { errore: "«" + x + "»: dadi ammessi da 1 a 20, d4, d6, d8, d10, d12, d20 o d100." };
+      if (segno < 0) return { errore: "«-" + x + "»: i dadi da sottrarre non sono ancora previsti." };
+      per.set(facce, (per.get(facce) || 0) + n); dadi += n;
+    } else if (/^\d{1,3}$/.test(x)) mod += segno * +x;
+    else return { errore: "«" + x + "» non è un dado (es. 2d6) né un numero." };
+  }
+  if (!dadi) return { errore: "La formula non ha dadi." };
+  if (dadi > 50 || mod < -50 || mod > 50) return { errore: "Al massimo 50 dadi e un modificatore tra −50 e +50." };
+  const gruppi = []; // il server accetta al massimo 20 dadi per gruppo e 7 gruppi
+  for (const [facce, n] of per) for (let r = n; r > 0; r -= 20) gruppi.push({ n: Math.min(r, 20), facce });
+  if (gruppi.length > 7) return { errore: "Troppi tipi di dadi nella stessa formula." };
+  return { dadi: gruppi, mod };
 }

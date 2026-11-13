@@ -89,6 +89,8 @@ export async function mostra(corpo) {
     return el("article", { class: "scheda-ui cp-campagna", "data-campagna": c.id },
       el("div", { class: "rl-doc-testa" }, el("h3", { testo: c.nome }),
         el("span", { class: "etichetta mr-cat cp-modulo", title: "Gioco della campagna: decide sezioni e pulsanti dell'app", testo: "🎮 " + nomeModulo(c.modulo) }),
+        c.modulo !== "d20-5e" ? el("button", { class: "piccolo", type: "button", testo: "📜 Modello della scheda…", title: "Campi, tiri, punti ferita e iniziativa della scheda libera di questa campagna",
+          on: { click: () => import("./modello_scheda.js").then((m) => m.apriModello(c)) } }) : null,
         c.sistema ? el("span", { class: "etichetta mr-cat", testo: "🎲 " + c.sistema + (c.edizione ? " · " + c.edizione : "") }) : el("span", { class: "etichetta", testo: "sistema non indicato" })),
       c.descrizione ? el("p", { class: "tenue piccolo", testo: c.descrizione }) : null,
       el("div", { class: "cp-griglia" },

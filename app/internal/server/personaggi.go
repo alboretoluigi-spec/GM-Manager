@@ -150,6 +150,8 @@ type riepilogo struct {
 	Velocita   any    `json:"velocita,omitempty"`
 	PercPass   int    `json:"percezionePassiva,omitempty"`
 	CDInc      *int   `json:"cdIncantesimi,omitempty"`
+	// Scheda libera (fase 3c, C4b): formula dell'iniziativa con i valori già scritti (es. «1d10 + 3»)
+	IniziativaFormula string `json:"iniziativaFormula,omitempty"`
 	// Per i riposi (riposi.go, 2026-11-11): Dadi Vita totali per tipo, modificatore di Costituzione, slot del patto.
 	DadiVita []dadoVita `json:"dadiVita,omitempty"`
 	ModCos   *int       `json:"modCos,omitempty"`
@@ -347,8 +349,10 @@ func (s *Server) apiPersonaggio(w http.ResponseWriter, r *http.Request) (any, er
 	if err != nil {
 		return nil, err
 	}
+	camp, mod := s.giocoDelPersonaggio(id)
 	return map[string]any{"personaggio": v, "dati": json.RawMessage(dati), "modificabile": s.puoModificarePersonaggio(u, id),
-		"effetti": s.effettiDelPG(id)}, nil // effetti in corso: la scheda mostra la CA cambiata con l'originale (effetti_valori.go)
+		"gioco":   map[string]string{"campagna": camp, "modulo": mod}, // scheda della quinta edizione o scheda libera (C4b)
+		"effetti": s.effettiDelPG(id)}, nil                            // effetti in corso: la scheda mostra la CA cambiata con l'originale (effetti_valori.go)
 }
 
 // schedaCompleta unisce la versione indicata e lo stato in gioco attuale.
@@ -704,11 +708,17 @@ func pulisciRiepilogo(raw json.RawMessage) string {
 		Rage                  *modificheEffetto // ira del barbaro (effetti_valori.go)
 		SpellsAuto            []incAuto         // incantesimi automatici (incantesimi_remoto.go)
 		Slots                 map[string]int
+		InitiativeFormula     string // scheda libera (fase 3c, C4b): formula dell'iniziativa con i valori
 	}
 	json.Unmarshal(raw, &in)
 	r := riepilogo{Classe: limita(in.Class, 40), Sottocl: limita(in.Subclass, 60), Livello: in.Level, Razza: limita(in.Race, 40),
 		CA: in.AC, PFMax: in.HPMax, Iniziativa: in.Initiative, Des: in.Dex, PercPass: in.PassivePerception, CDInc: in.SpellDC, AttInc: in.SpellAttack,
 		IncAuto: validaIncAuto(in.SpellsAuto), Slot: validaSlot(in.Slots)}
+	if f := strings.TrimSpace(in.InitiativeFormula); f != "" && len(f) <= 60 {
+		if _, err := leggiFormula(f); err == nil {
+			r.IniziativaFormula = f
+		}
+	}
 	for _, d := range in.HitDice {
 		if (d.F == 6 || d.F == 8 || d.F == 10 || d.F == 12) && d.N >= 1 && d.N <= 20 && len(r.DadiVita) < 4 {
 			r.DadiVita = append(r.DadiVita, d)
