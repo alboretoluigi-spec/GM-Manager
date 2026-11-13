@@ -103,6 +103,12 @@ export async function mostra(corpo) {
         el("a", { class: "pulsante piccolo", href: "/api/v1/regolamenti/miei/" + encodeURIComponent(d.id) + "/file?scarica=1", testo: "Scarica" }),
         el("button", { class: "piccolo", type: "button", testo: "Modifica", on: { click: () => finestraDocumento(d) } }),
         el("button", { class: "piccolo", type: "button", testo: "Campagne…", on: { click: () => finestraCampagne(d) } }),
+        d.testo ? el("button", { class: "piccolo", type: "button", testo: "🔎 Analizza", on: { click: async () => {
+          try {
+            const r = await api("/regolamenti/analisi/avvia", { metodo: "POST", dati: { documento: d.id } });
+            avviso(r.nuove + " regole trovate da verificare in «Regole da approvare»" + (r.giaPresenti ? " (" + r.giaPresenti + " già presenti)" : "") + ".", "", 5000);
+          } catch (e) { avviso(e.message, "errore"); }
+        } } }) : null,
         el("button", { class: "piccolo", type: "button", testo: "Sostituisci il file", on: { click: () => sostituisci(d) } }),
         d.formato === "pdf" && !d.testo ? el("button", { class: "piccolo", type: "button", testo: "Prepara la ricerca", on: { click: () => leggiPDF(d.id, "/api/v1/regolamenti/miei/" + encodeURIComponent(d.id) + "/file") } }) : null,
         el("button", { class: "piccolo pericolo", type: "button", testo: "Elimina", on: { click: () => elimina(d) } })),

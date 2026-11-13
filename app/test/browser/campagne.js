@@ -22,8 +22,9 @@ const chiama = (p, percorso, opz) => p.evaluate(([percorso, opz]) => import('/ui
   await p.fill('.dialogo [name="sistema"]', 'Gioco di prova');
   await p.fill('.dialogo [name="edizione"]', '2');
   await p.click('.dialogo button:has-text("Crea")');
-  await p.waitForTimeout(800);
   const nord = p.locator('.cp-campagna').filter({ has: p.locator('h3', { hasText: /^Le terre del nord$/ }) });
+  await nord.waitFor({ timeout: 10000 });
+  await p.waitForTimeout(300);
   ok(await nord.getByText('🎲 Gioco di prova · 2').count() === 1, 'nuova campagna con sistema ed edizione');
 
   await nord.locator('select[aria-label^="Regolamento principale"]').selectOption(reg.id);

@@ -175,3 +175,20 @@ account) e il **Quickstarter** in inglese (pagina di download su un sito collega
 Altervista). Le pagine non si sono potute aprire da questa sessione nemmeno dopo aver ammesso i siti nella rete
 dell'ambiente: i due documenti sono segnati «indirizzo da verificare», senza download diretto. Nessun SRD o licenza
 aperta trovata. Sito indicato: la pagina Kickstarter di Lightfish Games (da verificare).
+
+### L5 – Analisi dei regolamenti: fatto (13/11/2026)
+- Migrazione **040** (con rollback): tabella `regole_proposte` (campagna facoltativa, documento con titolo copiato, pagina,
+  punto, categoria, nome, testo del Master, estratto trovato, origine, stato `proposta`/`approvata`/`rifiutata`, nota,
+  date).
+- `app/internal/server/regolamenti_analisi.go` (nuovo): le **13 categorie** richieste; interfaccia Go
+  `analizzatoreRegole` (modulare); analizzatore **«parole chiave»** senza IA (titoli e capitoli in italiano e inglese,
+  con estratto, pagina e punto); analizzatore **«ia»** predisposto ma **non disponibile** in questa versione (nessuna
+  dipendenza obbligatoria). API: `GET /api/v1/regolamenti/analisi` (filtri documento, campagna, stato, categoria),
+  `POST …/analisi/avvia`, `POST …/analisi` (regola scritta dal Master), `PATCH`/`DELETE …/analisi/{id}`,
+  `GET /api/v1/campagne/{id}/regole` (le **sole approvate** della campagna o dei suoi documenti: l'unico punto da cui il
+  motore potrà leggerle). Nessuna regola viene applicata in automatico; ripetere l'analisi non crea doppioni; se il
+  documento viene eliminato le proposte restano con il titolo della fonte.
+- Pagine: `app/web/sezioni/analisi_regole.js` («Regole da approvare», terza scheda della libreria e voce di menu),
+  pulsante «🔎 Analizza» in My Rulebooks.
+- Prove: `TestAnalisiRegolamenti` (Go) verde; nel browser `analisi_regole` **13/13**. Tutte le altre prove verdi
+  (`go test ./...`; nel browser 13, 12, 24, 11).

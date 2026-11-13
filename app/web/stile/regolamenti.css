@@ -59,3 +59,10 @@
 .cp-imp-riga input { flex: 1 1 140px; }
 .cp-campagna textarea { width: 100%; margin: 6px 0; }
 .mr-campagne { display: flex; flex-wrap: wrap; gap: 4px; }
+/* Regole da approvare */
+.an-proposta.an-approvata { border-left-color: #2f5d3a; }
+.an-proposta.an-rifiutata { border-left-color: #8a8a8a; opacity: .8; }
+.an-approvata .an-stato { background: #2f5d3a; color: #fff; }
+.an-testo { white-space: pre-wrap; }
+.an-largo { grid-column: 1 / -1; }
+.an-largo textarea, .an-largo input { width: 100%; }

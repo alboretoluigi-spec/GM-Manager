@@ -52,8 +52,8 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
    (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
    non è più bloccato. Da fare sul PC del Master: installazione con i due comandi di `docs/INSTALLAZIONE.md` (modo A). Logo nuovo: in attesa del file senza filigrana
    (vedi Problemi aperti). 
-00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1, L2, L3 e L4 fatti**;
-   prossimo **L5 – analisi dei regolamenti** (proposte da approvare, IA facoltativa), poi L6 rapporto finale. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti campagne"` (la seconda
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1–L5 fatti**; prossimo **L6 – rapporto
+   finale** del modulo. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti campagne analisi_regole"` (la seconda
    scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`).
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
@@ -67,6 +67,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **L5 fatto**: analisi dei regolamenti (migrazione 040, 13 categorie, analizzatore per parole chiave, IA predisposta non attiva, proposte da approvare, regole approvate per campagna), pagina «Regole da approvare», pulsante «Analizza»; prove Go e nel browser 13/13; tutte le prove verdi. |
 | 2026-11-13 | Claude Code (cloud) | Richiesta del Master: Farsight nel catalogo (Lightfish Games): 21 giochi; schede e Quickstarter segnati «da verificare» (pagine non apribili da qui). Ambiente cloud: aggiunti lightfishgames.altervista.org e i domini di DriveThruRPG. Prove aggiornate (21 giochi). |
 | 2026-11-13 | Claude Code (cloud) | **L4 fatto**: campagne (migrazione 039 con Campagna principale e trigger per i gruppi nuovi, API, pagina Campagne, collegamento da My Rulebooks); prove Go e nel browser 11/11; tutte le prove verdi. |
 | 2026-11-13 | Claude Code (cloud) | **Prove tutte verdi**: mondo di prova inventato in `app/internal/server/testdata` (luoghi e strade disegnate, terreni, bestiario, professioni, scheda d'esempio); prove adattate (bilanciamento senza modelli, prodotto di prova, porta 7700); `go vet` e `go test ./...` verdi; prove nel browser 13 + 12 (download veri) + 24. |

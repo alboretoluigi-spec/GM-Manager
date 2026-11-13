@@ -170,6 +170,7 @@ func (s *Server) Handler() http.Handler {
 	s.rottePreparazione(mux)       // preparazione della sessione (fase L5, 2026-11-12)
 	s.rotteBilanciamento(mux)      // bilanciamento delle avventure (2026-11-12)
 	s.rotteLore(mux)               // Codice della campagna: la lore del Master (2026-11-12)
+	s.rotteAnalisiRegole(mux)      // analisi dei regolamenti: proposte da approvare (L5)
 	s.rotteCampagne(mux)           // campagne: sistema, regolamento, documenti, gruppi (L4)
 	s.rotteScaricaRegolamenti(mux) // download dei documenti consentiti (L2)
 	s.rotteMieiRegolamenti(mux)    // MY RULEBOOKS
