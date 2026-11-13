@@ -1,0 +1,18 @@
+# eseguibili e compilazione
+/gm-manager
+/gm-manager.exe
+*.exe
+/dist/
+# dati locali dell'app (database, file caricati, backup)
+/dati/
+/Dati/
+*.db
+*.db-wal
+*.db-shm
+# prove nel browser
+/test/browser/schermate/
+node_modules/
+__pycache__/
+# file del sistema operativo
+.DS_Store
+Thumbs.db
