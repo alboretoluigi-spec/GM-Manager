@@ -53,9 +53,10 @@ type Server struct {
 	chiudi   chan struct{}
 	agganci  codaAgganci // agganci per l'antagonista scritti dall'IA, in sottofondo (agganci_ia.go)
 	// opPianificate: operazioni pianificate di Windows per il tasto «Aggiorna» (aggiornamento.go); nil = quelle vere.
-	opPianificate operazioniPianificate
-	prepMedia     statoPrepMedia // preparazione automatica delle versioni leggere dei media (media_preparazione.go)
-	bib           biblioteca     // testi dell'assistente IA e indice di ricerca (biblioteca.go)
+	opPianificate  operazioniPianificate
+	prepMedia      statoPrepMedia // preparazione automatica delle versioni leggere dei media (media_preparazione.go)
+	bib            biblioteca     // testi dell'assistente IA e indice di ricerca (biblioteca.go)
+	pacchettiCache cacheContenuti // pacchetti di contenuti attivi uniti ai dati della scheda (contenuti.go)
 }
 
 // Nuovo prepara cartelle, chiave dei dati, database e certificati.
@@ -175,6 +176,7 @@ func (s *Server) Handler() http.Handler {
 	s.rotteScaricaRegolamenti(mux) // download dei documenti consentiti (L2)
 	s.rotteMieiRegolamenti(mux)    // MY RULEBOOKS
 	s.rotteRegolamenti(mux)        // RPG RULEBOOK LIBRARY e MY RULEBOOKS (docs/RULEBOOK_LIBRARY.md, 2026-11-13)
+	s.rotteContenuti(mux)          // pacchetti di contenuti importati dall'utente (fase 3c, C1)
 	s.rotteBiblioteca(mux)         // biblioteca dei testi per le due identità dell'assistente IA (2026-11-13)
 	mux.Handle("GET /ws", http.HandlerFunc(s.Hub.Gestisci))
 	mux.Handle("/api/", api(func(http.ResponseWriter, *http.Request) (any, error) { return nil, errNonTrovato }))
@@ -246,6 +248,9 @@ func (s *Server) statiche() http.Handler {
 				s.serviStatico(w, r2, fsrv, ".")
 				return
 			}
+		}
+		if s.serviContenuti(w, r, trimSlash(p)) { // dati della scheda con i pacchetti di contenuti attivi (contenuti.go)
+			return
 		}
 		s.serviStatico(w, r, fsrv, trimSlash(p)) // impronta (304) e compressione: statiche_veloci.go
 	})

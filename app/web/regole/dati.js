@@ -41,6 +41,11 @@ const RACES={};
 
 /* ===== BACKGROUND (PHB) ===== */
 const BGS={};
+/* Liste di incantesimi aggiunte dai pacchetti (codice di una lettera → nome), lista di ogni classe (id → codice),
+   nomi estesi delle fonti (codice → nome): vengono dai pacchetti di contenuti dell'utente. */
+const NOMI_LISTE={};
+const CODICI_LISTE={};
+const FONTI={};
 const ALIGN=['Legale Buono','Neutrale Buono','Caotico Buono','Legale Neutrale','Neutrale','Caotico Neutrale','Legale Malvagio','Neutrale Malvagio','Caotico Malvagio'];
 /* ===== INCANTESIMI: trucchetti e 1° livello =====
  formato: [nome IT, nome EN, livello, scuola, tempo, gittata, componenti, durata, classi, fonte, descrizione, livelli superiori]

@@ -66,3 +66,14 @@
 .an-testo { white-space: pre-wrap; }
 .an-largo { grid-column: 1 / -1; }
 .an-largo textarea, .an-largo input { width: 100%; }
+
+/* Contenuti di gioco (fase 3c, C1) */
+.ct-elenco { display: grid; gap: 12px; }
+.ct-pacchetto { border-left: 3px solid var(--gb-oro); }
+.ct-pacchetto.ct-spento { border-left-color: var(--gb-filetto); opacity: .75; }
+.ct-testa { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ct-testa h3 { margin: 0; overflow-wrap: anywhere; }
+.ct-conteggi { font-weight: 600; margin: 6px 0; }
+.ct-avviso { border-left: 3px solid #c9a227; padding-left: 10px; }
+.ct-pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 50vh; overflow: auto; font-size: .85rem; }
+.ct-vuoto { padding: 12px 0; }

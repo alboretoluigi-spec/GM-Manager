@@ -168,7 +168,7 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 | 2 | Inventario dei contenuti e delle licenze (§3) | **fatta** (13/11) |
 | 3a | Repository e struttura di base: istruzioni, stato del lavoro, piano, regole sui contenuti | **fatta** (13/11) |
 | 3b | Copia ripulita del codice: server, pagine, prove; nome cambiato (`barovia` → `gasterbless`) e marchio applicato a tutte le schermate (`branding/MARCHIO.md`); nessun contenuto di Barovia | **fatta** (13/11): vedi §5.1 |
-| 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | da fare |
+| 3c | Nessun dato di gioco incluso: bestiario, regole e manuali partono vuoti; importazione documentata (formati aperti) e inserimento a mano; motore della quinta edizione come primo «modulo di sistema» | **in corso** (13/11): C1 fatto, vedi §5.2 |
 | 3d | Compilazione e prove automatiche verdi (le 19 rosse del §5.1, nuove prove nel browser); elenco delle licenze nell'app | **prove verdi** (13/11): mondo di prova inventato in `app/internal/server/testdata`; manca l'elenco delle licenze nell'app |
 | 4 | Funzioni generiche (mappa, compendio, «Parla con un PNG», mazzo di carte, regole di zona, modelli di scenario) e rete per un cliente qualsiasi | — |
 | 5 | Installatore firmato, licenza, aggiornamenti, lingue (italiano e inglese) | — |
@@ -201,6 +201,18 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 - Da fare ancora: `web/regole/difese.js` contiene due regole legate a sottoclassi con il nome (3c); gioco da remoto
   (MQTT, Cloudflare, VPN) ancora nel codice ma spento (si toglie nella fase 4, decisione «niente gioco da remoto»);
   script PowerShell di `app/strumenti/` ereditati (si rifanno nella fase 5).
+
+### 5.2 Piano della fase 3c (13/11/2026)
+| Passo | Contenuto | Stato |
+|---|---|---|
+| **C1** | **Pacchetti di contenuti**: formato aperto e documentato «gasterbless-contenuti» (`docs/FORMATO_CONTENUTI.md`) per classi, sottoclassi, razze, sottorazze, background, incantesimi, armi, armature, talenti, stili; controllo del file con errori precisi; anteprima, importazione, attivazione, esportazione, eliminazione; i pacchetti attivi arrivano alla scheda della quinta edizione; modello con contenuti inventati | **fatto** (13/11) |
+| C2 | **Inserimento a mano**: editor nella pagina «Contenuti di gioco» per creare e modificare le voci (classe, razza, background, incantesimo, arma, armatura, talento) in un pacchetto personale, senza scrivere JSON | da fare |
+| C3 | **Altri contenuti nei pacchetti**: incantesimi sempre preparati delle sottoclassi e delle razze, strumenti e professioni, oggetti magici, mostri del bestiario (oggi il bestiario e gli oggetti si riempiono a mano o con «Importa dai manuali») | da fare |
+| C4 | **Modulo di sistema**: il sistema della campagna sceglie scheda, dadi e iniziativa; la quinta edizione è il primo modulo; **scheda libera** (campi e tiri definiti dal Master) per tutti gli altri giochi | da fare |
+| C5 | **Pulizia**: regole legate a sottoclassi con il nome in `web/regole/difese.js`, magie innate scritte nel codice della scheda (diventano dati dei pacchetti), guida aggiornata, prove | da fare |
+
+I moduli per le altre famiglie di meccaniche (§3.3bis) vengono dopo C4, nell'ordine che sceglie il Master (domanda
+aperta n. 1 del §6).
 
 ### Metodo per la fase 3b
 La copia si prepara **fuori dal repository** (cartella di lavoro temporanea), si ripulisce, si compila e si prova; solo

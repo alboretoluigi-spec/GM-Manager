@@ -194,7 +194,8 @@
     return { classi: per, slots: (FULL_SLOTS[livello] || []).slice(), livello: livello, patto: patto,
       multiclasse: slotClassi.length > 1 };
   }
-  var CODICI = { artefice: "a", bardo: "b", chierico: "c", druido: "d", paladino: "p", ranger: "r", stregone: "s", warlock: "w", mago: "m" };
+  var CODICI = Object.assign({ artefice: "a", bardo: "b", chierico: "c", druido: "d", paladino: "p", ranger: "r", stregone: "s", warlock: "w", mago: "m" },
+    typeof CODICI_LISTE !== "undefined" ? CODICI_LISTE : {}); // liste delle classi dei pacchetti di contenuti
 
   /** Livello massimo di incantesimo lanciabile (slot condivisi, patto e arcanum mistico). */
   function livelloMassimo(inc) {

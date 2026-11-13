@@ -50,6 +50,7 @@ const SEZIONI = [
   { p: "/regolamenti", t: "RPG Rulebook Library", i: "🏛", chi: "master", m: "regolamenti", g: "campagna" }, // libreria dei regolamenti (2026-11-13)
   { p: "/miei-regolamenti", t: "My Rulebooks", i: "📗", chi: "master", m: "miei_regolamenti", g: "campagna" }, // archivio personale (2026-11-13)
   { p: "/analisi-regole", t: "Regole da approvare", i: "⚖", chi: "master", m: "analisi_regole", g: "campagna" }, // analisi dei regolamenti (2026-11-13)
+  { p: "/contenuti", t: "Contenuti di gioco", i: "📦", chi: "master", m: "contenuti", g: "campagna" }, // pacchetti importati dall'utente (fase 3c, C1)
   { p: "/iscrizioni", t: "Iscrizioni", i: "👥", chi: "master", m: "iscrizioni", g: "campagna" },
   { p: "/avvisi", t: "Avvisi", i: "📣", chi: "master", m: "avvisi", g: "campagna" },
   { p: "/preparazione", t: "Preparazione sessione", i: "🧭", chi: "master", m: "preparazione", g: "campagna" }, // fase L5 del Codice (2026-11-12)

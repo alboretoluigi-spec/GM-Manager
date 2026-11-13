@@ -2,6 +2,8 @@
 
 > Nota (13/11/2026): in GASTER BLESS – MASTER SUITE i dati di gioco sono stati tolti (nessun contenuto incluso) e i
 > riferimenti alle vecchie cartelle di origine non valgono più: questa descrizione resta come guida alla struttura.
+> I dati arrivano dai **pacchetti di contenuti** dell'utente (`docs/FORMATO_CONTENUTI.md`): il server aggiunge in fondo a
+> `dati.js` e `talenti.js` le voci dei pacchetti attivi (`internal/server/contenuti.go`).
 
 | File | Contenuto |
 |---|---|

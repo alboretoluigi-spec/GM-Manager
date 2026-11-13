@@ -366,7 +366,7 @@ function showExh(){const n=Math.max(0,Math.min(6,+st.exh||0));$('sExh').value=St
 function render(){
  const c=C(),r=RD(),b=BG(),A=abil(),M=A.M,p=prof(),L=LT(),sx=SX();const E=magE();
  /* icone delle classi (web/img/classi, fornite dall'utente): principale e classi del multiclasse */
- {const ic=$('oClsIco');if(ic)ic.innerHTML=KL().map(k=>`<img src="/img/classi/${k.id}_t.svg" alt="" title="${esc(k.c.n)} ${k.lvl}">`).join('');}
+ {const ic=$('oClsIco');if(ic)ic.innerHTML=KL().map(k=>`<img src="/img/classi/${k.id}_t.svg" alt="" title="${esc(k.c.n)} ${k.lvl}" onerror="this.remove()">`).join('');}
  AB.forEach(a=>{$('m_'+a).textContent=sg(M[a]);$('t_'+a).textContent=A.T[a];const d=A.D[a];const ex=d.race+d.asi+d.x+(d.item||0);$('b_'+a).textContent=ex?'bonus '+sg(ex):'';});
  $('oProf').textContent=sg(p);
  /* tiri salvezza */
@@ -634,9 +634,10 @@ function boot(){migrateSpells();initStatic();refreshHeaderSel();buildCfg();rende
 const dl=document.createElement('datalist');dl.id='featList';dl.innerHTML=FEATS.map(f=>`<option value="${esc(f[0])}">${esc(f[1])} · ${esc(f[2])}</option>`).join('');document.body.appendChild(dl);
 /* ===== INCANTESIMI: selettore e dettagli ===== */
 const SCH={A:'Abiurazione',C:'Evocazione',D:'Divinazione',E:'Ammaliamento',V:'Invocazione',I:'Illusione',N:'Necromanzia',T:'Trasmutazione'};
-const CLS_CODE={artefice:'a',bardo:'b',chierico:'c',druido:'d',paladino:'p',ranger:'r',stregone:'s',warlock:'w',mago:'m'};
-const CODE_N={a:'Artefice',b:'Bardo',c:'Chierico',d:'Druido',p:'Paladino',r:'Ranger',s:'Stregone',w:'Warlock',m:'Mago'};
-const SRC_N={PHB:'Manuale del Giocatore',XGE:'Guida Omnicomprensiva di supplemento',TCE:'Calderone Omnicomprensivo di supplemento'};
+const CLS_CODE=Object.assign({artefice:'a',bardo:'b',chierico:'c',druido:'d',paladino:'p',ranger:'r',stregone:'s',warlock:'w',mago:'m'},typeof CODICI_LISTE!=='undefined'?CODICI_LISTE:{});
+const CODE_N=Object.assign({a:'Artefice',b:'Bardo',c:'Chierico',d:'Druido',p:'Paladino',r:'Ranger',s:'Stregone',w:'Warlock',m:'Mago'},typeof NOMI_LISTE!=='undefined'?NOMI_LISTE:{});
+/* nomi estesi delle fonti: dai pacchetti di contenuti (FONTI in regole/dati.js); senza nome si mostra il codice */
+const SRC_N=new Proxy(typeof FONTI!=='undefined'?FONTI:{},{get:(o,k)=>o[k]||(typeof k==='string'?k:undefined)});
 const SP=SPELLS.map(s=>({it:s[0],en:s[1],l:s[2],sc:s[3],t:s[4],r:s[5],cp:s[6],d:s[7],cl:s[8],src:s[9],ds:s[10],hi:s[11]||''}));
 SP.sort((a,b)=>a.l-b.l||a.it.localeCompare(b.it,'it'));
 const SPI={};SP.forEach(s=>SPI[s.en]=s);

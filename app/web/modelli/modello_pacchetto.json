@@ -1,0 +1,122 @@
+{
+  "formato": "gasterbless-contenuti",
+  "versioneFormato": 1,
+  "sistema": "d20-5e",
+  "nome": "Modello di pacchetto (contenuti inventati)",
+  "autore": "Gaster Bless",
+  "versione": "1.0",
+  "licenza": "Esempio libero: copialo e modificalo come vuoi",
+  "descrizione": "Mostra tutti i tipi di voce del formato. Classe, razza, background, incantesimi, armi, armature, talento e stile sono inventati.",
+  "fonti": { "MOD": "Modello di pacchetto" },
+  "listeIncantesimi": { "l": "Custode" },
+  "descrizioniGenerali": { "Vigilanza": "Non puoi essere colto di sorpresa mentre sei sveglio." },
+  "classi": [
+    {
+      "id": "custode",
+      "nome": "Custode delle Lanterne",
+      "fonte": "MOD",
+      "dadoVita": 8,
+      "tiriSalvezza": ["SAG", "CAR"],
+      "armature": ["l", "sc"],
+      "armi": ["s"],
+      "testoArmature": "Armature leggere, scudi",
+      "testoArmi": "Armi semplici",
+      "strumenti": "Attrezzi da vetraio",
+      "abilitaDaScegliere": 2,
+      "abilita": ["Percezione", "Intuizione", "Medicina", "Storia"],
+      "livelliAumento": [4, 8, 12, 16, 19],
+      "incantatore": { "tipo": "half", "caratteristica": "SAG", "preparazione": "half", "lista": "l" },
+      "nomeSottoclasse": "Ordine della Lanterna",
+      "livelloSottoclasse": 3,
+      "privilegi": { "1": ["Vigilanza", "Luce Guida"], "2": ["Incantesimi"], "3": ["Ordine della Lanterna"], "5": ["Fiamma Costante"] },
+      "equipaggiamento": ["Una lanterna schermata", "Un bastone ferrato", "Giubba imbottita di lana"],
+      "descrizioni": {
+        "Luce Guida": "Come azione bonus accendi una luce che illumina 6 metri intorno a te per un minuto.",
+        "Fiamma Costante": "La tua Luce Guida dura un'ora e non si spegne con il vento."
+      },
+      "sottoclassi": [
+        {
+          "nome": "Ordine del Faro",
+          "fonte": "MOD",
+          "privilegi": { "3": ["Segnale Lontano"], "7": ["Sguardo del Faro"] },
+          "descrizioni": ["Puoi far vedere la tua luce fino a un chilometro di distanza.", "Vantaggio alle prove di Percezione basate sulla vista."],
+          "abilitaFisse": ["Percezione"]
+        }
+      ]
+    }
+  ],
+  "razze": [
+    {
+      "id": "muschiati",
+      "nome": "Gente del Muschio",
+      "fonte": "MOD",
+      "caratteristiche": { "COS": 2 },
+      "velocita": 9,
+      "taglia": "Piccola",
+      "scurovisione": 18,
+      "lingue": ["Comune", "Lingua delle Radici"],
+      "tratti": ["Pelle di Muschio", "Passo Silenzioso"],
+      "descrizioni": { "Pelle di Muschio": "Nei boschi hai vantaggio alle prove per nasconderti." },
+      "sottorazze": [
+        { "id": "valle", "nome": "Muschiati della Valle", "caratteristiche": { "SAG": 1 }, "tratti": ["Radici Profonde"] },
+        { "id": "rupe", "nome": "Muschiati della Rupe", "caratteristiche": { "FOR": 1 }, "abilitaFisse": ["Atletica"], "tratti": ["Presa Salda"] }
+      ]
+    }
+  ],
+  "background": [
+    {
+      "id": "cartografo",
+      "nome": "Cartografo",
+      "abilita": ["Storia", "Sopravvivenza"],
+      "lingueExtra": 1,
+      "strumenti": "Strumenti da cartografo",
+      "privilegio": "Occhio per le Strade",
+      "descrizionePrivilegio": "Ricordi ogni strada che hai percorso e trovi sempre la via del ritorno.",
+      "equipaggiamento": "Strumenti da cartografo, una mappa incompleta, abiti da viaggio",
+      "monete": 10
+    }
+  ],
+  "incantesimi": [
+    {
+      "nome": "Scintilla del Custode",
+      "nomeInglese": "Keeper's Spark",
+      "livello": 0,
+      "scuola": "evocazione",
+      "tempo": "azione",
+      "gittata": "18 m",
+      "componenti": "V, S",
+      "durata": "istantanea",
+      "classi": ["l"],
+      "fonte": "MOD",
+      "descrizione": "Una scintilla colpisce una creatura: attacco a distanza con incantesimo, 1d8 danni da fuoco.",
+      "livelliSuperiori": "Il danno aumenta di 1d8 al 5°, 11° e 17° livello."
+    },
+    {
+      "nome": "Velo di Nebbia Chiara",
+      "nomeInglese": "Bright Mist Veil",
+      "livello": 1,
+      "scuola": "illusione",
+      "tempo": "azione",
+      "rituale": true,
+      "gittata": "Sé stesso",
+      "componenti": "V, S, M",
+      "durata": "10m",
+      "concentrazione": true,
+      "classi": "l",
+      "fonte": "MOD",
+      "descrizione": "Una nebbia luminosa ti avvolge: le creature a più di 9 metri hanno svantaggio a vederti."
+    }
+  ],
+  "armi": [
+    { "nome": "Bastone ferrato", "categoria": "semplice", "tipo": "mischia", "danno": "1d6", "tipoDanno": "contundente", "proprieta": "Versatile (1d8)", "versatile": true }
+  ],
+  "armature": [
+    { "nome": "Giubba imbottita di lana", "tipo": "leggera", "ca": 11, "forza": 0, "svantaggioFurtivita": false }
+  ],
+  "talenti": [
+    { "nome": "Passo Leggero", "nomeInglese": "Light Step", "fonte": "MOD", "caratteristiche": ["DES"], "effetti": { "speed": 1.5 }, "descrizione": "+1,5 m alla velocità; il terreno difficile non ti rallenta quando corri." }
+  ],
+  "stili": [
+    { "nome": "Guardia Ferma", "descrizione": "+1 alla CA quando non ti sei mosso in questo turno." }
+  ]
+}
