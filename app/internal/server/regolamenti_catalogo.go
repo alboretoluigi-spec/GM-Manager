@@ -205,6 +205,16 @@ func (s *Server) apiCatalogoRegolamenti(w http.ResponseWriter, r *http.Request) 
 		sort.Strings(l)
 		filtri[k] = l
 	}
+	presenti := map[string]string{} // documenti del catalogo già nella libreria personale: id del catalogo → id in MY RULEBOOKS
+	if rows, err := s.DB.Query(`SELECT catalogo_id, id FROM regolamenti_documenti WHERE catalogo_id != ''`); err == nil {
+		for rows.Next() {
+			var c, id string
+			if rows.Scan(&c, &id) == nil {
+				presenti[c] = id
+			}
+		}
+		rows.Close()
+	}
 	return map[string]any{"versione": c.Versione, "aggiornatoIl": c.AggiornatoIl, "avviso": c.Avviso, "tipologie": c.Tipologie,
-		"giochi": out, "filtri": filtri, "totale": len(c.Giochi)}, nil
+		"giochi": out, "filtri": filtri, "totale": len(c.Giochi), "nellaLibreria": presenti}, nil
 }

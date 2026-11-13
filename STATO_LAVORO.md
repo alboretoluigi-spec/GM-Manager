@@ -44,8 +44,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
-00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1 fatto**; prossimo
-   **L2 – download** dei documenti consentiti, poi L3 MY RULEBOOKS, L4 campagne, L5 analisi, L6 rapporto.
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1 e L2 fatti**;
+   prossimo **L3 – MY RULEBOOKS** (importazione, categorie, versioni, ricerca, visualizzazione), poi L4 campagne, L5 analisi,
+   L6 rapporto. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico"` (la seconda
+   scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`).
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
    edizione come primo «modulo di sistema», scheda libera per gli altri giochi; poi **3d**: le 19 prove rosse e nuove
@@ -58,6 +60,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **L2 fatto**: migrazione 038, download con ripresa e controlli, elenco e file di MY RULEBOOKS, pulsante con avanzamento; prove Go e nel browser con download veri (10/10); nessuna regressione. Rinominate in modo neutro le raccolte dei PNG («CoS Reloaded» → «Raccolta alternativa»), parole vietate aggiunte. Creato l'ambiente cloud personale «Gaster Bless (GM-Manager e Barovia)» con i due siti degli editori. |
 | 2026-11-13 | Claude Code (cloud) | Decisioni del Master sulla libreria: nomi ufficiali solo nel catalogo (CLAUDE.md aggiornato, catalogo escluso dal controllo delle parole), entità campagna, ordine L1→L6. **L1 fatto**: catalogo di 20 giochi con fonti verificate, API con filtri, pagina RPG Rulebook Library, prove Go e nel browser (13/13). |
 | 2026-11-13 | Claude Code (cloud) | Richiesta «Libreria universale dei regolamenti»: analisi dell'architettura e piano tecnico (passi L1-L6, componenti, dipendenze, conflitti, decisioni) in `docs/RULEBOOK_LIBRARY.md`. Nessun codice scritto. |
 | 2026-11-13 | Claude Code (cloud) | Richiesta del Master: sistema di gioco a scelta fra i più noti. Scritta la proposta (moduli di sistema per famiglia di meccaniche, elenco dei giochi, nodo dei marchi) in `docs/PIANO.md` §3.3bis; in attesa della scelta delle priorità. |

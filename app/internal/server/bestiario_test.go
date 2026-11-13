@@ -95,7 +95,7 @@ func TestSezionePNGeMostri(t *testing.T) {
 	}
 }
 
-// «🎭 PNG in scena» in due raccolte (2026-11-13): Campagna ufficiale e CoS Reloaded. La raccolta si sceglie per i PNG del
+// «🎭 PNG in scena» in due raccolte (2026-11-13): Raccolta principale e Raccolta alternativa. La raccolta si sceglie per i PNG del
 // bestiario di Gaster Bless e per quelli nuovi; resta nel file della campagna.
 func TestRaccoltaPNG(t *testing.T) {
 	tv := nuovoTavolo(t)

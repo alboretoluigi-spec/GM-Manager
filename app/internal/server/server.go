@@ -27,12 +27,13 @@ import (
 
 // Server raccoglie tutto lo stato condiviso dell'applicazione.
 type Server struct {
-	visioni    visioniDocumenti // documenti mostrati ad altri giocatori (documenti_mostra.go)
-	scene      scenePNG         // PNG in scena per gruppo (scena_png.go)
-	ipCasa     ipDiCasa         // indirizzo Internet di casa, con Cloudflare Tunnel (cloudflare.go)
-	avviatoIl  time.Time        // ora di avvio: fa parte della versione vista dalle pagine
-	fileApp    cacheStatiche    // impronte e versioni compresse dei file dell'app (statiche_veloci.go)
-	reteStrade reteStrade       // percorsi della mappa (mappa_strade.go)
+	visioni    visioniDocumenti        // documenti mostrati ad altri giocatori (documenti_mostra.go)
+	scene      scenePNG                // PNG in scena per gruppo (scena_png.go)
+	scarichi   scaricamentiRegolamenti // download della RPG RULEBOOK LIBRARY (regolamenti_scarica.go)
+	ipCasa     ipDiCasa                // indirizzo Internet di casa, con Cloudflare Tunnel (cloudflare.go)
+	avviatoIl  time.Time               // ora di avvio: fa parte della versione vista dalle pagine
+	fileApp    cacheStatiche           // impronte e versioni compresse dei file dell'app (statiche_veloci.go)
+	reteStrade reteStrade              // percorsi della mappa (mappa_strade.go)
 	indeb      livelliIndebolimento
 	// ultimo livello di indebolimento noto per personaggio (indebolimento.go)
 	Cfg    config.Config
@@ -169,6 +170,8 @@ func (s *Server) Handler() http.Handler {
 	s.rottePreparazione(mux)       // preparazione della sessione (fase L5, 2026-11-12)
 	s.rotteBilanciamento(mux)      // bilanciamento delle avventure (2026-11-12)
 	s.rotteLore(mux)               // Codice della campagna: la lore del Master (2026-11-12)
+	s.rotteScaricaRegolamenti(mux) // download dei documenti consentiti (L2)
+	s.rotteMieiRegolamenti(mux)    // MY RULEBOOKS
 	s.rotteRegolamenti(mux)        // RPG RULEBOOK LIBRARY e MY RULEBOOKS (docs/RULEBOOK_LIBRARY.md, 2026-11-13)
 	s.rotteBiblioteca(mux)         // biblioteca dei testi per le due identità dell'assistente IA (2026-11-13)
 	mux.Handle("GET /ws", http.HandlerFunc(s.Hub.Gestisci))

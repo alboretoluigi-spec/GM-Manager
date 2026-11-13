@@ -340,7 +340,7 @@ func (s *Server) apiIndiceManuale(w http.ResponseWriter, r *http.Request) (any, 
 }
 
 // ===== Raccolta dei PNG (2026-11-13) =====
-// «🎭 PNG in scena» divide i PNG in due raccolte: «Campagna ufficiale» e «CoS Reloaded». I PNG del bestiario di Gaster Bless e
+// «🎭 PNG in scena» divide i PNG in due raccolte: «Raccolta principale» e «Raccolta alternativa». I PNG del bestiario di Gaster Bless e
 // quelli nuovi senza scelta stanno nella campagna ufficiale; il Master sposta gli altri con un clic.
 
 func raccoltaValida(r string) bool { return r == "" || r == "ufficiale" || r == "reloaded" }

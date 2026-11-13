@@ -106,3 +106,25 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
 - Prove: `TestCatalogoRegolamenti` (Go) verde; `bash test/browser/esegui.sh regolamenti` 13/13 (catalogo, ricerca,
   filtri, fonti ufficiali in nuova scheda, telefono senza scorrimento orizzontale, nessun errore JavaScript). Nuova
   cartella delle prove nel browser: `app/test/browser/` (`esegui.sh`, `comune.js`).
+
+### L2 – Download: fatto (13/11/2026)
+- Migrazione **038** (`regolamenti_documenti`, `regolamenti_categorie`, con rollback): la tabella di MY RULEBOOKS, già con
+  i campi per categorie, versioni e note (servono al passo L3).
+- `app/internal/server/regolamenti_scarica.go`: `POST /api/v1/regolamenti/scarica` (solo voci con download diretto),
+  `GET /api/v1/regolamenti/scaricamenti`; download in sottofondo con avanzamento in tempo reale (`regolamenti.scarico`),
+  solo https, rinvii solo verso lo stesso dominio, massimo 200 MB e 10 minuti, ripresa con `Range` e fino a 3 tentativi,
+  pagine con accesso (401/402/403) e documenti spariti (404/410) segnalati senza riprovare, tipo controllato dal
+  contenuto (`%PDF-`, ZIP), doppioni riconosciuti dall'impronta SHA-256, file parziale in `Dati\regolamenti\parziali`
+  e definitivo in `Dati\regolamenti\file`.
+- `app/internal/server/regolamenti_miei.go`: `GET /api/v1/regolamenti/miei` (elenco) e `GET .../miei/{id}/file`
+  (consultazione o salvataggio, con `nosniff` e `sandbox`). Il catalogo indica i documenti già nella libreria.
+- Pagina: pulsante «⬇ Scarica nella mia libreria», barra di avanzamento, «✓ Nella mia libreria» con «Apri», errore
+  con «Riprova».
+- Prove: `TestScaricaRegolamenti` (editore finto: riuscito, già presente, doppione, interruzione a metà e ripresa,
+  pagina HTML al posto del PDF, accesso richiesto, rinvio verso un altro sito, file troppo grande, voce senza download
+  diretto, voce inesistente, giocatore rifiutato, riavvio con dati e file intatti) verde.
+  Nel browser `regolamenti_scarico` **10/10 con i download veri** dai siti degli editori (SRD di Daggerheart
+  1.553.971 byte, Quickstart di Basic Roleplaying 10.312.464 byte), avanzamento visto, file aperti come PDF, documenti
+  presenti dopo il riavvio del programma. Per questa prova nella sessione cloud servono i due siti nella rete
+  dell'ambiente (ambiente «Gaster Bless (GM-Manager e Barovia)») e `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`.
+- Nessuna regressione: le prove rosse del server restano le stesse 19 della fase 3b.

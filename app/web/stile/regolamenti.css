@@ -20,3 +20,6 @@
 .rl-diretto { background: var(--gb-fondo); color: var(--gb-oro); }
 .rl-fonte { font-weight: 600; }
 .rl-avviso { margin-top: 16px; }
+.rl-scarico { margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.rl-scarico progress { width: 160px; accent-color: var(--gb-oro); }
+.rl-errore { color: #a3262e; margin: 0; }

@@ -140,11 +140,11 @@ export function installaScena(io) {
 }
 
 // ===== il Master sceglie =====
-// Raccolte dell'elenco (richiesta dell'utente, 2026-11-13): i PNG si dividono in «Campagna ufficiale» e «CoS Reloaded»
+// Raccolte dell'elenco (richiesta dell'utente, 2026-11-13): i PNG si dividono in «Raccolta principale» e «Raccolta alternativa»
 // (campo «raccolta» della voce in «PNG e mostri», internal/server/bestiario.go); i mostri restano a parte.
 const RACCOLTE = [
-  { k: "ufficiale", t: "👤 PNG Campagna ufficiale", vuota: "Nessun PNG della campagna ufficiale con un'immagine." },
-  { k: "reloaded", t: "👤 PNG CoS Reloaded", vuota: "Nessun PNG di CoS Reloaded con un'immagine: sposta qui i PNG con il pulsante ⇄ dalla campagna ufficiale, o caricane l'immagine in «PNG e mostri»." },
+  { k: "ufficiale", t: "👤 PNG Raccolta principale", vuota: "Nessun PNG della campagna ufficiale con un'immagine." },
+  { k: "reloaded", t: "👤 PNG Raccolta alternativa", vuota: "Nessun PNG della Raccolta alternativa con un'immagine: sposta qui i PNG con il pulsante ⇄ dalla campagna ufficiale, o caricane l'immagine in «PNG e mostri»." },
   { k: "mostri", t: "🐺 Mostri", vuota: "Nessun mostro con un'immagine: caricala in «PNG e mostri» (🖼 Immagini)." },
 ];
 export const raccoltaDi = (v) => (v.cat !== "png" ? "mostri" : v.raccolta === "reloaded" ? "reloaded" : "ufficiale");
@@ -188,7 +188,7 @@ export async function apriScena() {
   };
   const sposta = async (v) => {
     const verso = raccoltaDi(v) === "reloaded" ? "ufficiale" : "reloaded";
-    try { await api("/bestiario/voci/" + encodeURIComponent(v.id) + "/raccolta", { metodo: "PUT", dati: { raccolta: verso } }); v.raccolta = verso; disegna(); avviso("«" + v.nome + "» ora è in " + (verso === "reloaded" ? "CoS Reloaded." : "Campagna ufficiale.")); }
+    try { await api("/bestiario/voci/" + encodeURIComponent(v.id) + "/raccolta", { metodo: "PUT", dati: { raccolta: verso } }); v.raccolta = verso; disegna(); avviso("«" + v.nome + "» ora è in " + (verso === "reloaded" ? "Raccolta alternativa." : "Raccolta principale.")); }
     catch (e) { avviso(e.message, "errore"); }
   };
 
@@ -215,8 +215,8 @@ export async function apriScena() {
         await metti(g, v.id, conNome.checked ? v.nome : "", lati.find((x) => x.i.checked).l, insieme.checked);
       } } },
       el("img", { src: "/media/" + v.img, alt: "", loading: "lazy" }), el("span", { testo: (v.cat === "png" ? "👤 " : "🐺 ") + v.nome })),
-      v.cat === "png" ? el("button", { class: "piccolo scena-sposta", testo: "⇄", title: raccoltaDi(v) === "reloaded" ? "Sposta in Campagna ufficiale" : "Sposta in CoS Reloaded",
-        "aria-label": (raccoltaDi(v) === "reloaded" ? "Sposta in Campagna ufficiale: " : "Sposta in CoS Reloaded: ") + v.nome, on: { click: () => sposta(v) } }) : null))
+      v.cat === "png" ? el("button", { class: "piccolo scena-sposta", testo: "⇄", title: raccoltaDi(v) === "reloaded" ? "Sposta in Raccolta principale" : "Sposta in Raccolta alternativa",
+        "aria-label": (raccoltaDi(v) === "reloaded" ? "Sposta in Raccolta principale: " : "Sposta in Raccolta alternativa: ") + v.nome, on: { click: () => sposta(v) } }) : null))
       : el("p", { class: "tenue", testo: q ? "Nessuna voce con questo nome." : vuota }));
   };
   cerca.addEventListener("input", disegna);
