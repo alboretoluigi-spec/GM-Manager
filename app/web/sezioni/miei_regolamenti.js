@@ -10,7 +10,7 @@ const FORMATI_OK = ".pdf,.docx,.epub,.rtf,.txt,.md,.markdown,.html,.htm";
 const mb = (n) => (n < 1048576 ? Math.max(1, Math.round(n / 1024)) + " KB" : (n / 1048576).toFixed(1).replace(".", ",") + " MB");
 
 export async function mostra(corpo) {
-  const stato = { docs: [], tipologie: {}, categorie: [], giochiCatalogo: [], filtri: { gioco: "", edizione: "", categoria: "", tipologia: "" } };
+  const stato = { docs: [], tipologie: {}, categorie: [], campagne: [], giochiCatalogo: [], filtri: { gioco: "", edizione: "", categoria: "", tipologia: "" } };
   const elenco = el("div", { class: "mr-elenco", "aria-live": "polite" });
   const risultati = el("div", { class: "mr-risultati" });
   const conta = el("p", { class: "tenue piccolo" });
@@ -40,8 +40,8 @@ export async function mostra(corpo) {
 
   async function ricarica() {
     try {
-      const [d, c] = await Promise.all([api("/regolamenti/miei"), api("/regolamenti/categorie")]);
-      stato.docs = d.documenti; stato.tipologie = d.tipologie; stato.categorie = c.categorie;
+      const [d, c, cp] = await Promise.all([api("/regolamenti/miei"), api("/regolamenti/categorie"), api("/campagne")]);
+      stato.docs = d.documenti; stato.tipologie = d.tipologie; stato.categorie = c.categorie; stato.campagne = cp.campagne;
     } catch (e) { avviso(e.message, "errore"); return; }
     if (!stato.giochiCatalogo.length) {
       try { stato.giochiCatalogo = (await api("/regolamenti/catalogo")).giochi.map((g) => g.nome); } catch { /* facoltativo */ }
@@ -97,10 +97,12 @@ export async function mostra(corpo) {
         d.formato.toUpperCase(), mb(d.dimensione), d.testo ? "testo per la ricerca ✓" : "senza testo per la ricerca"].filter(Boolean).join(" · ") }),
       d.licenza ? el("p", { class: "piccolo tenue", testo: "Licenza: " + d.licenza + (d.fonteUrl ? " · fonte: " + new URL(d.fonteUrl).hostname : "") }) : null,
       d.note ? el("p", { class: "piccolo", testo: d.note }) : null,
+      (d.campagne || []).length ? el("div", { class: "mr-campagne" }, d.campagne.map((id) => el("span", { class: "etichetta", testo: "🏰 " + ((stato.campagne.find((c) => c.id === id) || {}).nome || id) }))) : null,
       el("div", { class: "mr-azioni" },
         el("button", { class: "piccolo primario", type: "button", testo: "Apri", on: { click: () => apri(d) } }),
         el("a", { class: "pulsante piccolo", href: "/api/v1/regolamenti/miei/" + encodeURIComponent(d.id) + "/file?scarica=1", testo: "Scarica" }),
         el("button", { class: "piccolo", type: "button", testo: "Modifica", on: { click: () => finestraDocumento(d) } }),
+        el("button", { class: "piccolo", type: "button", testo: "Campagne…", on: { click: () => finestraCampagne(d) } }),
         el("button", { class: "piccolo", type: "button", testo: "Sostituisci il file", on: { click: () => sostituisci(d) } }),
         d.formato === "pdf" && !d.testo ? el("button", { class: "piccolo", type: "button", testo: "Prepara la ricerca", on: { click: () => leggiPDF(d.id, "/api/v1/regolamenti/miei/" + encodeURIComponent(d.id) + "/file") } }) : null,
         el("button", { class: "piccolo pericolo", type: "button", testo: "Elimina", on: { click: () => elimina(d) } })),
@@ -244,6 +246,25 @@ export async function mostra(corpo) {
     catch (e) { avviso(e.message, "errore"); }
   }
 
+  // In quali campagne usare il documento (documento supplementare o scheda personalizzata).
+  function finestraCampagne(d) {
+    const righe = stato.campagne.map((c) => {
+      const usa = (ruolo, attivo) => {
+        const x = el("input", { type: "checkbox", selezionato: attivo, on: { change: async () => {
+          try { await api("/campagne/" + encodeURIComponent(c.id) + "/documenti", { metodo: "PUT", dati: { documento: d.id, ruolo, presente: x.checked } }); }
+          catch (e) { x.checked = !x.checked; avviso(e.message, "errore"); }
+        } } });
+        return el("label", { class: "riga" }, x, el("span", { testo: ruolo === "scheda" ? "scheda personalizzata" : "documento supplementare" }));
+      };
+      return el("div", { class: "scheda-ui", "data-campagna": c.id }, el("strong", { testo: c.nome }),
+        c.regolamento === d.id ? el("p", { class: "piccolo tenue", testo: "È il regolamento principale di questa campagna." }) : null,
+        usa("supplementare", c.supplementari.includes(d.id)), usa("scheda", c.schede.includes(d.id)));
+    });
+    dialogo("Campagne di «" + d.titolo + "»", el("div", {}, righe.length ? righe : el("p", { testo: "Nessuna campagna." }),
+      el("p", { class: "tenue piccolo", testo: "Lo stesso documento può stare in più campagne. Il regolamento principale si sceglie nella pagina Campagne." })),
+      { azioni: (chiudi) => el("div", { class: "azioni" }, el("button", { class: "primario", type: "button", testo: "Fatto", on: { click: () => { chiudi(); ricarica(); } } })) });
+  }
+
   function finestraCategorie() {
     const lista = el("ul", { class: "mr-categorie" });
     const nome = el("input", { maxlength: "60", placeholder: "Nuova categoria", "aria-label": "Nome della nuova categoria" });
@@ -266,6 +287,7 @@ export async function mostra(corpo) {
   }
 
   const via = tempoReale.su("regolamenti.miei", () => ricarica());
+  const via2 = tempoReale.su("campagne", () => ricarica());
   await ricarica();
-  return () => via();
+  return () => { via(); via2(); };
 }

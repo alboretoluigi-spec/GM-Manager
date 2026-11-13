@@ -46,6 +46,7 @@ const SEZIONI = [
   { p: "/dadi", t: "Dadi", i: "🎲", chi: "tutti", m: "dadi", g: "gioco" },
   { p: "/riassunti", t: "Riassunti", i: "📝", chi: "tutti", m: "riassunti", g: "campagna" },
   { p: "/manuali", t: "Manuali", i: "📚", chi: "tutti", m: "manuali", g: "campagna" },
+  { p: "/campagne", t: "Campagne", i: "🏰", chi: "master", m: "campagne", g: "campagna" }, // campagne: sistema, regolamenti, gruppi (2026-11-13)
   { p: "/regolamenti", t: "RPG Rulebook Library", i: "🏛", chi: "master", m: "regolamenti", g: "campagna" }, // libreria dei regolamenti (2026-11-13)
   { p: "/miei-regolamenti", t: "My Rulebooks", i: "📗", chi: "master", m: "miei_regolamenti", g: "campagna" }, // archivio personale (2026-11-13)
   { p: "/iscrizioni", t: "Iscrizioni", i: "👥", chi: "master", m: "iscrizioni", g: "campagna" },

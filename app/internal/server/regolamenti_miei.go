@@ -27,25 +27,26 @@ import (
 )
 
 type docMio struct {
-	ID         string `json:"id"`
-	Titolo     string `json:"titolo"`
-	Gioco      string `json:"gioco"`
-	Edizione   string `json:"edizione"`
-	Tipologia  string `json:"tipologia"`
-	Lingua     string `json:"lingua"`
-	Editore    string `json:"editore"`
-	Formato    string `json:"formato"`
-	Dimensione int64  `json:"dimensione"`
-	Origine    string `json:"origine"`
-	CatalogoID string `json:"catalogoId,omitempty"`
-	FonteURL   string `json:"fonteUrl,omitempty"`
-	Licenza    string `json:"licenza,omitempty"`
-	Categoria  string `json:"categoria,omitempty"`
-	VersioneDi string `json:"versioneDi,omitempty"`
-	Versione   string `json:"versione,omitempty"`
-	Note       string `json:"note,omitempty"`
-	CreatoIl   int64  `json:"creatoIl"`
-	Testo      bool   `json:"testo"` // c'è il testo per la ricerca e la lettura
+	ID         string   `json:"id"`
+	Titolo     string   `json:"titolo"`
+	Gioco      string   `json:"gioco"`
+	Edizione   string   `json:"edizione"`
+	Tipologia  string   `json:"tipologia"`
+	Lingua     string   `json:"lingua"`
+	Editore    string   `json:"editore"`
+	Formato    string   `json:"formato"`
+	Dimensione int64    `json:"dimensione"`
+	Origine    string   `json:"origine"`
+	CatalogoID string   `json:"catalogoId,omitempty"`
+	FonteURL   string   `json:"fonteUrl,omitempty"`
+	Licenza    string   `json:"licenza,omitempty"`
+	Categoria  string   `json:"categoria,omitempty"`
+	VersioneDi string   `json:"versioneDi,omitempty"`
+	Versione   string   `json:"versione,omitempty"`
+	Note       string   `json:"note,omitempty"`
+	CreatoIl   int64    `json:"creatoIl"`
+	Testo      bool     `json:"testo"`    // c'è il testo per la ricerca e la lettura
+	Campagne   []string `json:"campagne"` // campagne che usano il documento (L4)
 	file       string
 }
 
@@ -101,6 +102,10 @@ func (s *Server) apiMieiRegolamenti(w http.ResponseWriter, r *http.Request) (any
 		_, e := os.Stat(s.fileTestoRegolamento(d.ID))
 		d.Testo = e == nil
 		out = append(out, d)
+	}
+	rows.Close()
+	for i := range out {
+		out[i].Campagne = s.campagneDelDocumento(out[i].ID)
 	}
 	return map[string]any{"documenti": out, "tipologie": tipologieMie(s)}, rows.Err()
 }

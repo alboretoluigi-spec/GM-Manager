@@ -149,3 +149,21 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
   in una nuova scheda; sostituzione del DOCX con ricerca aggiornata; eliminazione; tutto intatto dopo il riavvio; nessun
   errore JavaScript). Nessuna regressione (le stesse 19 prove rosse della fase 3b).
 - Manca ancora (passo L4): l'associazione dei documenti alle **campagne**.
+
+### L4 – Campagne: fatto (13/11/2026)
+- Migrazione **039** (con rollback): tabelle `campagne` e `campagna_documenti`, colonna facoltativa `gruppi.campagna_id`;
+  la migrazione crea la «Campagna principale» e ci mette tutti i gruppi esistenti (nessun dato perso); un trigger mette
+  i gruppi nuovi nella prima campagna, senza toccare il codice che crea i gruppi.
+- `app/internal/server/campagne.go` (nuovo): `GET/POST /api/v1/campagne`, `PATCH`/`DELETE /api/v1/campagne/{id}`,
+  `PUT /api/v1/campagne/{id}/documenti` (documento supplementare o scheda personalizzata; lo stesso documento in più
+  campagne), `PUT /api/v1/gruppi/{id}/campagna` (spostamento). Sistema di gioco ed edizione sono testo libero: il motore
+  non dipende da nessun regolamento. Regolamento principale da My Rulebooks; regole aggiuntive del Master; impostazioni
+  come oggetto JSON libero (massimo 16 KB). Si elimina solo una campagna senza gruppi e mai l'ultima; i documenti restano.
+  Un documento eliminato da My Rulebooks sparisce dalle campagne (anche come regolamento principale).
+- My Rulebooks: ogni documento mostra le campagne che lo usano e ha «Campagne…» per collegarlo.
+- Pagina `app/web/sezioni/campagne.js` (voce di menu «Campagne»), stile in `regolamenti.css`.
+- Prove: `TestCampagne` (Go) verde; nel browser `campagne` **11/11** (Campagna principale con il gruppo esistente,
+  nuova campagna, regolamento, documento supplementare, regole, impostazioni, spostamento del gruppo, eliminazione,
+  campagna con gruppi non eliminabile, collegamento da My Rulebooks, tutto intatto dopo il riavvio). `go vet` e
+  `go test ./...` verdi; le altre prove nel browser verdi (13, 12, 24).
+- Prossimo: **L5** (architettura dell'analisi dei regolamenti, con approvazione del Master) e **L6** (rapporto finale).

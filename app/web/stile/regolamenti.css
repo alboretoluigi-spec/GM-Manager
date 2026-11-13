@@ -47,3 +47,15 @@
 .mr-trovati .collegamento { background: none; border: 0; padding: 0; color: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; text-align: left; }
 .mr-categorie { list-style: none; padding: 0; display: grid; gap: 6px; }
 .mr-categorie li { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+/* Campagne */
+.cp-campagna { border-left: 3px solid var(--gb-oro); }
+.cp-campagna h3 { margin: 0; }
+.cp-griglia { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 10px 16px; margin: 8px 0; }
+.cp-griglia h4, .cp-campagna summary { font-weight: 600; }
+.cp-griglia h4 { margin: 0 0 4px; }
+.cp-gruppo { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 4px 0; }
+.cp-documenti { display: grid; gap: 4px; margin: 6px 0; }
+.cp-imp-riga { margin: 4px 0; flex-wrap: wrap; }
+.cp-imp-riga input { flex: 1 1 140px; }
+.cp-campagna textarea { width: 100%; margin: 6px 0; }
+.mr-campagne { display: flex; flex-wrap: wrap; gap: 4px; }

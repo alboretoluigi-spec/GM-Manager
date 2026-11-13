@@ -51,10 +51,9 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
    `GasterBless`, percorsi `C:\Progetti\GM-Manager\app`, niente passaggi di Barovia), pacchetto completo
    (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
    non è più bloccato. Da fare sul PC del Master: installazione con i due comandi di `docs/INSTALLAZIONE.md` (modo A). Logo nuovo: in attesa del file senza filigrana
-   (vedi Problemi aperti). Il passo L4 (campagne) della libreria è in pausa.
-00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1, L2 e L3 fatti**;
-   prossimo **L4 – campagne** (entità campagna con sistema, edizione, regolamento, documenti, regole e impostazioni; gruppi
-   esistenti nella «Campagna principale»), poi L5 analisi, L6 rapporto. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti"` (la seconda
+   (vedi Problemi aperti). 
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1, L2, L3 e L4 fatti**;
+   prossimo **L5 – analisi dei regolamenti** (proposte da approvare, IA facoltativa), poi L6 rapporto finale. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti campagne"` (la seconda
    scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`).
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
@@ -68,6 +67,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **L4 fatto**: campagne (migrazione 039 con Campagna principale e trigger per i gruppi nuovi, API, pagina Campagne, collegamento da My Rulebooks); prove Go e nel browser 11/11; tutte le prove verdi. |
 | 2026-11-13 | Claude Code (cloud) | **Prove tutte verdi**: mondo di prova inventato in `app/internal/server/testdata` (luoghi e strade disegnate, terreni, bestiario, professioni, scheda d'esempio); prove adattate (bilanciamento senza modelli, prodotto di prova, porta 7700); `go vet` e `go test ./...` verdi; prove nel browser 13 + 12 (download veri) + 24. |
 | 2026-11-13 | Claude Code (cloud) | App di base installabile: porta 7700/7701 (config, conf d'esempio, prove), script `installa.ps1` (riscritto senza i passaggi di Barovia), `aggiorna.ps1`, `aggiorna_auto.ps1`, `disinstalla.ps1`, `.bat`, `crea-pacchetto.ps1` (pacchetto zip completo), `LEGGIMI_INSTALLAZIONE.txt`, icona `gasterbless.ico` «GB»; pagina di aggiornamento con i percorsi nuovi; `docs/INSTALLAZIONE.md`. Compilazione per Windows e macOS verificata. Logo nuovo in attesa del file valido. |
 | 2026-11-13 | Claude Code (cloud) | **L3 fatto**: MY RULEBOOKS completo (importazione con controlli, RTF, ricerca nel contenuto, categorie, versioni, sostituzione, eliminazione, lettura), pagina e schede tra le due sezioni; prove Go e nel browser 24/24; nessuna regressione. |
