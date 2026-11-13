@@ -10,8 +10,8 @@ package server
 //   - «claude»: Claude di Anthropic (a pagamento), con la libreria ufficiale;
 //   - «altro»: qualsiasi servizio con lo stesso formato di OpenAI (indirizzo e modello a mano).
 //
-// Privacy: all'IA arrivano solo dati di gioco. Mai nomi degli account, telefoni, password, indirizzi; i dati delle schede esterne
-// non vengono né letti né toccati. Il Master vede con «Cosa sa l'IA» esattamente il testo che viene inviato.
+// Privacy: all'IA arrivano solo dati di gioco. Mai nomi degli account, telefoni, password, indirizzi.
+// Il Master vede con «Cosa sa l'IA» esattamente il testo che viene inviato.
 // Le chiavi dei servizi online sono cifrate con la chiave di Gaster Bless e non tornano mai alle pagine.
 // L'IA propone soltanto: niente cambia nelle schede, nella Mappa o nel tracker senza un clic del Master.
 

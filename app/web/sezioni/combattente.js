@@ -90,10 +90,9 @@ export async function mostra(corpo, { titolo, azioni }) {
         el("h2", { testo: "✨ Incantesimi" }),
         el("p", { class: "piccolo tenue", testo: c.incantesimi.gruppi.map((g) => g.etichetta + (g.usi ? " " + Math.max(0, g.usi - ((c.incantesimi.usati || {})[c.incantesimi.gruppi.indexOf(g)] || 0)) + "/" + g.usi : "")).join(" · ") }),
         el("button", { class: "primario piccolo", testo: "✨ Lancia un incantesimo", on: { click: () => import("../ui/incantesimi_mostro.js").then((x) => x.apriIncantesimiMostro(sid, c)) } })) : null,
-      puo && !c.arcana ? el("div", { class: "riga-flex cr-pf-comandi" }, v,
+      puo ? el("div", { class: "riga-flex cr-pf-comandi" }, v,
         el("button", { class: "piccolo", testo: "− Danno", on: { click: () => { const n = val(); if (n != null) comando(pre + "danno", { combattente: c.id, valore: n }).catch(() => {}); } } }),
         el("button", { class: "piccolo", testo: "+ Cura", on: { click: () => { const n = val(); if (n != null) comando(pre + "cura", { combattente: c.id, valore: n }).catch(() => {}); } } })) : null,
-      c.arcana ? el("p", { class: "etichetta arcana", testo: "📡 PF gestiti da una scheda esterna" }) : null,
       // Scheda intera della creatura (dal bestiario, solo il Master): tratti, azioni, sensi, azioni leggendarie (2026-11-12)
       master() && c.tipo === "mostro" ? schedaIntera(c) : null);
   }

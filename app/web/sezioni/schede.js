@@ -174,7 +174,6 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
     el("button", { class: "piccolo", testo: "🧠 Sanità mentale", title: "Valore, tiro salvezza, Terrore, follia e condizioni", on: { click: () => apriMiniSanita(pg.id) } }),
     el("button", { class: "piccolo", testo: "Storico", on: { click: storico } }),
     el("button", { class: "piccolo", testo: "Stato…", on: { click: cambiaStato } }),
-    io_.ruolo === "master" ? el("button", { class: "piccolo", testo: "📡 scheda esterna…", title: "Collega l'app scheda esterna del giocatore a questo personaggio", on: { click: arcana } }) : null,
     io_.ruolo === "master" ? el("button", { class: "piccolo", testo: "👤 Assegna…", title: "Assegna la scheda a un giocatore", on: { click: assegna } }) : null,
     io_.ruolo === "master" ? el("button", { class: "piccolo pericolo", testo: "🗑 Elimina…", title: "Elimina definitivamente la scheda", on: { click: elimina } }) : null,
     io_.ruolo === "master" ? el("button", { class: "piccolo", testo: "🧩 Tipo di scheda…", on: { click: cambiaTipo } }) : null,
@@ -585,7 +584,7 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
       // effetti in corso nello scontro (internal/server/effetti_valori.go): la scheda mostra la CA cambiata con l'originale
       const eff = JSON.stringify(d.effetti || null);
       if (eff !== ultimiEffetti) { ultimiEffetti = eff; invia({ type: "scheda:effetti", effetti: d.effetti || null }); }
-      // Indebolimento: livello dalle condizioni (tracker, Master, scheda esterna) → riquadro della scheda
+      // Indebolimento: livello dalle condizioni (tracker, Master) → riquadro della scheda
       const exh = Math.max(0, ...(d.condizioni || []).map((c) => /^Indebolimento (\d)$/.test(c) ? +RegExp.$1 : 0));
       if (salvato.exh !== JSON.stringify(exh)) {
         salvato.exh = JSON.stringify(exh);
@@ -785,48 +784,6 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
       passo1();
       return zona;
     }, { azioni: (chiudi) => el("div", { class: "azioni" }, el("button", { testo: "Annulla", on: { click: chiudi } })) });
-  }
-
-  // scheda esterna (scheda esterna, kit-scheda/CONTRATTO_ARCANA.md): il Master crea il codice di abbinamento, vede i
-  // dispositivi collegati e li scollega. Durante la sessione della scheda esterna i PF di questo personaggio li comanda una scheda esterna.
-  async function arcana() {
-    const base = "/personaggi/" + encodeURIComponent(pg.id) + "/arcana";
-    const zona = el("div", {});
-    const copia = (t) => el("button", { class: "piccolo", testo: "Copia", on: { click: () => navigator.clipboard.writeText(t).then(() => avviso("Copiato."), () => avviso("Copia non riuscita: selezionalo a mano.", "errore")) } });
-    let codice = null;
-    async function disegna() {
-      let d;
-      try { d = await api(base); } catch (e) { svuota(zona, el("p", { class: "errore", testo: e.message })); return; }
-      if (!zona.isConnected && codice === null && zona.dataset.pronto) return;
-      zona.dataset.pronto = "1";
-      const ora = (t) => quando(t);
-      svuota(zona,
-        el("p", { testo: "Se " + (pg.nomeGiocatore || "il giocatore") + " usa l'app scheda esterna, può mandare a Gaster Bless PF, tiri, slot e condizioni di " + pg.nome + ". Mentre la sessione della scheda esterna è aperta, i PF si segnano su scheda esterna e nel tracker sono bloccati." }),
-        !d.indirizzo ? el("div", { class: "banner" }, "L'accesso da Internet non è configurato (porta_pubblica e nome_pubblico in gasterbless.conf): scheda esterna non può raggiungere Gaster Bless.") :
-          !d.accessoAperto ? el("div", { class: "banner" }, "L'accesso da Internet adesso è chiuso: aprilo da Impostazioni quando si gioca, altrimenti scheda esterna non arriva a Gaster Bless.") : null,
-        d.indirizzo ? el("div", { class: "scheda-ui" },
-          el("h3", { testo: "1. Indirizzo da scrivere in scheda esterna" }),
-          el("div", { class: "riga-flex" }, el("code", { class: "arcana-indirizzo", testo: d.indirizzo }), copia(d.indirizzo)),
-          el("h3", { testo: "2. Codice di abbinamento", stile: { marginTop: "12px" } }),
-          codice ? el("div", {},
-            el("div", { class: "riga-flex" }, el("span", { class: "codice", testo: codice.codice }), copia(codice.codice)),
-            el("p", { class: "tenue", testo: "Vale una volta sola, fino alle " + ora(codice.scade).split(", ").pop() + ". Il giocatore lo scrive in scheda esterna, nel pannello «Sessione Gaster Bless»." })) :
-            el("button", { class: "primario", testo: "Crea il codice", on: { click: async () => { try { codice = await api(base + "/codice", { dati: {} }); disegna(); } catch (e) { avviso(e.message, "errore"); } } } })) : null,
-        d.risorse && d.risorse.length ? el("div", {}, el("h3", { testo: "Risorse (da una scheda esterna)", stile: { marginTop: "12px" } }),
-          el("p", { testo: d.risorse.map((r) => r.nome + " " + (r.max - r.used) + "/" + r.max).join(" · ") })) : null,
-        el("h3", { testo: "Dispositivi collegati", stile: { marginTop: "12px" } }),
-        d.dispositivi.length ? el("ul", { class: "arcana-disp" }, d.dispositivi.map((x) => el("li", {},
-          el("div", {}, el("strong", { testo: x.nome }), x.sessione ? el("span", { class: "etichetta arcana", testo: "📡 sessione aperta" }) : null,
-            el("div", { class: "tenue piccolo", testo: "collegato " + ora(x.creato) + " · ultimo contatto " + ora(x.ultimo) })),
-          el("button", { class: "piccolo pericolo", testo: "Scollega", on: { click: async () => {
-            if (!(await conferma("Scollegare «" + x.nome + "»?", "scheda esterna su quel dispositivo smette di mandare dati; per ricollegarlo serve un codice nuovo. I PF tornano al tracker.", "Scollega", true))) return;
-            try { await api(base + "/dispositivi/" + encodeURIComponent(x.id), { metodo: "DELETE" }); disegna(); } catch (e) { avviso(e.message, "errore"); } } } })))) :
-          el("p", { class: "tenue", testo: "Nessuno." }));
-    }
-    await disegna();
-    dialogo("📡 scheda esterna · " + pg.nome, zona, { largo: true });
-    const via = tempoReale.su("arcana.dispositivi", (d) => { if (!zona.isConnected) { via(); return; } if (d.personaggio === pg.id) disegna(); });
-    smetti.push(via);
   }
 
   return () => {

@@ -80,7 +80,7 @@ func TestAccessoDaInternet(t *testing.T) {
 		return resp.StatusCode, out
 	}
 	if c, out := chiama("GET", "/io", nil); c != 403 || out["codice"] != "accesso_chiuso" {
-		t.Fatalf("chiuso finché il Master non lo apre, con un errore JSON riconoscibile (scheda esterna): %d %v", c, out)
+		t.Fatalf("chiuso finché il Master non lo apre, con un errore JSON riconoscibile: %d %v", c, out)
 	}
 	s.Filtro.ImpostaPubblico(true)
 	if c, io := chiama("GET", "/io", nil); c != 200 || io["primoAvvio"] == true {

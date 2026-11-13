@@ -256,7 +256,6 @@ export async function mostra(corpo, { io, azioni }) {
         c.mio ? el("span", { class: "etichetta approvato", testo: "tu" }) : null,
         c.giocatore && !c.mio ? el("span", { class: "tenue piccolo", testo: c.giocatore }) : null,
         c.nascosto ? el("span", { class: "etichetta attesa", testo: "nascosto" }) : null,
-        c.arcana ? el("span", { class: "etichetta arcana", title: "Il giocatore usa scheda esterna: i PF li segna lì. Digli il danno a voce.", testo: "📡 PF gestiti da una scheda esterna" }) : null,
         c.ca != null ? el("span", { class: "piccolo" + (c.caOrig != null ? " valore-modificato" : ""), testo: "🛡 " + c.ca + (c.caOrig != null ? " (" + c.caOrig + ")" : ""),
           title: c.caOrig != null ? "CA " + c.ca + " con " + (c.effettiCA || []).join(", ") + "; senza: " + c.caOrig : null }) : null,
         c.percezionePassiva ? el("span", { class: "piccolo tenue", title: "Percezione passiva", testo: "👁 " + c.percezionePassiva }) : null),
@@ -272,8 +271,7 @@ export async function mostra(corpo, { io, azioni }) {
       const v = el("input", { type: "number", min: "0", max: "999", inputmode: "numeric", "aria-label": "Valore", class: "num-piccolo", placeholder: "0" });
       const val = () => { const n = parseInt(v.value, 10); if (!(n >= 0)) { avviso("Scrivi un numero.", "errore"); return null; } v.value = ""; return n; };
       const pre = c.tipo === "pg" ? "pg." : "mostro.";
-      // PF gestiti da una scheda esterna (sessione aperta): danni, cure, temporanei e TS contro la morte si segnano su scheda esterna
-      const pfQui = !c.arcana;
+      const pfQui = true;
       comandi.append(...[pfQui ? v : null,
         !pfQui ? null : el("button", { class: "piccolo", testo: "− Danno", on: { click: () => { const n = val(); if (n != null) comando(pre + "danno", { combattente: c.id, valore: n }); } } }),
         !pfQui ? null : el("button", { class: "piccolo", testo: "+ Cura", on: { click: () => { const n = val(); if (n != null) comando(pre + "cura", { combattente: c.id, valore: n }); } } }),
@@ -455,7 +453,7 @@ export async function mostra(corpo, { io, azioni }) {
           el("a", { href: "/schede/" + encodeURIComponent(mio.personaggio), "data-interno": true, class: "pulsante piccolo", testo: "📜 Apri la scheda" }),
           el("button", { class: "piccolo", testo: "🗗 Scheda ridotta", title: "In un'altra finestra: PF, azioni e attacchi, in tempo reale", on: { click: () => apriRidotta(mio) } }),
           el("button", { class: "piccolo", testo: "🗗 Scheda completa", title: "La scheda intera in un'altra finestra", on: { click: () => apriCompleta(mio) } }),
-          mio.arcana ? el("span", { class: "etichetta arcana", testo: "📡 PF su scheda esterna" }) : el("button", { class: "piccolo", testo: "Riposo lungo", on: { click: async () => { if (await conferma("Riposo lungo?", "PF al massimo, PF temporanei e tiri contro la morte azzerati, slot recuperati.", "Riposa")) comando("pg.riposo_lungo", { combattente: mio.id }); } } }))));
+          el("button", { class: "piccolo", testo: "Riposo lungo", on: { click: async () => { if (await conferma("Riposo lungo?", "PF al massimo, PF temporanei e tiri contro la morte azzerati, slot recuperati.", "Riposa")) comando("pg.riposo_lungo", { combattente: mio.id }); } } }))));
     }
     // Messaggi privati. Master (2026-11-11): una finestra per ogni giocatore (web/ui/chat.js), sempre visibili insieme;
     // qui l'elenco dei giocatori della sessione con i non letti. Giocatore: la sua conversazione con il Master.

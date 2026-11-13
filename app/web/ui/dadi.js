@@ -5,7 +5,7 @@ import { el, svuota, api, avviso, tempoReale } from "./ui.js";
 import { SET_DADI, caricaTre, pronto, webglOk, lancia3D, fermaLancio3D, suonoAcceso, impostaSuono } from "./dadi3d.js";
 
 // colore del mio set di dadi («#corpo/#numeri», dal server: GET /io, PUT /io/dadi); vale anche per i tiri che il
-// server non decora (scheda esterna)
+// server non decora
 let mioColore = "";
 async function leggiMioColore() { try { mioColore = (await api("/io")).coloreDadi || ""; } catch { /* resta il predefinito */ } return mioColore; }
 

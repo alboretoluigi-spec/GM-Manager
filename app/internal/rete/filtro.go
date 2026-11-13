@@ -71,7 +71,7 @@ func (f *Filtro) PortaPubblica(next http.Handler, nome string) http.Handler {
 		r2.Host = nome
 		if !f.pubblico.Load() {
 			// Chi apre Gaster Bless dal browser o dall'icona sulla schermata Home vede una pagina chiara; l'API e le
-			// app esterne (come una scheda esterna) ricevono il JSON con il codice.
+			// le altre richieste all'API ricevono il JSON con il codice.
 			if r.Method == http.MethodGet && strings.Contains(r.Header.Get("Accept"), "text/html") && !strings.HasPrefix(r.URL.Path, "/api/") {
 				casa := ""
 				if f.Casa != nil {
@@ -80,7 +80,7 @@ func (f *Filtro) PortaPubblica(next http.Handler, nome string) http.Handler {
 				paginaChiusa(w, casa)
 				return
 			}
-			// JSON con un codice, come gli errori dell'API (le app esterne, come una scheda esterna, lo riconoscono)
+			// JSON con un codice, come gli errori dell'API 
 			w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(http.StatusForbidden)
 			w.Write([]byte(`{"errore":"Gaster Bless in questo momento non è raggiungibile da Internet: chiedi al Master di aprire l'accesso.","codice":"accesso_chiuso"}` + "\n"))

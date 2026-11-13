@@ -35,6 +35,8 @@ Il codice di partenza viene dal repository `alboretoluigi-spec/Progetto_Barovia`
   senza testi dei manuali.
 - Immagini, suoni, font e librerie: solo con una licenza che permetta la vendita, annotata in `docs/LICENZE_E_CONTENUTI.md`.
 - Niente dati personali del Master o dei suoi giocatori nel repository.
+- **Niente Arcana** (decisione del Master, 13/11/2026): nessun collegamento, codice, pagina o testo dell'app Arcana o di
+  una «scheda esterna» in Gaster Bless. Il controllo automatico delle parole vietate lo verifica.
 - In caso di dubbio su un contenuto: non copiarlo, segnalalo e chiedi.
 
 ## Regole di lavoro

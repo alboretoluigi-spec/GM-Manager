@@ -13,7 +13,7 @@ package server
 //
 // Una sola richiesta in attesa per personaggio: un nuovo invio si unisce a quella aperta (il «prima» resta quello
 // della prima richiesta; un campo riportato al valore attuale esce dalla richiesta).
-// Il Master non passa mai dall'approvazione. Le schede alternative (plugin) e scheda esterna scrivono con le loro regole.
+// Il Master non passa mai dall'approvazione. Le schede alternative (plugin) scrivono con le loro regole.
 
 import (
 	"bytes"

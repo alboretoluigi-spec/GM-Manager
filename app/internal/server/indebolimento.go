@@ -2,7 +2,7 @@ package server
 
 // Indebolimento (richiesta dell'utente, 2026-11-07): il livello (0-6) vive nelle condizioni dello stato in gioco
 // («Indebolimento N», una sola alla volta), così scheda, tracker e Master vedono lo stesso valore. Quando il livello
-// di un personaggio sale (dalla scheda, dal tracker, dal Master o da una scheda esterna), il giocatore riceve «indebolimento»:
+// di un personaggio sale (dalla scheda, dal tracker o dal Master), il giocatore riceve «indebolimento»:
 // sul suo schermo nero per 1 secondo, poi l'immagine «stanco» (web/ui/indebolimento.js).
 
 import (

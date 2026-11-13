@@ -39,3 +39,10 @@ wizards of the coast
 \bliraen\b
 curse of
 \bcos reloaded\b
+# Arcana (app esterna, decisione del Master del 13/11/2026: non va inclusa in Gaster Bless). Il nome con la maiuscola e
+# gli identificativi del vecchio collegamento; restano ammesse le parole comuni «arcana» (abilità «arcana» del modulo
+# PDF, «serratura arcana»).
+(?-i:Arcana)
+[._/]arcana\b
+arcana[._/-]
+schede? esterne?

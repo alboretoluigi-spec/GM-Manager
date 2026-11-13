@@ -32,14 +32,12 @@ type Config struct {
 	// ServizioPubblico: chi porta Internet alla porta pubblica: "tailscale" (Funnel, predefinito) oppure "cloudflare"
 	// (Cloudflare Tunnel, 2026-11-08: indirizzo del proprio dominio, va bene anche in casa senza certificato).
 	ServizioPubblico string
-	// OriginiEsterne: siti da cui La scheda esterna può mandare dati a /api/v1/esterne/arcana (CORS).
-	OriginiEsterne []string
-	PannelloSoloPC bool     // pannello del Master raggiungibile solo dal PC locale
-	BackupGiorni   int      // giorni di conservazione dei backup
-	BackupOra      int      // ora del backup automatico (0-23)
-	InattiviMesi   int      // mesi dopo cui un account inattivo viene segnalato
-	BrokerMQTT     []string // server MQTT pubblici per il gioco da remoto (indirizzi wss://)
-	ModalitaProva  bool     // solo per i test automatici: dati temporanei, nessun DPAPI
+	PannelloSoloPC   bool     // pannello del Master raggiungibile solo dal PC locale
+	BackupGiorni     int      // giorni di conservazione dei backup
+	BackupOra        int      // ora del backup automatico (0-23)
+	InattiviMesi     int      // mesi dopo cui un account inattivo viene segnalato
+	BrokerMQTT       []string // server MQTT pubblici per il gioco da remoto (indirizzi wss://)
+	ModalitaProva    bool     // solo per i test automatici: dati temporanei, nessun DPAPI
 	// ApprovazioneSchede (2026-11-11): i giocatori cambiano da soli solo i campi di gioco della scheda; il resto passa
 	// da «Modifica manuale» e vale dopo l'approvazione del Master. Valore di partenza: il Master lo cambia nelle
 	// Impostazioni (che hanno la precedenza). Le prove automatiche lo spengono (approvazione_schede = no).
@@ -68,7 +66,6 @@ func Predefinita() Config {
 		BackupOra:          4,
 		InattiviMesi:       12,
 		BrokerMQTT:         []string{"wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt"},
-		OriginiEsterne:     nil,
 		ApprovazioneSchede: true,
 	}
 }
@@ -190,19 +187,6 @@ func (c *Config) imposta(k, v string) error {
 			return fmt.Errorf("nome_pubblico: %q non è un nome valido (esempio: pc-master.tail1234.ts.net oppure gasterbless.miodominio.it)", v)
 		}
 		c.NomePubblico = v
-	case "origini_arcana":
-		c.OriginiEsterne = nil
-		for _, o := range strings.Split(v, ",") {
-			o = strings.TrimSuffix(strings.TrimSpace(o), "/")
-			if o == "" {
-				continue
-			}
-			h, ok := strings.CutPrefix(o, "https://")
-			if !ok || !nomeHostValido(strings.Split(h, ":")[0]) || strings.ContainsAny(h, "/?#") {
-				return fmt.Errorf("origini_arcana: %q non è un sito valido (esempio: https://esempio.it)", o)
-			}
-			c.OriginiEsterne = append(c.OriginiEsterne, strings.ToLower(o))
-		}
 	case "pannello_solo_pc":
 		c.PannelloSoloPC, err = booleano()
 	case "backup_giorni":

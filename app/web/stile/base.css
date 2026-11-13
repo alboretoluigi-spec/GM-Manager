@@ -625,12 +625,6 @@ img.ritratto-iniz.classe { border-radius: 8px; border: 0; }
 :root[data-dispositivo="cellulare"] .tabella.adattiva tr { display: block; border: 1px solid var(--bordo); border-radius: var(--raggio); margin-bottom: 10px; padding: 6px; }
 :root[data-dispositivo="cellulare"] .tabella.adattiva td { display: flex; gap: 8px; border: 0; padding: 4px 6px; }
 :root[data-dispositivo="cellulare"] .tabella.adattiva td::before { content: attr(data-etichetta); min-width: 90px; color: var(--tenue); font-size: .85em; }
-.etichetta.arcana { border-color: var(--info); color: var(--info); }
-/* scheda esterna (pannello del Master nella scheda) */
-.arcana-indirizzo { flex: 1; min-width: 0; overflow-wrap: anywhere; padding: 6px 8px; background: var(--pannello-2); border: 1px solid var(--bordo); border-radius: var(--raggio); font-size: .9em; }
-.arcana-disp { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-.arcana-disp li { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 8px; border: 1px solid var(--bordo); border-radius: var(--raggio); }
-.arcana-disp li .etichetta { margin-left: 6px; }
 
 /* «Saluta il gruppo»: immagine su sfondo nero e scritta di commiato */
 .saluto { position: fixed; inset: 0; z-index: 2000; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; padding: 3vh 16px; cursor: pointer; animation: saluto-entra 1.6s ease both; }

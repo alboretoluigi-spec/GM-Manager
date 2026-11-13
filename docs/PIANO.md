@@ -18,7 +18,7 @@ un avvocato esperto di proprietà intellettuale.
 | 13/11/2026 | Licenza: **1 PC per licenza, a vita** |
 | 13/11/2026 | **Niente gioco da remoto** nella prima versione (MQTT, Cloudflare, VPN restano fuori) |
 | 13/11/2026 | **App generica per diversi giochi di ruolo. Nessun contenuto di gioco incluso né scaricato dall'app** (mostri, manuali, ambientazioni, incantesimi, classi, oggetti, nemmeno dall'SRD): l'utente li **importa da file che si procura** o li **inserisce a mano** |
-| 13/11/2026 | **Interfaccia adattiva**: il Master sceglie il gioco all'accesso; l'app mostra solo pulsanti, sezioni e materiale di quel gioco e abilita le funzioni proprie di quel gioco (passo C4, §5.2) |
+| 13/11/2026 | **Interfaccia adattiva**: all'accesso il Master sceglie **la campagna** (il gioco è quello della campagna); l'app mostra solo pulsanti, sezioni e materiale di quel gioco, **nascondendo del tutto** il resto; i **giocatori seguono** la scelta del Master; nella prima versione quinta edizione, scheda libera **e le altre famiglie** di meccaniche. Analisi e sotto-passi C4a–C4e: `docs/INTERFACCIA_ADATTIVA.md` |
 | 13/11/2026 | **Sistema di gioco a scelta fra i più noti**: per ogni campagna il Master sceglie il sistema; l'app ne conosce le meccaniche (dadi, tiri, iniziativa, salute, condizioni, struttura della scheda), sempre senza contenuti né testi dei manuali. Elenco e priorità: proposta al §3.3bis, da confermare |
 | 13/11/2026 | **Nome ufficiale: GASTER BLESS – MASTER SUITE**, slogan **MASTER YOUR WORLD**, sottotitolo **THE UNIVERSAL TABLETOP RPG PLATFORM**; stile dell'immagine di riferimento (oro antico su fondo scuro). Cambiano solo nome, logo testuale e intestazione; funzioni, struttura e contenuti restano. Dettagli: `branding/MARCHIO.md` |
 
@@ -131,7 +131,7 @@ League, Paradox/Dark Pack…). Fino ad allora i moduli hanno nomi descrittivi (�
 ### 3.7 Integrazioni, rete e installazione
 | Elemento | Esito | Note |
 |---|---|---|
-| Arcana (`arcana*.go`, `kit-scheda/`, `guide/arcana.md`) | TOGLIERE | Accordo con un'altra app, non trasferibile |
+| Arcana (`arcana*.go`, `kit-scheda/`, `guide/arcana.md`) | TOLTO | Accordo con un'altra app, non trasferibile. Il 13/11 (decisione del Master: «Non includere Arcana in GasterBless») tolti anche i resti: pulsante e finestra «scheda esterna» nelle Schede, etichette in Iniziativa e nella scheda di combattimento, impostazione `origini_arcana`, migrazioni 009 e 011 (ora vuote), stile; parole aggiunte a `docs/parole_vietate.txt` |
 | Cloudflare, VPN, MQTT da remoto | VERIFICARE | La funzione «gioco da remoto» va riprogettata per un cliente qualsiasi (proposta nella fase 4) |
 | Certificato HTTPS da accettare su ogni dispositivo | SOSTITUIRE | Ostacolo principale per un cliente; soluzione da scegliere nella fase 4 |
 | Installazione e aggiornamenti con PowerShell (`strumenti/*.ps1`, `portatile/`) | SOSTITUIRE | Installatore firmato e aggiornamento automatico verificato |

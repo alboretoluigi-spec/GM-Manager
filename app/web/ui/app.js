@@ -353,8 +353,7 @@ function chiamata(pagina, testo) {
 }
 tempoReale.su("iniz.chiamata", chiamata("/iniziativa", (d) => d.fase === "inizio" ? "⚔ Il combattimento è iniziato!" : "⚔ Si combatte! Tira l'iniziativa."));
 tempoReale.su("mappa.chiamata", chiamata("/mappa", "📺 Il Master sta proiettando sulla mappa."));
-tempoReale.su("arcana.avviso", (d) => avviso(d.testo, "", 6000));
-tempoReale.su("riassunto.ottimo", (d) => avviso(d.testo, "", 8000)); // «Ottimo lavoro» del Master sul tuo riassunto // scheda esterna: collegamenti, sessioni, incantesimi, note (arcana.go)
+tempoReale.su("riassunto.ottimo", (d) => avviso(d.testo, "", 8000)); // «Ottimo lavoro» del Master sul tuo riassunto
 tempoReale.su("assistente.nuova", (d) => { if (location.pathname !== "/assistente") avviso("🧛 L'assistente ha nuove idee per l'antagonista (" + d.gruppo + "): apri «Assistente IA».", "", 9000); }); // dopo un riassunto nuovo (agganci_ia.go)
 // Il Master sul PC di Gaster Bless: prepara le pagine dei manuali per i telefoni (pagine_manuali.js, 2026-11-11).
 function pcDelMaster() { return !!(stato.io && stato.io.collegato && stato.io.utente && stato.io.utente.ruolo === "master" && stato.io.locale); }

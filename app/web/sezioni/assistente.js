@@ -349,7 +349,7 @@ export async function mostra(corpo, { azioni }) {
     try { c = await api("/assistente/contesto?gruppo=" + encodeURIComponent(selGruppo.value || "")); } catch (e) { avviso(e.message, "errore"); return; }
     dialogo("Cosa sa l'IA", el("div", {},
       el("p", { class: "tenue", testo: "Questo è il testo che Gaster Bless aggiunge a ogni domanda" + (c.online ? ", inviato a " + c.nomeFornitore + "." : ".") +
-        " Contiene solo dati di gioco: mai nomi degli account, telefoni o password. I dati delle schede esterne non vengono usati." }),
+        " Contiene solo dati di gioco: mai nomi degli account, telefoni o password." }),
       el("h3", { testo: "🏰 Cronista della campagna" }),
       el("details", {}, el("summary", { testo: "📜 Istruzioni del Cronista (Campaign Bible)" }), el("pre", { class: "ia-contesto", testo: c.istruzioni })),
       c.istruzioniAntagonista ? el("details", {}, el("summary", { testo: "🧛 Istruzioni dell'antagonista («Parla con l'antagonista»)" }), el("pre", { class: "ia-contesto", testo: c.istruzioniAntagonista })) : null,
