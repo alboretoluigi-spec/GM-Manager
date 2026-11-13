@@ -11,7 +11,7 @@
 *.db-wal
 *.db-shm
 # prove nel browser
-/test/browser/schermate/
+/app/test/browser/schermate/
 node_modules/
 __pycache__/
 # file del sistema operativo
