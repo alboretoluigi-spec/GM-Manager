@@ -167,3 +167,11 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
   campagna con gruppi non eliminabile, collegamento da My Rulebooks, tutto intatto dopo il riavvio). `go vet` e
   `go test ./...` verdi; le altre prove nel browser verdi (13, 12, 24).
 - Prossimo: **L5** (architettura dell'analisi dei regolamenti, con approvazione del Master) e **L6** (rapporto finale).
+
+### Aggiunta: Farsight (13/11/2026, richiesta del Master)
+Gioco di fantascienza di **Lightfish Games** (sistema «Double Twelve», derivato dalla quinta edizione; Corebook del 2023).
+Nel catalogo con due documenti gratuiti trovati nella ricerca: le **schede** (prezzo zero su DriveThruRPG, serve un
+account) e il **Quickstarter** in inglese (pagina di download su un sito collegato a Lightfish Games, ospitato su
+Altervista). Le pagine non si sono potute aprire da questa sessione nemmeno dopo aver ammesso i siti nella rete
+dell'ambiente: i due documenti sono segnati «indirizzo da verificare», senza download diretto. Nessun SRD o licenza
+aperta trovata. Sito indicato: la pagina Kickstarter di Lightfish Games (da verificare).

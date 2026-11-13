@@ -15,7 +15,7 @@ func TestCatalogoRegolamenti(t *testing.T) {
 	if err != nil {
 		t.Fatalf("catalogo incorporato: %v", err)
 	}
-	if len(c.Giochi) != 20 {
+	if len(c.Giochi) != 21 {
 		t.Fatalf("giochi nel catalogo: %d", len(c.Giochi))
 	}
 	for _, g := range c.Giochi {
@@ -40,7 +40,7 @@ func TestCatalogoRegolamenti(t *testing.T) {
 		return l
 	}
 	tutto := cat(nil)
-	if len(tutto["giochi"].([]any)) != 20 || tutto["avviso"] == "" || tutto["totale"] != 20.0 {
+	if len(tutto["giochi"].([]any)) != 21 || tutto["avviso"] == "" || tutto["totale"] != 21.0 {
 		t.Fatalf("catalogo completo: %d giochi, avviso %q", len(tutto["giochi"].([]any)), tutto["avviso"])
 	}
 	f := tutto["filtri"].(map[string]any)
@@ -89,7 +89,7 @@ func TestCatalogoRegolamenti(t *testing.T) {
 	dir := filepath.Join(a.s.Cfg.CartellaDati, "regolamenti")
 	os.MkdirAll(dir, 0o700)
 	os.WriteFile(filepath.Join(dir, "catalogo.json"), []byte(`{"versione":1,"giochi":[{"id":"x","nome":"X","sito":"http://non-sicuro"}]}`), 0o600)
-	if len(cat(nil)["giochi"].([]any)) != 20 {
+	if len(cat(nil)["giochi"].([]any)) != 21 {
 		t.Fatal("catalogo locale non valido: deve restare quello incorporato")
 	}
 	valido := `{"versione":1,"aggiornatoIl":"2026-12-01","avviso":"a","tipologie":{"srd":"SRD"},"giochi":[{"id":"x","nome":"Gioco X","editore":"E","generi":["g"],"edizioni":["1"],"sito":"https://esempio.it","documenti":[{"id":"x1","titolo":"T","tipologia":"srd","lingua":"it","formato":"pdf","url":"https://esempio.it/t.pdf","licenza":"CC-BY-4.0","gratuito":true,"downloadDiretto":true,"verificatoIl":"2026-12-01"}]}]}`

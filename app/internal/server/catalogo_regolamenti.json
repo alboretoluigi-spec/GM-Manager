@@ -541,6 +541,49 @@
    "sito": "https://freeleaguepublishing.com/",
    "sitoVerificatoIl": "",
    "documenti": []
+  },
+  {
+   "id": "farsight",
+   "nome": "Farsight",
+   "editore": "Lightfish Games",
+   "generi": [
+    "fantascienza"
+   ],
+   "edizioni": [
+    "Corebook (2023)"
+   ],
+   "sito": "https://www.kickstarter.com/projects/lightfishgames/farsight-5e-evolved-explorative-sci-fi-rpg",
+   "sitoVerificatoIl": "",
+   "documenti": [
+    {
+     "id": "farsight-sheets",
+     "titolo": "FARSIGHT RPG – Sheets (schede del Corebook, anche compilabile)",
+     "edizione": "Corebook (2023)",
+     "tipologia": "scheda",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://legacy.drivethrurpg.com/product/454595/FARSIGHT-RPG--Sheets",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Prezzo zero sul negozio DriveThruRPG (serve un account): l'app apre solo la pagina. Dati presi dai risultati di ricerca del 13/11/2026: pagina non aperta, da verificare.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    },
+    {
+     "id": "farsight-quickstarter",
+     "titolo": "FARSIGHT RPG – Quickstarter (anche in versione da stampare) e personaggi pronti",
+     "edizione": "",
+     "tipologia": "quickstart",
+     "lingua": "en",
+     "formato": "pdf",
+     "url": "https://lightfishgames.altervista.org/download/",
+     "licenza": "Condizioni dell'editore",
+     "condizioni": "Pagina di download di un sito collegato a Lightfish Games (ospitato su Altervista), indicata dai risultati di ricerca del 13/11/2026: non è stato possibile aprirla né confermare che sia il sito ufficiale. Da verificare prima dell'uso.",
+     "gratuito": true,
+     "downloadDiretto": false,
+     "verificatoIl": ""
+    }
+   ]
   }
  ]
 }

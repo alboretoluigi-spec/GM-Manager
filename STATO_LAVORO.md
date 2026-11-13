@@ -67,6 +67,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | Richiesta del Master: Farsight nel catalogo (Lightfish Games): 21 giochi; schede e Quickstarter segnati «da verificare» (pagine non apribili da qui). Ambiente cloud: aggiunti lightfishgames.altervista.org e i domini di DriveThruRPG. Prove aggiornate (21 giochi). |
 | 2026-11-13 | Claude Code (cloud) | **L4 fatto**: campagne (migrazione 039 con Campagna principale e trigger per i gruppi nuovi, API, pagina Campagne, collegamento da My Rulebooks); prove Go e nel browser 11/11; tutte le prove verdi. |
 | 2026-11-13 | Claude Code (cloud) | **Prove tutte verdi**: mondo di prova inventato in `app/internal/server/testdata` (luoghi e strade disegnate, terreni, bestiario, professioni, scheda d'esempio); prove adattate (bilanciamento senza modelli, prodotto di prova, porta 7700); `go vet` e `go test ./...` verdi; prove nel browser 13 + 12 (download veri) + 24. |
 | 2026-11-13 | Claude Code (cloud) | App di base installabile: porta 7700/7701 (config, conf d'esempio, prove), script `installa.ps1` (riscritto senza i passaggi di Barovia), `aggiorna.ps1`, `aggiorna_auto.ps1`, `disinstalla.ps1`, `.bat`, `crea-pacchetto.ps1` (pacchetto zip completo), `LEGGIMI_INSTALLAZIONE.txt`, icona `gasterbless.ico` «GB»; pagina di aggiornamento con i percorsi nuovi; `docs/INSTALLAZIONE.md`. Compilazione per Windows e macOS verificata. Logo nuovo in attesa del file valido. |

@@ -8,7 +8,7 @@ const { BASE, ok, browser, master, chiudiFinestre, fine } = require('./comune');
   await p.waitForSelector('.rl-gioco');
   await chiudiFinestre(p);
   const giochi = () => p.locator('.rl-gioco').count();
-  ok(await giochi() === 20, 'catalogo: 20 giochi');
+  ok(await giochi() === 21, 'catalogo: 21 giochi');
   ok((await p.locator('.rl-titolo').textContent()).toLowerCase().includes('rulebook library'), 'titolo della sezione');
   ok(await p.locator('nav.menu').getByText('RPG Rulebook Library').count() === 1, 'voce nel menu del Master');
   await p.screenshot({ path: path.join(__dirname, 'schermate', 'regolamenti-catalogo.png'), fullPage: false });
@@ -18,7 +18,7 @@ const { BASE, ok, browser, master, chiudiFinestre, fine } = require('./comune');
   ok(await giochi() === 1 && (await p.locator('.rl-gioco h3').textContent()) === 'Call of Cthulhu', 'ricerca per nome');
   await p.fill('input[aria-label="Nome del gioco"]', '');
   await p.waitForTimeout(700);
-  ok(await giochi() === 20, 'ricerca svuotata');
+  ok(await giochi() === 21, 'ricerca svuotata');
 
   await p.selectOption('select[aria-label="Editore"]', 'Chaosium');
   await p.waitForTimeout(500);
