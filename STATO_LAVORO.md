@@ -44,9 +44,9 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
-00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1 e L2 fatti**;
-   prossimo **L3 – MY RULEBOOKS** (importazione, categorie, versioni, ricerca, visualizzazione), poi L4 campagne, L5 analisi,
-   L6 rapporto. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico"` (la seconda
+00. **RPG RULEBOOK LIBRARY / MY RULEBOOKS** (`docs/RULEBOOK_LIBRARY.md`): decisioni prese (§5bis), **L1, L2 e L3 fatti**;
+   prossimo **L4 – campagne** (entità campagna con sistema, edizione, regolamento, documenti, regole e impostazioni; gruppi
+   esistenti nella «Campagna principale»), poi L5 analisi, L6 rapporto. Prove nel browser: `cd app && bash test/browser/esegui.sh "regolamenti regolamenti_scarico miei_regolamenti"` (la seconda
    scarica dai siti veri: nella sessione cloud serve `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`).
 0. **Fase 3c** (dopo la conferma del Master): importazione dei contenuti da parte dell'utente (formati aperti e documentati
    per classi, razze, incantesimi, talenti, mostri, equipaggiamento, professioni; inserimento a mano), motore della quinta
@@ -60,6 +60,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **L3 fatto**: MY RULEBOOKS completo (importazione con controlli, RTF, ricerca nel contenuto, categorie, versioni, sostituzione, eliminazione, lettura), pagina e schede tra le due sezioni; prove Go e nel browser 24/24; nessuna regressione. |
 | 2026-11-13 | Claude Code (cloud) | **L2 fatto**: migrazione 038, download con ripresa e controlli, elenco e file di MY RULEBOOKS, pulsante con avanzamento; prove Go e nel browser con download veri (10/10); nessuna regressione. Rinominate in modo neutro le raccolte dei PNG («CoS Reloaded» → «Raccolta alternativa»), parole vietate aggiunte. Creato l'ambiente cloud personale «Gaster Bless (GM-Manager e Barovia)» con i due siti degli editori. |
 | 2026-11-13 | Claude Code (cloud) | Decisioni del Master sulla libreria: nomi ufficiali solo nel catalogo (CLAUDE.md aggiornato, catalogo escluso dal controllo delle parole), entità campagna, ordine L1→L6. **L1 fatto**: catalogo di 20 giochi con fonti verificate, API con filtri, pagina RPG Rulebook Library, prove Go e nel browser (13/13). |
 | 2026-11-13 | Claude Code (cloud) | Richiesta «Libreria universale dei regolamenti»: analisi dell'architettura e piano tecnico (passi L1-L6, componenti, dipendenze, conflitti, decisioni) in `docs/RULEBOOK_LIBRARY.md`. Nessun codice scritto. |

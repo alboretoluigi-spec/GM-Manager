@@ -23,3 +23,27 @@
 .rl-scarico { margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .rl-scarico progress { width: 160px; accent-color: var(--gb-oro); }
 .rl-errore { color: #a3262e; margin: 0; }
+/* schede tra le due sezioni */
+.rl-schede { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.rl-scheda { padding: 6px 14px; border-radius: 999px; background: var(--gb-fondo); color: var(--gb-grigio); text-decoration: none; font-family: var(--gb-carattere); font-weight: 600; text-transform: uppercase; font-size: .78rem; letter-spacing: .05em; border: 1px solid transparent; }
+.rl-scheda.attiva { color: var(--gb-oro); border-color: var(--gb-filetto); }
+/* MY RULEBOOKS */
+.mr-comandi { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.mr-gruppo { margin-top: 14px; }
+.mr-gioco { margin: 0 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--gb-filetto); }
+.mr-elenco { display: block; }
+.mr-doc { margin: 0 0 8px; border-left: 3px solid var(--gb-oro); }
+.mr-doc p { margin: 3px 0; }
+.mr-azioni { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.mr-versioni { margin: 8px 0 0 14px; }
+.mr-versioni .mr-doc { border-left-color: var(--gb-filetto); }
+.mr-cat { background: var(--gb-fondo); color: var(--gb-oro); }
+.mr-campi { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 8px 12px; margin: 10px 0; }
+.mr-campi .riga-campo { display: flex; flex-direction: column; gap: 2px; }
+.mr-campi .riga-campo span { font-size: .8rem; }
+.mr-lettore { max-height: 65vh; overflow: auto; }
+.mr-parte.evidenziata { background: rgba(216, 185, 120, .18); border-radius: 6px; padding: 4px 8px; }
+.mr-trovati { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.mr-trovati .collegamento { background: none; border: 0; padding: 0; color: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; text-align: left; }
+.mr-categorie { list-style: none; padding: 0; display: grid; gap: 6px; }
+.mr-categorie li { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }

@@ -128,3 +128,24 @@ minimo si scrive nel progetto. La ricerca delle fonti ufficiali per il catalogo 
   presenti dopo il riavvio del programma. Per questa prova nella sessione cloud servono i due siti nella rete
   dell'ambiente (ambiente «Gaster Bless (GM-Manager e Barovia)») e `SSL_CERT_FILE=/root/.ccr/ca-bundle.crt`.
 - Nessuna regressione: le prove rosse del server restano le stesse 19 della fase 3b.
+
+### L3 – MY RULEBOOKS: fatto (13/11/2026)
+- `app/internal/server/regolamenti_miei.go` (ampliato): importazione (`POST /api/v1/regolamenti/miei?file=…`) di PDF,
+  DOCX, EPUB, RTF, TXT, MD, HTML fino a 200 MB, con controlli sul contenuto (PDF con intestazione e fine, DOCX/EPUB come
+  ZIP con le parti necessarie, testo senza byte binari, RTF ben formato): file vuoti, danneggiati, binari e formati non
+  supportati rifiutati con un messaggio chiaro, doppioni riconosciuti dall'impronta (409); modifica dei dati (gioco,
+  edizione, tipologia, lingua, editore, categoria, versione, note), **versioni** dello stesso regolamento (un livello:
+  principale e sue versioni), sostituzione del file (`PUT …/file`), eliminazione (le versioni restano), lettura del
+  testo a blocchi (`GET …/testo`), testo dei PDF letto nel browser con pdf.js e mandato al server (`POST …/testo`),
+  **ricerca** nel titolo e nel contenuto senza maiuscole e accenti (`GET …/miei/cerca`), **categorie** personali
+  (creare, rinominare, eliminare: i documenti restano).
+- `app/internal/server/regolamenti_rtf.go` (nuovo): lettore RTF minimo senza librerie esterne.
+- Pagine: `app/web/sezioni/miei_regolamenti.js` (nuova, voce di menu «My Rulebooks»), `app/web/ui/libreria_schede.js`
+  (schede tra le due sezioni), stile in `app/web/stile/regolamenti.css`. I PDF si aprono nel lettore del browser; gli
+  altri formati nel lettore dell'app, anche nel punto trovato dalla ricerca.
+- Prove: `TestMieiRegolamenti` e `TestLettoreRTF` (Go) verdi; nel browser `miei_regolamenti` **24/24** (importazione di
+  PDF vero, TXT, RTF, DOCX; PDF danneggiato, formato non supportato e doppione rifiutati; categoria; filtri; ricerca nel
+  PDF e nell'RTF senza accenti; apertura nel punto trovato; versione sotto il principale; lettura del TXT; PDF aperto
+  in una nuova scheda; sostituzione del DOCX con ricerca aggiornata; eliminazione; tutto intatto dopo il riavvio; nessun
+  errore JavaScript). Nessuna regressione (le stesse 19 prove rosse della fase 3b).
+- Manca ancora (passo L4): l'associazione dei documenti alle **campagne**.

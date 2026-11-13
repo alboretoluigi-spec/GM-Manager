@@ -1,6 +1,7 @@
 // RPG RULEBOOK LIBRARY (passo L1, docs/RULEBOOK_LIBRARY.md, 13/11/2026): catalogo dei giochi e dei documenti gratuiti
 // pubblicati dagli editori, con filtri. Solo riferimenti alle fonti ufficiali: nessun documento è incluso nell'app.
 import { el, svuota, api, avviso, tempoReale } from "../ui/ui.js";
+import { schedeLibreria } from "../ui/libreria_schede.js";
 
 const LINGUE = { it: "Italiano", en: "Inglese", de: "Tedesco", fr: "Francese", es: "Spagnolo" };
 const FORMATI = { pdf: "PDF", web: "Pagina web", zip: "Archivio ZIP", epub: "EPUB", docx: "DOCX" };
@@ -26,6 +27,7 @@ export async function mostra(corpo) {
   } } });
 
   svuota(corpo, el("div", { class: "largo rl" },
+    schedeLibreria("catalogo"),
     el("div", { class: "rl-banda" },
       el("div", {}, el("h2", { class: "rl-titolo", testo: "RPG Rulebook Library" }),
         el("p", { class: "rl-sotto", testo: "Catalogo dei giochi di ruolo e dei documenti gratuiti pubblicati dagli editori" }))),
@@ -114,7 +116,7 @@ function voceDocumento(d, g, tipologie, lib) {
 // Download diretto (passo L2): pulsante, avanzamento in tempo reale, esito.
 function riquadroScarico(d, lib) {
   const box = el("div", { class: "rl-scarico" });
-  const apri = (id) => el("a", { class: "rl-fonte", href: "/api/v1/regolamenti/miei/" + encodeURIComponent(id) + "/file", target: "_blank", rel: "noopener", testo: "Apri ↗" });
+  const apri = (id) => el("a", { class: "rl-fonte", href: "/miei-regolamenti", testo: "Vai a My Rulebooks →" });
   const mb = (n) => (n / 1048576).toFixed(1).replace(".", ",") + " MB";
   const disegna = (st) => {
     if (st.stato === "fatto" || st.stato === "presente") {
