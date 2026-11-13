@@ -25,7 +25,7 @@ async function opzioni(p, sel) { return p.locator(sel + ' option').allTextConten
   await p.goto(BASE + '/contenuti', { waitUntil: 'networkidle' });
   await chiudiFinestre(p);
   await p.waitForSelector('.ct-vuoto');
-  ok(await p.getByText('Nessun pacchetto importato').count() === 1, 'pagina vuota con la spiegazione');
+  ok(await p.getByText('Nessun pacchetto: la scheda').count() === 1, 'pagina vuota con la spiegazione');
   const r = await p.request.get(BASE + '/modelli/modello_pacchetto.json');
   ok(r.ok() && (await r.json()).formato === 'gasterbless-contenuti', 'il modello si scarica');
 

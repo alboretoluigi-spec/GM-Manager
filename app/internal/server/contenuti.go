@@ -18,6 +18,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"gasterbless/internal/cripto"
 )
@@ -30,6 +31,7 @@ type cacheContenuti struct {
 	pronti bool
 	file   map[string]*fileGenerato // "regole/dati.js", "regole/talenti.js"
 	sovr   []string                 // voci sovrascritte da un pacchetto successivo
+	liste  map[string]string        // liste di incantesimi dichiarate dai pacchetti attivi (per l'inserimento a mano)
 }
 
 type fileGenerato struct {
@@ -53,6 +55,7 @@ type vistaPacchetto struct {
 	Descrizione string         `json:"descrizione"`
 	Conteggi    map[string]int `json:"conteggi"`
 	Attivo      bool           `json:"attivo"`
+	Personale   bool           `json:"personale"`
 	CreatoIl    int64          `json:"creatoIl"`
 }
 
@@ -60,13 +63,15 @@ func (s *Server) rotteContenuti(mux *http.ServeMux) {
 	mux.Handle("GET /api/v1/contenuti", api(s.apiContenuti))
 	mux.Handle("POST /api/v1/contenuti", api(s.apiImportaContenuti))
 	mux.Handle("POST /api/v1/contenuti/verifica", api(s.apiVerificaContenuti))
+	mux.Handle("POST /api/v1/contenuti/personale", api(s.apiNuovoPersonale))
+	mux.Handle("PUT /api/v1/contenuti/{id}", api(s.apiSalvaContenuti))
 	mux.Handle("PATCH /api/v1/contenuti/{id}", api(s.apiModificaContenuti))
 	mux.Handle("DELETE /api/v1/contenuti/{id}", api(s.apiEliminaContenuti))
 	mux.Handle("GET /api/v1/contenuti/{id}/file", http.HandlerFunc(s.apiFileContenuti))
 }
 
 func (s *Server) pacchetti(soloAttivi bool) ([]vistaPacchetto, []string, error) {
-	q := `SELECT id, nome, sistema, autore, versione, licenza, descrizione, conteggi, attivo, creato_il, file FROM contenuti_pacchetti`
+	q := `SELECT id, nome, sistema, autore, versione, licenza, descrizione, conteggi, attivo, personale, creato_il, file FROM contenuti_pacchetti`
 	if soloAttivi {
 		q += ` WHERE attivo = 1`
 	}
@@ -79,11 +84,11 @@ func (s *Server) pacchetti(soloAttivi bool) ([]vistaPacchetto, []string, error) 
 	for rows.Next() {
 		var p vistaPacchetto
 		var cont, f string
-		var att int
-		if err := rows.Scan(&p.ID, &p.Nome, &p.Sistema, &p.Autore, &p.Versione, &p.Licenza, &p.Descrizione, &cont, &att, &p.CreatoIl, &f); err != nil {
+		var att, pers int
+		if err := rows.Scan(&p.ID, &p.Nome, &p.Sistema, &p.Autore, &p.Versione, &p.Licenza, &p.Descrizione, &cont, &att, &pers, &p.CreatoIl, &f); err != nil {
 			return nil, nil, err
 		}
-		p.Attivo = att == 1
+		p.Attivo, p.Personale = att == 1, pers == 1
 		json.Unmarshal([]byte(cont), &p.Conteggi)
 		out = append(out, p)
 		file = append(file, f)
@@ -99,13 +104,19 @@ func (s *Server) apiContenuti(w http.ResponseWriter, r *http.Request) (any, erro
 	if err != nil {
 		return nil, err
 	}
-	sovr := []string{}
+	sovr, liste := []string{}, map[string]string{}
+	for k, v := range listeIncantesimiBase {
+		liste[k] = v
+	}
 	if _, err := s.contenutiGenerati(); err == nil {
 		s.pacchettiCache.mu.Lock()
 		sovr = append(sovr, s.pacchettiCache.sovr...)
+		for k, v := range s.pacchettiCache.liste {
+			liste[k] = v
+		}
 		s.pacchettiCache.mu.Unlock()
 	}
-	return map[string]any{"pacchetti": p, "sovrascritti": sovr, "formato": formatoContenuti, "versioneFormato": versioneFormatoContenuti,
+	return map[string]any{"pacchetti": p, "sovrascritti": sovr, "liste": liste, "formato": formatoContenuti, "versioneFormato": versioneFormatoContenuti,
 		"sistemi": []string{sistemaQuintaEdizione}}, nil
 }
 
@@ -185,6 +196,81 @@ func (s *Server) apiImportaContenuti(w http.ResponseWriter, r *http.Request) (an
 	}
 	s.pacchettiCache.svuota()
 	s.evento("contenuti_importa", u.ID, p.Nome)
+	s.Hub.AlMaster(Msg{Tipo: "contenuti", Dati: map[string]any{}})
+	out := riepilogoLetto(p)
+	out["id"] = id
+	return out, nil
+}
+
+// apiNuovoPersonale crea un pacchetto personale vuoto, da riempire a mano nella pagina «Contenuti di gioco».
+func (s *Server) apiNuovoPersonale(w http.ResponseWriter, r *http.Request) (any, error) {
+	u, err := richiedi(r, "master")
+	if err != nil {
+		return nil, err
+	}
+	var d struct {
+		Nome string `json:"nome"`
+	}
+	json.NewDecoder(io.LimitReader(r.Body, 4096)).Decode(&d)
+	d.Nome = strings.TrimSpace(d.Nome)
+	if d.Nome == "" || utf8.RuneCountInString(d.Nome) > 120 {
+		return nil, errore(http.StatusBadRequest, "Scrivi il nome del pacchetto (al massimo 120 caratteri).")
+	}
+	file, _ := json.MarshalIndent(map[string]any{"formato": formatoContenuti, "versioneFormato": versioneFormatoContenuti,
+		"sistema": sistemaQuintaEdizione, "nome": d.Nome, "autore": "", "versione": "1", "licenza": "", "descrizione": ""}, "", "  ")
+	p, err := leggiPacchettoOpz(file, true)
+	if err != nil {
+		return nil, &ErrAPI{Codice: http.StatusBadRequest, Msg: err.Error(), Tipo: "formato"}
+	}
+	id, ora := cripto.ID(), time.Now()
+	cont, _ := json.Marshal(p.Conteggi)
+	if _, err := s.DB.Exec(`INSERT INTO contenuti_pacchetti (id, nome, sistema, autore, versione, licenza, descrizione, file, impronta, conteggi, attivo, personale, creato_il, aggiornato_il)
+		VALUES (?, ?, ?, '', '1', '', '', ?, ?, ?, 1, 1, ?, ?)`, id, p.Nome, p.Sistema, string(file), improntaContenuti(file)+":"+id, string(cont), ora.UnixNano(), ora.Unix()); err != nil {
+		return nil, err
+	}
+	s.pacchettiCache.svuota()
+	s.evento("contenuti_personale", u.ID, p.Nome)
+	s.Hub.AlMaster(Msg{Tipo: "contenuti", Dati: map[string]any{}})
+	return map[string]any{"id": id}, nil
+}
+
+// apiSalvaContenuti sostituisce il file di un pacchetto con la versione modificata nell'app (inserimento a mano). Il
+// file passa lo stesso controllo dell'importazione; solo un pacchetto personale può restare vuoto.
+func (s *Server) apiSalvaContenuti(w http.ResponseWriter, r *http.Request) (any, error) {
+	u, err := richiedi(r, "master")
+	if err != nil {
+		return nil, err
+	}
+	id := r.PathValue("id")
+	var pers int
+	if s.DB.QueryRow(`SELECT personale FROM contenuti_pacchetti WHERE id = ?`, id).Scan(&pers) != nil {
+		return nil, errNonTrovato
+	}
+	b, err := s.leggiFileContenuti(w, r)
+	if err != nil {
+		return nil, err
+	}
+	p, err := leggiPacchettoOpz(b, pers == 1)
+	if err != nil {
+		return nil, &ErrAPI{Codice: http.StatusBadRequest, Msg: err.Error(), Tipo: "formato"}
+	}
+	hash := improntaContenuti(b)
+	if pers == 1 {
+		hash += ":" + id
+	} else {
+		var altro string
+		if s.DB.QueryRow(`SELECT nome FROM contenuti_pacchetti WHERE impronta = ? AND id != ?`, hash, id).Scan(&altro) == nil {
+			return nil, &ErrAPI{Codice: http.StatusConflict, Msg: "Un altro pacchetto ha già esattamente questo contenuto: «" + altro + "».", Tipo: "doppione"}
+		}
+	}
+	cont, _ := json.Marshal(p.Conteggi)
+	if _, err := s.DB.Exec(`UPDATE contenuti_pacchetti SET nome = ?, autore = ?, versione = ?, licenza = ?, descrizione = ?, file = ?, impronta = ?,
+		conteggi = ?, aggiornato_il = ? WHERE id = ?`, p.Nome, p.Autore, p.Versione, p.Licenza, p.Descrizione, string(b), hash, string(cont),
+		time.Now().Unix(), id); err != nil {
+		return nil, err
+	}
+	s.pacchettiCache.svuota()
+	s.evento("contenuti_modifica", u.ID, p.Nome)
 	s.Hub.AlMaster(Msg{Tipo: "contenuti", Dati: map[string]any{}})
 	out := riepilogoLetto(p)
 	out["id"] = id
@@ -287,7 +373,7 @@ func (s *Server) contenutiGenerati() (map[string]*fileGenerato, error) {
 	tot := nuoviDatiScheda()
 	sovr := []string{}
 	for _, f := range file {
-		p, err := leggiPacchetto([]byte(f))
+		p, err := leggiPacchettoOpz([]byte(f), true)
 		if err != nil { // non dovrebbe accadere: il file è stato controllato all'importazione
 			continue
 		}
@@ -309,7 +395,7 @@ func (s *Server) contenutiGenerati() (map[string]*fileGenerato, error) {
 		g.gz = zb.Bytes()
 		out[nome] = g
 	}
-	c.file, c.sovr, c.pronti = out, sovr, true
+	c.file, c.sovr, c.liste, c.pronti = out, sovr, tot.NomiListe, true
 	return out, nil
 }
 

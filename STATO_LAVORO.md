@@ -6,7 +6,9 @@
 da Barovia è la fase 3b.
 
 ## Fase attuale (aggiornamento)
-**13/11/2026: fase 3c iniziata, passo C1 fatto.** Pacchetti di contenuti nel formato aperto «gasterbless-contenuti»
+**13/11/2026: fase 3c, passi C1 e C2 fatti.** C2: inserimento a mano delle voci (pacchetti personali, moduli per ogni
+tipo di voce, modifica anche dei pacchetti importati).
+C1: Pacchetti di contenuti nel formato aperto «gasterbless-contenuti»
 (`docs/FORMATO_CONTENUTI.md`): pagina «Contenuti di gioco», controllo del file con errori precisi, anteprima,
 importazione, attivazione, esportazione, eliminazione; i pacchetti attivi arrivano alla scheda della quinta edizione.
 Piano dei passi C1–C5 in `docs/PIANO.md` §5.2.
@@ -55,10 +57,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
-0000. **Fase 3c** (`docs/PIANO.md` §5.2): **C1 fatto**; prossimo **C2 – inserimento a mano** delle voci (editor nella pagina
-   «Contenuti di gioco», senza scrivere JSON). Ancora aperta la scelta del Master sulle famiglie di sistemi di gioco
-   (§3.3bis, domanda n. 1 del §6). Prove: `cd app && go test ./internal/server -run TestPacchettiContenuti` e
-   `bash test/browser/esegui.sh contenuti`.
+0000. **Fase 3c** (`docs/PIANO.md` §5.2): **C1 e C2 fatti**; prossimo **C3 – altri contenuti nei pacchetti** (incantesimi
+   sempre preparati di sottoclassi e razze, strumenti e professioni, oggetti magici, mostri). Ancora aperta la scelta del Master sulle famiglie di sistemi di gioco
+   (§3.3bis, domanda n. 1 del §6). Prove: `cd app && go test ./internal/server -run TestPacchetti` e
+   `bash test/browser/esegui.sh "contenuti contenuti_editor"`.
 000. **App di base installabile (richiesta del Master del 13/11)**: script sistemati (porta 7700/7701, servizio e cartelle
    `GasterBless`, percorsi `C:\Progetti\GM-Manager\app`, niente passaggi di Barovia), pacchetto completo
    (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
@@ -80,6 +82,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-13 | Claude Code (cloud) | **Fase 3c, C2 fatto**: migrazione 042 (pacchetti personali), API `POST /contenuti/personale` e `PUT /contenuti/{id}` (stesso controllo dell'importazione; voci ripetute rifiutate; lista di un altro pacchetto = avviso; `GET /contenuti` dà le liste note), editor a moduli `web/sezioni/contenuti_editor.js` (tutti i tipi di voce, privilegi, tratti, sottoclassi, sottorazze, dati del pacchetto; campi non mostrati conservati). Corretta in `web/ui/ui.js` la messa a fuoco delle finestre: non sposta più il cursore se si sta già scrivendo in un campo (era la causa del testo finito nel campo sbagliato e dell'instabilità della prova campagne). Prove Go verdi; nel browser tutte verdi due volte di fila (13, 12, 24, 11, 13, 18, 15). |
 | 2026-11-13 | Claude Code (cloud) | **Fase 3c, C1 fatto**: formato aperto dei pacchetti di contenuti (`docs/FORMATO_CONTENUTI.md`), migrazione 041, API (verifica, importa, attiva, esporta, elimina), `/regole/dati.js` e `/regole/talenti.js` serviti con i pacchetti attivi (solo a utenti collegati), pagina «Contenuti di gioco», modello con contenuti inventati (`app/web/modelli/`); scheda: liste di incantesimi e fonti dai pacchetti (tolti i nomi dei manuali da `SRC_N`), icona di classe nascosta se manca. Prove: Go verdi; nel browser contenuti 18/18, le altre verdi (campagne instabile una volta su tre, come già noto). |
 | 2026-11-13 | Claude Code (cloud) | **L6 fatto**: rapporto finale del modulo in `docs/RAPPORTO_RULEBOOK_LIBRARY.md` (funzioni, file creati e modificati, prove e risultati, cosa resta, limiti tecnici e legali); `docs/RULEBOOK_LIBRARY.md` §7 aggiornato. |
 | 2026-11-13 | Claude Code (cloud) | **L5 fatto**: analisi dei regolamenti (migrazione 040, 13 categorie, analizzatore per parole chiave, IA predisposta non attiva, proposte da approvare, regole approvate per campagna), pagina «Regole da approvare», pulsante «Analizza»; prove Go e nel browser 13/13; tutte le prove verdi. |
@@ -99,8 +102,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 | 2026-11-13 | Claude Code (cloud) | Fase 3a: repository collegato alla sessione; creati `CLAUDE.md`, `README.md`, `.gitignore`, `STATO_LAVORO.md`, `docs/PIANO.md` (dall'inventario di Barovia, con il nome GM Manager e le fasi 3a-3d), `docs/LICENZE_E_CONTENUTI.md` (regole, attribuzione SRD 5.1, componenti di terzi). |
 
 ## File creati o modificati nell'ultima sessione
-Nuovi: `docs/FORMATO_CONTENUTI.md`, `app/internal/db/schema/041_contenuti.sql`, `app/internal/db/rollback/041_contenuti_rollback.sql`,
-`app/internal/server/contenuti.go`, `contenuti_formato.go`, `contenuti_test.go`, `app/web/sezioni/contenuti.js`,
-`app/web/modelli/modello_pacchetto.json`, `app/test/browser/contenuti.js`.
-Modificati: `app/internal/server/server.go`, `app/web/embed.go`, `app/web/ui/app.js`, `app/web/stile/regolamenti.css`,
-`app/web/regole/dati.js`, `app/web/regole/motore.js`, `app/web/scheda/scheda.js`, `docs/PIANO.md`, `STATO_LAVORO.md`.
+C2 – nuovi: `app/internal/db/schema/042_contenuti_personali.sql`, `app/internal/db/rollback/042_contenuti_personali_rollback.sql`,
+`app/web/sezioni/contenuti_editor.js`, `app/test/browser/contenuti_editor.js`. Modificati: `app/internal/server/contenuti.go`,
+`contenuti_formato.go`, `contenuti_test.go`, `app/web/sezioni/contenuti.js`, `app/web/stile/regolamenti.css`,
+`app/web/ui/ui.js`, `app/test/browser/contenuti.js`, `docs/FORMATO_CONTENUTI.md`, `docs/PIANO.md`, `STATO_LAVORO.md`.

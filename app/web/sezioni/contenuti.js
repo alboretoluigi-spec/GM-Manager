@@ -3,6 +3,7 @@
 // lui o che si procura), li controlla prima di importarli, li attiva o li disattiva, li esporta e li elimina. I pacchetti
 // attivi arrivano alla scheda del personaggio di tutti i giocatori.
 import { el, svuota, api, avviso, dialogo, conferma, tempoReale } from "../ui/ui.js";
+import { apriEditor } from "./contenuti_editor.js";
 
 const TIPI = [["classi", "classi"], ["razze", "razze"], ["background", "background"], ["incantesimi", "incantesimi"], ["armi", "armi"],
   ["armature", "armature"], ["talenti", "talenti"], ["stili", "stili di combattimento"]];
@@ -13,7 +14,7 @@ function conteggi(c) {
 }
 
 export async function mostra(corpo) {
-  const stato = { pacchetti: [], sovrascritti: [] };
+  const stato = { pacchetti: [], sovrascritti: [], liste: {} };
   const elenco = el("div", { class: "ct-elenco", "aria-live": "polite" });
   const scegli = el("input", { type: "file", accept: ".json,application/json", hidden: true, "aria-label": "File del pacchetto", on: { change: () => {
     const f = scegli.files[0]; scegli.value = ""; if (f) anteprima(f);
@@ -28,19 +29,20 @@ export async function mostra(corpo) {
       el("p", { class: "tenue piccolo", testo: "Importa solo materiale che hai il diritto di usare. Per ora i pacchetti valgono per il sistema «d20-5e» (quinta edizione)." })),
     el("div", { class: "mr-comandi" },
       el("button", { class: "primario", type: "button", testo: "📥 Importa un pacchetto…", on: { click: () => scegli.click() } }),
+      el("button", { type: "button", testo: "＋ Nuovo pacchetto personale", on: { click: () => nuovoPersonale() } }),
       el("a", { class: "pulsante", href: "/modelli/modello_pacchetto.json", download: "modello_pacchetto.json", testo: "⬇ Scarica il modello" }),
       scegli),
     elenco));
 
   async function ricarica() {
-    try { const r = await api("/contenuti"); stato.pacchetti = r.pacchetti; stato.sovrascritti = r.sovrascritti || []; }
+    try { const r = await api("/contenuti"); stato.pacchetti = r.pacchetti; stato.sovrascritti = r.sovrascritti || []; stato.liste = r.liste || {}; }
     catch (e) { avviso(e.message, "errore"); return; }
     disegna();
   }
 
   function disegna() {
     if (!stato.pacchetti.length) {
-      svuota(elenco, el("p", { class: "tenue ct-vuoto", testo: "Nessun pacchetto importato: la scheda del personaggio non ha classi, razze né incantesimi. Comincia dal modello." }));
+      svuota(elenco, el("p", { class: "tenue ct-vuoto", testo: "Nessun pacchetto: la scheda del personaggio non ha classi, razze né incantesimi. Importa un pacchetto, comincia dal modello o crea un pacchetto personale e inserisci le voci a mano." }));
       return;
     }
     svuota(elenco,
@@ -59,19 +61,34 @@ export async function mostra(corpo) {
     const dett = [p.versione && "versione " + p.versione, p.autore && "di " + p.autore, p.sistema].filter(Boolean).join(" · ");
     return el("div", { class: "scheda-ui ct-pacchetto" + (p.attivo ? "" : " ct-spento"), "data-id": p.id },
       el("div", { class: "ct-testa" },
-        el("h3", { testo: "📦 " + p.nome }),
+        el("h3", { testo: (p.personale ? "✍ " : "📦 ") + p.nome }),
         el("label", { class: "riga ct-attivo" }, att, el("span", { testo: "Attivo" }))),
       dett ? el("p", { class: "tenue piccolo", testo: dett }) : null,
       el("p", { class: "ct-conteggi", testo: conteggi(p.conteggi) }),
       p.licenza ? el("p", { class: "piccolo", testo: "Licenza: " + p.licenza }) : null,
       p.descrizione ? el("p", { class: "piccolo", testo: p.descrizione }) : null,
       el("div", { class: "mr-comandi" },
+        el("button", { type: "button", class: p.personale ? "primario" : "", testo: "✏️ Voci", "aria-label": "Voci di " + p.nome,
+          on: { click: () => apriEditor(p, stato.liste, ricarica) } }),
         el("a", { class: "pulsante", href: "/api/v1/contenuti/" + encodeURIComponent(p.id) + "/file", testo: "⬇ Esporta" }),
         el("button", { type: "button", class: "pericolo", testo: "🗑 Elimina", on: { click: async () => {
           if (!(await conferma("Eliminare il pacchetto?", "«" + p.nome + "»: le sue voci spariscono dalle schede. I personaggi già creati restano, ma la scheda non riconoscerà più classi, razze o incantesimi del pacchetto.", "Elimina", true))) return;
           try { await api("/contenuti/" + encodeURIComponent(p.id), { metodo: "DELETE" }); avviso("Pacchetto eliminato."); ricarica(); }
           catch (e) { avviso(e.message, "errore"); }
         } } })));
+  }
+
+  function nuovoPersonale() {
+    const nome = el("input", { type: "text", name: "nome", maxlength: 120, valore: "Le mie aggiunte", autocomplete: "off" });
+    dialogo("Nuovo pacchetto personale", el("div", {},
+      el("p", { class: "piccolo", testo: "Un pacchetto vuoto da riempire a mano, voce per voce: classi, razze, incantesimi e il resto, senza scrivere file." }),
+      el("label", { class: "ce-campo" }, el("span", { testo: "Nome del pacchetto" }), nome)), { azioni: (chiudi) => el("div", { class: "azioni" },
+      el("button", { type: "button", testo: "Annulla", on: { click: chiudi } }),
+      el("button", { type: "button", class: "primario", testo: "Crea", on: { click: async () => {
+        try { const r = await api("/contenuti/personale", { dati: { nome: nome.value } }); chiudi(); await ricarica();
+          const p = stato.pacchetti.find((x) => x.id === r.id); if (p) apriEditor(p, stato.liste, ricarica); }
+        catch (e) { avviso(e.message, "errore"); }
+      } } })) });
   }
 
   async function anteprima(file) {

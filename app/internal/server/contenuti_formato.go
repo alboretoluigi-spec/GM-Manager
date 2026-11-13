@@ -458,7 +458,10 @@ func nomeVoce(raw json.RawMessage) string {
 }
 
 // leggiPacchetto controlla l'intero file e lo converte. Restituisce tutti gli errori trovati (fino a 50) in un colpo.
-func leggiPacchetto(b []byte) (*pacchettoLetto, error) {
+func leggiPacchetto(b []byte) (*pacchettoLetto, error) { return leggiPacchettoOpz(b, false) }
+
+// leggiPacchettoOpz: vuotoAmmesso per i pacchetti personali, che si riempiono a mano voce per voce.
+func leggiPacchettoOpz(b []byte, vuotoAmmesso bool) (*pacchettoLetto, error) {
 	var p pacchettoFile
 	if err := decodifica(b, &p); err != nil {
 		return nil, fmt.Errorf("Il file non è un pacchetto di contenuti valido: %v.", err)
@@ -511,6 +514,7 @@ func leggiPacchetto(b []byte) (*pacchettoLetto, error) {
 		{"talenti", p.Talenti, convertiTalento}, {"stili", p.Stili, convertiStile},
 	}
 	totale := 0
+	visti := map[string]bool{}
 	for _, t := range tipi {
 		if len(t.voci) > maxVociPerTipo {
 			c.err("«%s»: troppe voci (al massimo %d)", t.nome, maxVociPerTipo)
@@ -518,6 +522,23 @@ func leggiPacchetto(b []byte) (*pacchettoLetto, error) {
 		}
 		for i, raw := range t.voci {
 			c.dove = fmt.Sprintf("%s n. %d%s: ", t.nome, i+1, nomeVoce(raw))
+			var chiave struct {
+				ID   string `json:"id"`
+				Nome string `json:"nome"`
+			}
+			json.Unmarshal(raw, &chiave)
+			k := chiave.ID
+			if k == "" {
+				k = strings.ToLower(strings.TrimSpace(chiave.Nome))
+			}
+			if k != "" && visti[t.nome+"|"+k] {
+				if chiave.ID != "" {
+					c.err("c'è già un'altra voce con l'id «%s» in questo pacchetto", chiave.ID)
+				} else {
+					c.err("c'è già un'altra voce con il nome «%s» in questo pacchetto", strings.TrimSpace(chiave.Nome))
+				}
+			}
+			visti[t.nome+"|"+k] = true
 			if err := t.fn(c, raw, d); err != nil {
 				c.err("%v", err)
 			}
@@ -526,13 +547,13 @@ func leggiPacchetto(b []byte) (*pacchettoLetto, error) {
 		out.Conteggi[t.nome] = len(t.voci)
 		totale += len(t.voci)
 	}
-	if totale == 0 && len(c.errori) == 0 {
+	if totale == 0 && len(c.errori) == 0 && !vuotoAmmesso {
 		c.err("il pacchetto non contiene nessuna voce (classi, razze, background, incantesimi, armi, armature, talenti o stili)")
 	}
 	// Codici di lista usati dalle classi e dagli incantesimi: devono esistere (base o dichiarati nel pacchetto).
 	for id, cod := range d.Codici {
 		if listeIncantesimiBase[cod] == "" && d.NomiListe[cod] == "" {
-			c.err("classe «%s»: la lista di incantesimi «%s» non esiste; dichiarala in «listeIncantesimi»", id, cod)
+			c.avv("classe «%s»: la lista di incantesimi «%s» non è dichiarata in questo pacchetto; funziona solo se la dichiara un altro pacchetto attivo", id, cod)
 		}
 	}
 	if len(c.errori) > 0 {
@@ -904,9 +925,13 @@ func convertiIncantesimo(c *controllore, raw json.RawMessage, d *datiScheda) err
 		c.err("«classi» deve essere un testo come «bcm» o un elenco come [\"b\", \"c\", \"m\"]")
 	}
 	for _, r := range cl {
+		if r < 'a' || r > 'z' {
+			c.err("«classi»: «%c» non è il codice di una lista (una lettera minuscola)", r)
+			continue
+		}
 		k := string(r)
 		if listeIncantesimiBase[k] == "" && d.NomiListe[k] == "" {
-			c.err("«classi»: la lista «%s» non esiste; dichiarala in «listeIncantesimi»", k)
+			c.avv("«classi»: la lista «%s» non è dichiarata in questo pacchetto; funziona solo se la dichiara un altro pacchetto attivo", k)
 		}
 	}
 	v := []any{nome, en, liv, sc, t, c.testo("gittata", x.Gittata, false), c.testo("componenti", x.Componenti, false), du, cl,

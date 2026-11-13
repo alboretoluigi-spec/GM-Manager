@@ -162,7 +162,8 @@ export function dialogo(titolo, contenuto, { largo = false, azioni = null } = {}
   document.body.append(velo);
   document.addEventListener("keydown", esc);
   const primo = d.querySelector("input,select,textarea,button.primario");
-  if (primo) setTimeout(() => primo.focus(), 30);
+  // Solo se il cursore non è già in un campo della finestra (scrivendo subito, il testo non finisce nel primo campo).
+  if (primo) setTimeout(() => { if (!d.contains(document.activeElement)) primo.focus(); }, 30);
   return chiudi;
 }
 

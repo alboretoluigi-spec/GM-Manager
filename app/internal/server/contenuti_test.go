@@ -121,7 +121,7 @@ func TestPacchettiContenuti(t *testing.T) {
 		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","classi":[{"id":"a","nome":"A","dadi":8}]}`:                                                    `classi n. 1 («A»): campo sconosciuto "dadi"`,
 		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","classi":[{"id":"Spadaccino","nome":"S","dadoVita":30,"tiriSalvezza":["FORZA"]}]}`:             "dadoVita» deve essere tra 4 e 20",
 		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","razze":[{"id":"r","nome":"R","caratteristiche":{"FOR":"due"}}]}`:                              "razze n. 1 («R»): «caratteristiche.FOR» deve essere un numero intero",
-		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","incantesimi":[{"nome":"Lampo","livello":12,"scuola":"fuoco","tempo":"azione","classi":"q"}]}`: "la lista «q» non esiste",
+		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","incantesimi":[{"nome":"Lampo","livello":12,"scuola":"fuoco","tempo":"azione","classi":"q"}]}`: "«livello» deve essere tra 0 e 9",
 		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","armi":[{"nome":"Mazza","categoria":"pesante","tipo":"mischia","danno":"tanto"}]}`:             "«categoria» deve essere «semplice» o «guerra»",
 		`{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"x","talenti":[{"nome":"T","effetti":{"volo":1}}]}`:                                                "«effetti»: «volo» sconosciuto",
 	}
@@ -179,5 +179,84 @@ func TestPacchettiContenuti(t *testing.T) {
 	}
 	if p := m.deve(200, "GET", "/contenuti", nil)["pacchetti"].([]any); len(p) != 1 || p[0].(map[string]any)["attivo"] != false {
 		t.Fatalf("resta il secondo, disattivato: %v", p)
+	}
+}
+
+// Pacchetti personali (fase 3c, C2): si creano vuoti, si salvano voce per voce con lo stesso controllo
+// dell'importazione (un errore lascia il pacchetto com'era), voci ripetute rifiutate, un pacchetto importato non può
+// restare vuoto né diventare uguale a un altro; solo il Master.
+func TestPacchettiPersonali(t *testing.T) {
+	a := nuovoAmbiente(t)
+	web := a.s.Web.(fstest.MapFS)
+	for _, f := range []string{"regole/dati.js", "regole/talenti.js"} {
+		b, _ := os.ReadFile("../../web/" + f)
+		web[f] = &fstest.MapFile{Data: b}
+	}
+	m := a.master()
+	g := a.giocatore("Lia", "3330000001", "192.168.1.20")
+	m.deve(400, "POST", "/contenuti/personale", map[string]any{"nome": "  "})
+	g.deve(403, "POST", "/contenuti/personale", map[string]any{"nome": "Mio"})
+	id := m.deve(200, "POST", "/contenuti/personale", map[string]any{"nome": "Le mie aggiunte"})["id"].(string)
+	id2 := m.deve(200, "POST", "/contenuti/personale", map[string]any{"nome": "Le mie aggiunte"})["id"].(string) // stesso nome: due pacchetti
+	p := m.deve(200, "GET", "/contenuti", nil)["pacchetti"].([]any)
+	if len(p) != 2 || p[0].(map[string]any)["personale"] != true || p[0].(map[string]any)["nome"] != "Le mie aggiunte" {
+		t.Fatalf("pacchetti personali: %v", p)
+	}
+	salva := func(c *cliente, id, corpo string, atteso int) string {
+		t.Helper()
+		cod, _, b := c.grezzo("PUT", "/contenuti/"+id, []byte(corpo), "application/json")
+		if cod != atteso {
+			t.Fatalf("salvataggio: atteso %d, ottenuto %d (%s)", atteso, cod, b)
+		}
+		return string(b)
+	}
+	testa := `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Le mie aggiunte",`
+	salva(m, id, testa+`"incantesimi":[{"nome":"Lampo di Brina","livello":1,"scuola":"invocazione","tempo":"azione","classi":"m"}]}`, 200)
+	if _, js := g.statico("/regole/dati.js"); !strings.Contains(js, `"Lampo di Brina"`) {
+		t.Fatal("voce salvata a mano non nella scheda")
+	}
+	// Una lista non dichiarata qui è solo un avviso (può dichiararla un altro pacchetto attivo).
+	if out := salva(m, id, testa+`"incantesimi":[{"nome":"Lampo di Brina","livello":1,"scuola":"invocazione","tempo":"azione","classi":"mz"}]}`, 200); !strings.Contains(out, "«z» non è dichiarata") {
+		t.Fatalf("avviso della lista: %s", out)
+	}
+	// Errore: il pacchetto resta com'era.
+	if e := salva(m, id, testa+`"incantesimi":[{"nome":"Lampo di Brina","livello":12,"scuola":"invocazione","tempo":"azione"}]}`, 400); !strings.Contains(e, "livello") {
+		t.Fatalf("errore del livello: %s", e)
+	}
+	if _, js := g.statico("/regole/dati.js"); !strings.Contains(js, `["Lampo di Brina","Lampo di Brina",1,`) {
+		t.Fatal("dopo un errore il pacchetto deve restare com'era")
+	}
+	// Voci ripetute.
+	if e := salva(m, id, testa+`"classi":[{"id":"x","nome":"X","dadoVita":8},{"id":"x","nome":"Y","dadoVita":8}]}`, 400); !strings.Contains(e, "già un'altra voce con l'id «x»") {
+		t.Fatalf("id ripetuto: %s", e)
+	}
+	if e := salva(m, id, testa+`"armi":[{"nome":"Mazza","categoria":"semplice","tipo":"mischia","danno":"1d6"},{"nome":"mazza ","categoria":"semplice","tipo":"mischia","danno":"1d4"}]}`, 400); !strings.Contains(e, "già un'altra voce con il nome «mazza»") {
+		t.Fatalf("nome ripetuto: %s", e)
+	}
+	// Un pacchetto personale può tornare vuoto e cambiare nome.
+	salva(m, id, `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Aggiunte del giovedì","autore":"Il Master"}`, 200)
+	if _, js := g.statico("/regole/dati.js"); strings.Contains(js, "Lampo di Brina") {
+		t.Fatal("voce eliminata ancora nella scheda")
+	}
+	// Due personali con lo stesso contenuto non sono un problema.
+	salva(m, id2, `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Aggiunte del giovedì","autore":"Il Master"}`, 200)
+	// Un pacchetto importato non può restare vuoto né diventare uguale a un altro importato.
+	imp1 := `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Uno","stili":[{"nome":"Guardia"}]}`
+	imp2 := `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Due","stili":[{"nome":"Guardia"}]}`
+	_, _, b := m.grezzo("POST", "/contenuti", []byte(imp1), "application/json")
+	_, _, b2 := m.grezzo("POST", "/contenuti", []byte(imp2), "application/json")
+	var o1, o2 map[string]any
+	json.Unmarshal(b, &o1)
+	json.Unmarshal(b2, &o2)
+	if e := salva(m, o2["id"].(string), `{"formato":"gasterbless-contenuti","versioneFormato":1,"sistema":"d20-5e","nome":"Due"}`, 400); !strings.Contains(e, "nessuna voce") {
+		t.Fatalf("importato vuoto: %s", e)
+	}
+	if e := salva(m, o2["id"].(string), imp1, 409); !strings.Contains(e, "«Uno»") {
+		t.Fatalf("uguale a un altro: %s", e)
+	}
+	salva(g, id, imp1, 403)
+	salva(m, "nessuno", imp1, 404)
+	if p := m.deve(200, "GET", "/contenuti", nil)["pacchetti"].([]any); p[0].(map[string]any)["nome"] != "Aggiunte del giovedì" || p[0].(map[string]any)["autore"] != "Il Master" {
+		t.Fatalf("nome e autore aggiornati: %v", p[0])
 	}
 }

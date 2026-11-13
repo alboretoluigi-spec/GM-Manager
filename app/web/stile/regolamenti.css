@@ -77,3 +77,39 @@
 .ct-avviso { border-left: 3px solid #c9a227; padding-left: 10px; }
 .ct-pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 50vh; overflow: auto; font-size: .85rem; }
 .ct-vuoto { padding: 12px 0; }
+
+/* Inserimento a mano dei contenuti (fase 3c, C2) */
+.ce-schede { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.ce-schede button.attiva { background: var(--gb-fondo); color: var(--gb-oro); border-color: var(--gb-oro); }
+.ce-corpo { display: grid; gap: 10px; justify-items: start; }
+.ce-voci { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; width: 100%; }
+.ce-voce { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--gb-filetto); }
+.ce-voce-nome { font-weight: 600; overflow-wrap: anywhere; }
+.ce-voce-azioni { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.ce-modulo { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 10px 14px; }
+.ce-campo { display: grid; gap: 4px; align-content: start; min-width: 0; }
+.ce-campo > label, .ce-campo > span { font-size: .85rem; font-weight: 600; }
+.ce-campo input[type=text], .ce-campo input[type=number], .ce-campo select, .ce-campo textarea { width: 100%; box-sizing: border-box; }
+.ce-largo { grid-column: 1 / -1; }
+.ce-si { align-self: end; }
+fieldset.ce-campo { border: 1px solid var(--gb-filetto); border-radius: 8px; padding: 8px 10px; }
+.ce-multi { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.ce-multi legend { width: 100%; }
+.ce-multi-riga { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.ce-car { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; }
+.ce-car label { display: grid; gap: 2px; font-size: .85rem; }
+.ce-righe { display: grid; gap: 6px; margin-bottom: 6px; }
+.ce-riga { display: flex; gap: 6px; align-items: start; flex-wrap: wrap; }
+.ce-riga input[type=text], .ce-riga textarea { flex: 1 1 180px; min-width: 0; }
+.ce-riga .ce-liv { width: 4.5em; flex: 0 0 auto; }
+.ce-riga .ce-corto { flex: 0 1 8em; }
+.ce-x { flex: 0 0 auto; }
+.ce-gruppo { margin-top: 6px; }
+.ce-sotto { display: grid; gap: 8px; margin-bottom: 6px; }
+.ce-voce-sotto { border: 1px solid var(--gb-filetto); border-radius: 8px; padding: 6px 10px; }
+.ce-voce-sotto summary { font-weight: 600; cursor: pointer; }
+.ce-voce-sotto > .ce-modulo { margin: 8px 0; }
+.ce-errore { border-left: 3px solid #b3261e; padding-left: 8px; }
+.ce-campo .ce-riga input[type=text], .ce-campo .ce-riga textarea { width: auto; flex: 1 1 180px; }
+.ce-campo .ce-riga input.ce-liv { width: 4.5em; flex: 0 0 4.5em; }
+.ce-campo .ce-riga input.ce-corto { width: 6em; flex: 0 1 6em; }

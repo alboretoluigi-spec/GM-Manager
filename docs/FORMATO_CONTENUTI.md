@@ -24,6 +24,19 @@ con un editor di testo.
   disattiva quella vecchia.
 - «⬇ Esporta» restituisce il file originale, per salvarlo o portarlo su un altro PC.
 
+## Inserimento a mano, senza scrivere il file
+- «＋ Nuovo pacchetto personale» crea un pacchetto vuoto (✍); «✏️ Voci» apre le sue voci divise per tipo. Ogni voce si
+  crea, si modifica, si copia o si elimina con un modulo: per le classi anche privilegi per livello (con la
+  descrizione) e sottoclassi, per le razze tratti e sottorazze. In «⚙ Dati del pacchetto» nome, autore, licenza, fonti
+  e liste di incantesimi nuove.
+- Ogni salvataggio passa lo stesso controllo dell'importazione: se c'è un errore il modulo lo mostra e il pacchetto
+  resta com'era. Nello stesso pacchetto non possono esserci due voci con lo stesso `id` (o lo stesso nome).
+- Si possono modificare anche i pacchetti importati: cambia la copia nell'app, non il file sul PC. I campi che il modulo
+  non mostra (per esempio gli agganci) restano com'erano.
+- Il pacchetto resta nel formato aperto: «⬇ Esporta» dà il file, da conservare o da passare a un altro PC.
+- Un incantesimo o una classe possono usare una lista dichiarata in un altro pacchetto attivo: l'app lo segnala come
+  avviso, non come errore.
+
 ## Intestazione del pacchetto
 | Campo | Obbligatorio | Contenuto |
 |---|---|---|
