@@ -4,11 +4,11 @@
   «\GasterBless\Aggiorna», quando il Master preme il tasto.
 
   Prova (non ferma e non sostituisce nulla: scarica solo l'elenco delle novità, fa i test e compila in una cartella a parte):
-      powershell -ExecutionPolicy Bypass -File C:\Progetti\Progetto_GasterBless\04_nuova_app\strumenti\aggiorna_auto.ps1 -Prova
+      powershell -ExecutionPolicy Bypass -File C:\Progetti\GM-Manager\app\strumenti\aggiorna_auto.ps1 -Prova
   Solo l'elenco delle novità (lo usa l'operazione «\GasterBless\Controlla», tasto «Controlla novità»):
-      powershell -ExecutionPolicy Bypass -File C:\Progetti\Progetto_GasterBless\04_nuova_app\strumenti\aggiorna_auto.ps1 -SoloControllo
+      powershell -ExecutionPolicy Bypass -File C:\Progetti\GM-Manager\app\strumenti\aggiorna_auto.ps1 -SoloControllo
   Aggiornamento vero:
-      powershell -ExecutionPolicy Bypass -File C:\Progetti\Progetto_GasterBless\04_nuova_app\strumenti\aggiorna_auto.ps1
+      powershell -ExecutionPolicy Bypass -File C:\Progetti\GM-Manager\app\strumenti\aggiorna_auto.ps1
 
   Passi: novità da GitHub (solo avanzamento lineare, mai fusioni) -> go vet e go test -> compilazione in una cartella a
   parte -> Gaster Bless ferma -> copia di sicurezza del database e del programma -> nuovo programma -> Gaster Bless riparte ->
@@ -28,11 +28,11 @@ $ErrorActionPreference = 'Stop'
 try { [Console]::OutputEncoding = New-Object Text.UTF8Encoding $false } catch { }
 
 $strumenti = $PSScriptRoot
-$app       = Split-Path $strumenti -Parent            # ...\04_nuova_app
-$repo      = Split-Path $app -Parent                  # ...\Progetto_Gaster Bless
+$app       = Split-Path $strumenti -Parent            # ...\GM-Manager\app
+$repo      = Split-Path $app -Parent                  # ...\GM-Manager
 $prog      = Join-Path $env:ProgramFiles 'GasterBless'
 $exe       = Join-Path $prog 'GasterBless.exe'
-$exePrec   = Join-Path $prog 'Gaster Bless.precedente.exe'
+$exePrec   = Join-Path $prog 'GasterBless.precedente.exe'
 $dati      = Join-Path $env:ProgramData 'GasterBless'
 $conf      = Join-Path $dati 'gasterbless.conf'
 $cartAgg   = Join-Path $dati 'aggiornamento'
@@ -76,7 +76,7 @@ function Leggi($cosa, [string[]]$argomenti) {
 }
 
 function Porta {
-    $p = 7600
+    $p = 7700
     if (Test-Path $conf) {
         $t = Get-Content $conf -Raw -Encoding UTF8
         if ($t -match '(?m)^\s*porta_https\s*=\s*(\d+)') { $p = [int]$Matches[1] }
@@ -87,7 +87,7 @@ function Porta {
 function Risponde([int]$secondi) {
     $url = "https://127.0.0.1:$(Porta)/api/v1/io"
     for ($i = 0; $i -lt $secondi; $i += 3) {
-        $sv = Get-Service Gaster Bless -ErrorAction SilentlyContinue
+        $sv = Get-Service GasterBless -ErrorAction SilentlyContinue
         if ($sv -and $sv.Status -eq 'Running') {
             $codice = Leggi 'curl.exe' @('-k', '-s', '-o', 'NUL', '-w', '%{http_code}', '--max-time', '5', $url)
             if ("$codice" -eq '200') { return $true }
@@ -96,11 +96,11 @@ function Risponde([int]$secondi) {
     }
     return $false
 }
-function Ferma-Gaster Bless {
-    $sv = Get-Service Gaster Bless -ErrorAction SilentlyContinue
-    if ($sv -and $sv.Status -ne 'Stopped') { Stop-Service Gaster Bless -Force -ErrorAction SilentlyContinue }
-    for ($i = 0; $i -lt 30 -and (Get-Process -Name Gaster Bless -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe }); $i++) { Start-Sleep 1 }
-    Get-Process -Name Gaster Bless -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force -ErrorAction SilentlyContinue
+function Ferma-GasterBless {
+    $sv = Get-Service GasterBless -ErrorAction SilentlyContinue
+    if ($sv -and $sv.Status -ne 'Stopped') { Stop-Service GasterBless -Force -ErrorAction SilentlyContinue }
+    for ($i = 0; $i -lt 30 -and (Get-Process -Name GasterBless -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe }); $i++) { Start-Sleep 1 }
+    Get-Process -Name GasterBless -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep 1
 }
 function Copia-DB($da, $a) {
@@ -114,7 +114,7 @@ function Copia-DB($da, $a) {
 # Rimette la versione precedente (programma e, se servono, i dati) e riavvia Gaster Bless.
 function Torna-Indietro($motivo) {
     Write-Host "`nLa nuova versione non funziona ($motivo): torno alla precedente." -ForegroundColor Yellow
-    Ferma-Gaster Bless
+    Ferma-GasterBless
     if (Test-Path $exePrec) { Copy-Item $exePrec $exe -Force }
     # Il database si rimette sempre com'era un attimo prima (Gaster Bless era ferma): la versione nuova potrebbe aver
     # applicato migrazioni anche se GitHub non ne mostrava (per esempio con -Forza su una Gaster Bless installata vecchia).
@@ -122,7 +122,7 @@ function Torna-Indietro($motivo) {
         Copia-DB $copiaDB $dati
         Write-Host "Database rimesso com'era prima dell'aggiornamento."
     }
-    try { Start-Service Gaster Bless } catch { }
+    try { Start-Service GasterBless } catch { }
     $ok = Risponde 60
     if ($vecchio) {
         $null = Esegui 'git' @('-C', $repo, 'reset', '--keep', $vecchio)   # così il prossimo tentativo ritrova le novità
@@ -136,7 +136,7 @@ function Ferma($testo) {
     Write-Host "`n$testo" -ForegroundColor Red
     if ($sostituito) { Torna-Indietro $testo }
     else {
-        if ($fermato) { try { Start-Service Gaster Bless } catch { }; $null = Risponde 60 }
+        if ($fermato) { try { Start-Service GasterBless } catch { }; $null = Risponde 60 }
         if ($applicato -and $vecchio) { $null = Esegui 'git' @('-C', $repo, 'reset', '--keep', $vecchio) }
         $S.esito = 'fallito'
         $S.messaggio = "$testo La Gaster Bless installata non è stata cambiata."
@@ -170,7 +170,7 @@ try {
     if (-not (Get-Command go -ErrorAction SilentlyContinue)) { Ferma "Go non trovato in $strGo\go." }
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) { Ferma "Git non trovato." }
     if (-not (Get-Command curl.exe -ErrorAction SilentlyContinue)) { Ferma "curl.exe non trovato (c'è di serie in Windows 10 e 11)." }
-    if (-not (Get-Service Gaster Bless -ErrorAction SilentlyContinue)) { Ferma "Il servizio Gaster Bless non esiste: prima va installato con aggiorna.ps1." }
+    if (-not (Get-Service GasterBless -ErrorAction SilentlyContinue)) { Ferma "Il servizio Gaster Bless non esiste: prima va installato con aggiorna.ps1." }
     if (-not (Test-Path $exe)) { Ferma "Programma non trovato: $exe" }
     Write-Host "Repository: $repo"
     Write-Host "Programma:  $exe"
@@ -211,8 +211,8 @@ try {
     $S.novita | ForEach-Object { Write-Host "  $_" }
     $diff = Leggi 'git' @('-C', $repo, 'diff', '--name-only', $vecchio, $remoto)
     $cambiati = @($diff | Where-Object { $_ })
-    $schemaCambiato = [bool]($cambiati | Where-Object { $_ -like '04_nuova_app/internal/db/schema/*' })
-    $installaCambiato = [bool]($cambiati | Where-Object { $_ -eq '04_nuova_app/strumenti/installa.ps1' })
+    $schemaCambiato = [bool]($cambiati | Where-Object { $_ -like 'app/internal/db/schema/*' })
+    $installaCambiato = [bool]($cambiati | Where-Object { $_ -eq 'app/strumenti/installa.ps1' })
     $S.migrazioni = $schemaCambiato
     if ($schemaCambiato) { Write-Host "Ci sono modifiche al database (migrazioni)." -ForegroundColor Yellow }
     if ($Prova) {
@@ -247,7 +247,7 @@ try {
     }
 
     Passo 'installa' '5. Installazione (Gaster Bless si ferma per circa un minuto)'
-    Ferma-Gaster Bless; $fermato = $true
+    Ferma-GasterBless; $fermato = $true
     New-Item -ItemType Directory -Force -Path $copiaDB | Out-Null
     Copia-DB $dati $copiaDB
     Copy-Item $exe $exePrec -Force
@@ -267,7 +267,7 @@ try {
         foreach ($f in 'avvia.bat', 'ferma.bat', 'apri.bat', 'disinstalla.ps1', 'gasterbless.ico') {
             $p = Join-Path $strumenti $f; if (Test-Path $p) { Copy-Item $p (Join-Path $prog $f) -Force }
         }
-        try { Start-Service Gaster Bless } catch { Write-Host "Avvio: $($_.Exception.Message)" -ForegroundColor Yellow }
+        try { Start-Service GasterBless } catch { Write-Host "Avvio: $($_.Exception.Message)" -ForegroundColor Yellow }
     }
 
     Passo 'verifica' '6. Gaster Bless risponde?'

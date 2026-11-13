@@ -122,7 +122,7 @@ func TestTailscaleAncheInCasa(t *testing.T) {
 		t.Fatalf("da casa sua: %s", v)
 	}
 	// Pagina di benvenuto da iPhone: alternativa senza certificato.
-	r := httptest.NewRequest("GET", "http://192.168.1.10:7601/?invito=abc", nil)
+	r := httptest.NewRequest("GET", "http://192.168.1.10:7701/?invito=abc", nil)
 	r.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)")
 	w := httptest.NewRecorder()
 	s.benvenuto().ServeHTTP(w, r)

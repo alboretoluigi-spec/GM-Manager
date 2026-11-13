@@ -1,0 +1,23 @@
+GASTER BLESS – MASTER SUITE
+MASTER YOUR WORLD · The universal tabletop RPG platform
+
+INSTALLAZIONE SU WINDOWS 10/11 (dal pacchetto)
+1. Estrai lo zip in una cartella, per esempio C:\GasterBless-pacchetto.
+2. Tasto destro su Start -> «Terminale (amministratore)».
+3. Scrivi (cambia il percorso se hai estratto altrove) e premi Invio:
+       powershell -ExecutionPolicy Bypass -File C:\GasterBless-pacchetto\installa.ps1
+4. Alla fine apri l'icona «GasterBless» sul Desktop, oppure https://localhost:7700
+5. Al primo avvio crea l'account del Master.
+
+Cosa installa: il programma in C:\Program Files\GasterBless, i dati in C:\ProgramData\GasterBless, il servizio
+Windows «GasterBless» (parte da solo all'accensione), le icone e una regola del firewall solo per la rete di casa.
+Porta: 7700 (scelta per non scontrarsi con altre app che usano la 7600).
+
+AGGIORNARE
+- Installazione dalla cartella del progetto (copia di GitHub): nell'app, Impostazioni -> «Aggiornamento di
+  Gaster Bless» -> «Controlla novità» e «Aggiorna».
+- Installazione da pacchetto: installa il pacchetto nuovo sopra quello vecchio (stesso comando). I dati restano.
+
+TOGLIERE
+       powershell -ExecutionPolicy Bypass -File "C:\Program Files\GasterBless\disinstalla.ps1"
+I dati restano in C:\ProgramData\GasterBless (per cancellarli: aggiungi -CancellaDati).

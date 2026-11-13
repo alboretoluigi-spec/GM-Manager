@@ -261,7 +261,7 @@ func (s *Server) eliminaFileDati(nome string) {
 	}
 }
 
-// ===== Pagina di benvenuto (HTTP, porta 7601): solo il certificato e le istruzioni =====
+// ===== Pagina di benvenuto (HTTP, porta 7701): solo il certificato e le istruzioni =====
 
 var paginaBenvenuto = template.Must(template.New("b").Parse(`<!doctype html>
 <html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

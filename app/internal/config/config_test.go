@@ -13,7 +13,7 @@ func TestFileEsempioValido(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if c.PortaHTTPS != 7600 || c.AccessoEsterno != "casa" || c.BackupGiorni != 30 || c.CartellaDati != `C:\ProgramData\GasterBless` || c.CartellaMedia != `C:\ProgramData\GasterBless\Media` || len(c.BrokerMQTT) != 2 {
+	if c.PortaHTTPS != 7700 || c.AccessoEsterno != "casa" || c.BackupGiorni != 30 || c.CartellaDati != `C:\ProgramData\GasterBless` || c.CartellaMedia != `C:\ProgramData\GasterBless\Media` || len(c.BrokerMQTT) != 2 {
 		t.Fatalf("valori letti: %+v", c)
 	}
 }
@@ -41,7 +41,7 @@ func TestPortaPubblica(t *testing.T) {
 	if err != nil || c.PortaPubblica != 7602 || c.NomePubblico != "pc-master.tail1a2b.ts.net" {
 		t.Fatalf("%v %+v", err, c)
 	}
-	for _, testo := range []string{"porta_pubblica = 7602\n", "porta_pubblica = 7600\nnome_pubblico = pc.tail1.ts.net\n", "nome_pubblico = 1.2.3.4\n"} {
+	for _, testo := range []string{"porta_pubblica = 7602\n", "porta_pubblica = 7700\nnome_pubblico = pc.tail1.ts.net\n", "nome_pubblico = 1.2.3.4\n"} {
 		if _, err := Leggi(scrivi(testo)); err == nil {
 			t.Fatalf("%q deve dare errore", testo)
 		}

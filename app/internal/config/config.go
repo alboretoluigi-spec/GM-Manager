@@ -58,8 +58,8 @@ func Predefinita() Config {
 	return Config{
 		CartellaDati:       filepath.Join(prog, "Gaster Bless"),
 		CartellaMedia:      filepath.Join(prog, "Gaster Bless", "Media"),
-		PortaHTTPS:         7600,
-		PortaBenvenuto:     7601, // non 7680: è usata da Windows Update (Ottimizzazione recapito)
+		PortaHTTPS:         7700, // 7700 e 7701: non si scontrano con altre app del Master sulla 7600 e 7601
+		PortaBenvenuto:     7701, // non 7680: è usata da Windows Update (Ottimizzazione recapito)
 		AccessoEsterno:     "casa",
 		ServizioPubblico:   "tailscale",
 		RetiVPN:            []string{"100.64.0.0/10"},

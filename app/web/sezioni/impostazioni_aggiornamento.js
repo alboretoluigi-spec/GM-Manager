@@ -63,7 +63,7 @@ export function sezioneAggiornamento(imp) {
       stato ? el("p", { class: "piccolo tenue", testo: "Gaster Bless in funzione dal " + quando(stato.avviatoIl * 1000) + "." }) : null,
       !pronto && stato ? el("div", { class: "agg-esito agg-fallito" }, el("b", { testo: "Manca la preparazione una tantum. " }),
         "Clic destro su Start → «Terminale (amministratore)» e incolla, uno alla volta: ",
-        el("pre", { class: "agg-pre", testo: "cd C:\\Progetti\\Progetto_GasterBless\ngit pull\npowershell -ExecutionPolicy Bypass -File C:\\Progetti\\Progetto_GasterBless\\04_nuova_app\\strumenti\\aggiorna.ps1" })) : null,
+        el("pre", { class: "agg-pre", testo: "cd C:\\Progetti\\GM-Manager\ngit pull\npowershell -ExecutionPolicy Bypass -File C:\\Progetti\\GM-Manager\\app\\strumenti\\aggiorna.ps1" })) : null,
       messaggio || null,
       el("div", { class: "riga-flex" },
         el("button", { class: "agg-controlla", testo: "🔍 Controlla novità", disabled: lavoro || !(stato && stato.controlloPronto) || (stato && stato.inCorso), on: { click: controlla } }),

@@ -9,7 +9,7 @@ param([switch]$CancellaDati)
 $ErrorActionPreference = 'Continue'
 $prog = Join-Path $env:ProgramFiles 'GasterBless'
 $dati = Join-Path $env:ProgramData 'GasterBless'
-if (Get-Service Gaster Bless -ErrorAction SilentlyContinue) { Stop-Service Gaster Bless -Force; & sc.exe delete Gaster Bless | Out-Host }
+if (Get-Service GasterBless -ErrorAction SilentlyContinue) { Stop-Service GasterBless -Force; & sc.exe delete GasterBless | Out-Host }
 Get-NetFirewallRule -DisplayName 'Gaster Bless*' -ErrorAction SilentlyContinue | Remove-NetFirewallRule
 Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -match 'GasterBless' } | Remove-Item
 Remove-Item (Join-Path ([Environment]::GetFolderPath('CommonDesktopDirectory')) 'GasterBless.lnk') -ErrorAction SilentlyContinue

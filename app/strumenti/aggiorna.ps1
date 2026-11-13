@@ -1,6 +1,6 @@
 ﻿<#
   Aggiornamento di Gaster Bless sul PC del Master, in un solo comando. Va eseguito come amministratore:
-      powershell -ExecutionPolicy Bypass -File C:\Progetti\Progetto_GasterBless\04_nuova_app\strumenti\aggiorna.ps1
+      powershell -ExecutionPolicy Bypass -File C:\Progetti\GM-Manager\app\strumenti\aggiorna.ps1
   Cosa fa: scarica gli aggiornamenti da GitHub (git pull), ricrea GasterBless.exe con Go e lo reinstalla con
   installa.ps1 (ferma Gaster Bless, sostituisce il programma, la riavvia). Dati e contenuti restano dove sono.
 #>

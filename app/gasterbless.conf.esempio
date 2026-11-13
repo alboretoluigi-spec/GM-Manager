@@ -10,10 +10,10 @@ cartella_dati = C:\ProgramData\GasterBless
 # cartella Documenti\GasterBless\GasterBlessDati (che poi si può eliminare).
 cartella_media = C:\ProgramData\GasterBless\Media
 
-# Porta dell'app (https://<indirizzo del PC>:7600) e porta della pagina per installare il certificato
-# sui telefoni (http://<indirizzo del PC>:7601; 0 = disattivata).
-porta_https = 7600
-porta_benvenuto = 7601
+# Porta dell'app (https://<indirizzo del PC>:7700) e porta della pagina per installare il certificato
+# sui telefoni (http://<indirizzo del PC>:7701; 0 = disattivata).
+porta_https = 7700
+porta_benvenuto = 7701
 
 # Interfaccia di ascolto: vuoto = tutte (Wi-Fi e cavo).
 indirizzo =

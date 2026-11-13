@@ -117,7 +117,7 @@ async function registrazione(radice, invito) {
   }
   const nome = el("input", { autocomplete: "nickname", required: true, maxlength: "40", minlength: "2" });
   // Codice d'invito scritto a mano: WhatsApp rende cliccabile solo la parte numerica dei link con indirizzo e porta
-  // (http://192.168.x.x:7601/?invito=…), quindi spesso il codice non arriva con il link.
+  // (http://192.168.x.x:7701/?invito=…), quindi spesso il codice non arriva con il link.
   const codice = invito ? null : el("input", { autocomplete: "off", autocapitalize: "characters", spellcheck: "false", maxlength: "40", placeholder: "per esempio U89S6U3B2DFD" });
   const tel = campoTelefono();
   const pw = campoPassword();

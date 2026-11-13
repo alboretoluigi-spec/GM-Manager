@@ -39,8 +39,8 @@ $ok = Read-Host "Ripristino $($bak.Name): Gaster Bless verrà fermata per qualch
 if ($ok -ne 'SI' -and $ok -ne 'si' -and $ok -ne 'Si') { Ferma "Annullato: nulla è cambiato." }
 
 Write-Host "`nFermo Gaster Bless..."
-Stop-Service Gaster Bless -ErrorAction SilentlyContinue
-for ($i = 0; $i -lt 30 -and (Get-Service Gaster Bless -ErrorAction SilentlyContinue).Status -ne 'Stopped'; $i++) { Start-Sleep 1 }
+Stop-Service GasterBless -ErrorAction SilentlyContinue
+for ($i = 0; $i -lt 30 -and (Get-Service GasterBless -ErrorAction SilentlyContinue).Status -ne 'Stopped'; $i++) { Start-Sleep 1 }
 Start-Sleep 2
 
 $env:GASTERBLESS_CODICE_RIPRISTINO = $codice
@@ -48,7 +48,7 @@ try { $risultato = ((& $exe -config $conf ripristina $bak.FullName 2>&1) | ForEa
 finally { Remove-Item Env:\GASTERBLESS_CODICE_RIPRISTINO -ErrorAction SilentlyContinue; $codice = $null }
 
 Write-Host "Riavvio Gaster Bless..."
-Start-Service Gaster Bless -ErrorAction SilentlyContinue
+Start-Service GasterBless -ErrorAction SilentlyContinue
 if ($esito -ne 0) { Ferma ($risultato.Trim() + "`n`nGasterBless è stata riavviata con i dati di prima (nulla è cambiato).") }
 Write-Host "`n$($risultato.Trim())" -ForegroundColor Green
 Write-Host "Gaster Bless è di nuovo accesa: apri l'app e controlla che i dati siano quelli del backup."

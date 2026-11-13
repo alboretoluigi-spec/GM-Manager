@@ -131,7 +131,7 @@ export async function mostra(corpo) {
     // Il QR porta alla pagina di benvenuto (certificato), che poi rimanda alla registrazione con il codice.
     const link = base + "/?invito=" + codice;
     // Messaggio per WhatsApp: WhatsApp rende cliccabile solo la parte numerica di un link con indirizzo e porta
-    // (http://192.168.1.202:7601/…), che così non funziona. Indirizzo da scrivere a mano e codice a parte; il link
+    // (http://192.168.1.202:7701/…), che così non funziona. Indirizzo da scrivere a mano e codice a parte; il link
     // per fuori casa (nome .ts.net) invece WhatsApp lo riconosce intero.
     const messaggio = "Benvenuto in Gaster Bless! 🦇\n\n" +
       (remoto ? "🏠 A casa del Master (sul suo Wi-Fi):\n" : "Collegati al Wi-Fi di casa del Master, poi:\n") +

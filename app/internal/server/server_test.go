@@ -132,7 +132,7 @@ func TestProtezioneCSRFeOrigine(t *testing.T) {
 func TestQRLeggibile(t *testing.T) {
 	a, master, gioc, _, _, _ := preparaPartita(t)
 	get := func(c *cliente) *http.Response {
-		r, err := c.c.Get(a.srv.URL + "/api/v1/qr.png?t=https%3A%2F%2F192.168.1.10%3A7600%2F%3Finvito%3Dabc")
+		r, err := c.c.Get(a.srv.URL + "/api/v1/qr.png?t=https%3A%2F%2F192.168.1.10%3A7700%2F%3Finvito%3Dabc")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -178,18 +178,18 @@ func TestCacheDellePagine(t *testing.T) {
 func TestPaginaBenvenuto(t *testing.T) {
 	a := nuovoAmbiente(t)
 	w := httptest.NewRecorder()
-	a.s.benvenuto().ServeHTTP(w, httptest.NewRequest("GET", "http://192.168.1.10:7601/?invito=abc", nil))
+	a.s.benvenuto().ServeHTTP(w, httptest.NewRequest("GET", "http://192.168.1.10:7701/?invito=abc", nil))
 	corpo := w.Body.String()
-	if !strings.Contains(corpo, `href="https://192.168.1.10:7600/?invito=abc"`) || !strings.Contains(corpo, "Entra in Gaster Bless") || !strings.Contains(corpo, "Avanzate") {
+	if !strings.Contains(corpo, `href="https://192.168.1.10:7700/?invito=abc"`) || !strings.Contains(corpo, "Entra in Gaster Bless") || !strings.Contains(corpo, "Avanzate") {
 		t.Fatalf("pagina di benvenuto:\n%s", corpo)
 	} // iPhone: percorso guidato del certificato (obbligatorio su Safari) con controllo prima di entrare.
-	r := httptest.NewRequest("GET", "http://192.168.1.10:7601/", nil)
+	r := httptest.NewRequest("GET", "http://192.168.1.10:7701/", nil)
 	r.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1")
 	w = httptest.NewRecorder()
 	a.s.benvenuto().ServeHTTP(w, r)
 	corpo = w.Body.String()
-	if !strings.Contains(corpo, `<body class="ios">`) || !strings.Contains(corpo, "Profilo scaricato") || !strings.Contains(corpo, `"https://192.168.1.10:7600/manifest.webmanifest"`) ||
-		!strings.Contains(w.Header().Get("Content-Security-Policy"), "connect-src https://192.168.1.10:7600") {
+	if !strings.Contains(corpo, `<body class="ios">`) || !strings.Contains(corpo, "Profilo scaricato") || !strings.Contains(corpo, `"https://192.168.1.10:7700/manifest.webmanifest"`) ||
+		!strings.Contains(w.Header().Get("Content-Security-Policy"), "connect-src https://192.168.1.10:7700") {
 		t.Fatalf("pagina di benvenuto per iPhone:\n%s", corpo)
 	}
 }

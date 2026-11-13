@@ -79,7 +79,14 @@ func TestMieiRegolamenti(t *testing.T) {
 		{"rotto.pdf", []byte("%PDF-1.7\nmanca la fine"), 400, "danneggiato"},
 		{"finto.pdf", []byte("<html>non sono un pdf</html>"), 400, "danneggiato"},
 		{"senza.docx", docxFinto()[:30], 400, "danneggiato"},
-		{"vuoto.docx", func() []byte { var b bytes.Buffer; z := zip.NewWriter(&b); w, _ := z.Create("altro.xml"); w.Write([]byte("x")); z.Close(); return b.Bytes() }(), 400, "danneggiato"},
+		{"vuoto.docx", func() []byte {
+			var b bytes.Buffer
+			z := zip.NewWriter(&b)
+			w, _ := z.Create("altro.xml")
+			w.Write([]byte("x"))
+			z.Close()
+			return b.Bytes()
+		}(), 400, "danneggiato"},
 		{"rotto.rtf", []byte(`{\rtf1 testo senza chiusura`), 400, "danneggiato"},
 		{"falso.epub", []byte("non è uno zip"), 400, "danneggiato"},
 		{"binario.txt", []byte("testo\x00\x01\x02 binario"), 400, "non è un testo"},
@@ -140,7 +147,7 @@ func TestMieiRegolamenti(t *testing.T) {
 		t.Fatalf("versione: %v", b)
 	}
 	m.deve(400, "PATCH", "/regolamenti/miei/"+txt["id"].(string), map[string]any{"versioneDi": docx["id"]})  // ha già versioni
-	m.deve(400, "PATCH", "/regolamenti/miei/"+docx["id"].(string), map[string]any{"versioneDi": p["id"]})  // p è una versione
+	m.deve(400, "PATCH", "/regolamenti/miei/"+docx["id"].(string), map[string]any{"versioneDi": p["id"]})    // p è una versione
 	m.deve(400, "PATCH", "/regolamenti/miei/"+docx["id"].(string), map[string]any{"versioneDi": docx["id"]}) // sé stesso
 
 	// sostituzione del file: nuovi contenuti e nuovo testo, stessi dati
