@@ -31,6 +31,42 @@ func TestFormuleSchedaLibera(t *testing.T) {
 	}
 }
 
+// Modelli di partenza delle famiglie (C4d): tutti validi, con punti ferita e tiri con la meccanica; iniziativa per
+// valore senza dadi; valute.
+func TestModelliFamiglie(t *testing.T) {
+	a := nuovoAmbiente(t)
+	for _, m := range a.s.moduliDiGioco().Moduli {
+		b, _ := json.Marshal(modelloBasePer(m.ID))
+		if _, err := validaModello(b); err != nil {
+			t.Errorf("modello di %s: %v", m.ID, err)
+		}
+		x := modelloBasePer(m.ID)
+		if x.PF == "" {
+			t.Errorf("modello di %s senza punti ferita", m.ID)
+		}
+		if m.Tiro != "" {
+			mecc := false
+			for _, s := range x.Sezioni {
+				for _, c := range s.Campi {
+					mecc = mecc || c.Meccanica
+				}
+			}
+			if !mecc {
+				t.Errorf("modello di %s senza tiri con la meccanica", m.ID)
+			}
+		}
+	}
+	if v, nat, testo := tiroIniziativa("12 + 3", 0); v != 15 || nat != nil || !strings.Contains(testo, "valore 15") {
+		t.Fatalf("iniziativa per valore: %d %v %s", v, nat, testo)
+	}
+	if _, err := validaModello([]byte(`{"sezioni":[{"titolo":"A","campi":[{"id":"oro","nome":"Oro","tipo":"risorsa"}]}],"valute":["oro"]}`)); err == nil {
+		t.Fatal("una valuta deve essere un campo numero")
+	}
+	if _, err := validaModello([]byte(`{"sezioni":[{"titolo":"A","campi":[{"id":"des","nome":"Des","tipo":"numero"}]}],"iniziativa":"{des} + 2"}`)); err != nil {
+		t.Fatalf("iniziativa per valore nel modello: %v", err)
+	}
+}
+
 // Scheda libera (fase 3c, C4b): modello di base, modello personalizzato con i controlli, gioco e modello di un
 // personaggio, ritorno al modello di base, solo il Master cambia il modello.
 func TestSchedaLibera(t *testing.T) {

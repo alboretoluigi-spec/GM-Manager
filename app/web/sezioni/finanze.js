@@ -1,9 +1,11 @@
 // Sezione «💰 Finanze». Master: modifiche da autorizzare, monete di tutti i personaggi (dare o togliere), registro dei
 // movimenti, ricompense automatiche. Giocatore: le monete dei suoi personaggi, le sue richieste, «Trasferisci», registro.
-import { el, svuota, api, avviso, quando, tempoReale } from "../ui/ui.js";
+import { el, svuota, api, avviso, quando, tempoReale, dialogo } from "../ui/ui.js";
 import { apriTrasferimento, decidiRichiesta, moStr } from "../ui/finanze.js";
 
 export async function mostra(corpo, { io }) {
+  // Giochi diversi dalla quinta edizione: le valute del modello della scheda (fase 3c, C4d)
+  if (io.gioco && io.gioco.modulo && io.gioco.modulo.id !== "d20-5e") return mostraValute(corpo, io);
   const master = io.utente.ruolo === "master";
   const box = el("div", { class: "largo" });
   svuota(corpo, box);
@@ -58,3 +60,62 @@ export async function mostra(corpo, { io }) {
   const vie = [tempoReale.su("finanze.movimento", () => disegna()), tempoReale.su("finanze.richiesta", () => disegna()), tempoReale.su("finanze.decisione", () => disegna())];
   return () => vie.forEach((f) => f());
 }
+
+// ===== Valute del gioco (fase 3c, C4d, internal/server/valute.go) =====
+// Il denaro sta nei campi «valute» del modello della scheda libera. Master: dà o toglie; tutti: trasferire ad altri
+// personaggi con la stessa valuta; registro dei movimenti.
+async function mostraValute(corpo, io) {
+  const master = io.utente.ruolo === "master";
+  const box = el("div", { class: "largo" });
+  svuota(corpo, box);
+  async function disegna() {
+    let f;
+    try { f = await api("/valute"); } catch (e) { svuota(box, el("p", { class: "errore", testo: e.message })); return; }
+    svuota(box,
+      el("section", { class: "scheda-ui" }, el("h2", { testo: master ? "Denaro dei personaggi" : "Il tuo denaro" }),
+        f.personaggi.length ? el("div", { class: "griglia" }, f.personaggi.map((p) => el("div", { class: "fin-pg", "data-pg": p.id },
+          el("p", {}, el("b", { testo: p.nome }), p.giocatore && master ? el("span", { class: "tenue", testo: " · " + p.giocatore }) : null),
+          p.valute.map((v) => el("p", { class: "fin-tot", "data-valuta": v.id, testo: v.valore + " " + v.nome })),
+          el("div", { class: "riga-flex" },
+            el("button", { class: "piccolo", testo: "💸 Trasferisci", on: { click: () => trasferisci(p) } }),
+            master ? daiTogli(p) : null))))
+          : el("p", { class: "tenue", testo: "Nessun personaggio con una valuta. Le valute si scelgono nel modello della scheda della campagna (Campagne → «Modello della scheda»)." }),
+        el("p", { class: "tenue piccolo", testo: "Il denaro è un campo della scheda: si cambia anche dalla scheda (con l'approvazione del Master, se è attiva)." })),
+      el("section", { class: "scheda-ui" }, el("h2", { testo: "Movimenti" }),
+        f.registro.length ? el("ul", { class: "fin-registro" }, f.registro.map((r) => el("li", {},
+          el("span", { class: "tenue", testo: quando(r.quando) + " · " }), el("span", { testo: r.nome + ": " + r.testo }))))
+          : el("p", { class: "tenue", testo: "Nessun movimento." })));
+  }
+  function sceltaValuta(p) {
+    const s = el("select", { "aria-label": "Valuta" }, p.valute.map((v) => el("option", { value: v.id, testo: v.nome })));
+    if (p.valute.length === 1) s.hidden = true;
+    return s;
+  }
+  function daiTogli(p) {
+    const v = el("input", { type: "number", step: "1", placeholder: "±", class: "corto", "aria-label": "Importo da dare (+) o togliere (−) a " + p.nome });
+    const val = sceltaValuta(p);
+    const m = el("input", { maxlength: "120", placeholder: "Motivo", class: "corto", "aria-label": "Motivo" });
+    return el("span", { class: "riga-flex" }, v, val, m, el("button", { class: "piccolo", testo: "Applica", on: { click: async () => {
+      const importo = parseInt(v.value, 10) || 0;
+      if (!importo) return;
+      try { await api("/valute/" + encodeURIComponent(p.id) + "/master", { dati: { valuta: val.value, importo, motivo: m.value } }); disegna(); } catch (e) { avviso(e.message, "errore"); }
+    } } }));
+  }
+  async function trasferisci(p) {
+    let dest = [];
+    try { dest = await api("/finanze/" + encodeURIComponent(p.id) + "/destinatari"); } catch (e) { avviso(e.message, "errore"); return; }
+    const a = el("select", { "aria-label": "A chi" }, dest.map((d) => el("option", { value: d.id, testo: d.nome + (d.giocatore ? " (" + d.giocatore + ")" : "") })));
+    const val = sceltaValuta(p);
+    const q = el("input", { type: "number", min: 1, step: 1, valore: 1, class: "corto", "aria-label": "Quanto" });
+    dialogo("💸 Trasferisci da " + p.nome, el("div", { class: "riga-flex" }, a, q, val), { azioni: (chiudi) => el("div", { class: "azioni" },
+      el("button", { type: "button", testo: "Annulla", on: { click: chiudi } }),
+      el("button", { type: "button", class: "primario", testo: "Trasferisci", on: { click: async () => {
+        try { const r = await api("/valute/" + encodeURIComponent(p.id) + "/trasferisci", { dati: { a: a.value, valuta: val.value, importo: parseInt(q.value, 10) || 0 } }); chiudi(); avviso(r.testo); disegna(); }
+        catch (e) { avviso(e.message, "errore"); }
+      } } })) });
+  }
+  await disegna();
+  const via = tempoReale.su("finanze.movimento", () => disegna());
+  return () => via();
+}
+

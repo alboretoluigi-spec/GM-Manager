@@ -64,10 +64,10 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
   prima di registrare dominio e marchio.
 
 ## Prossimo passo
-0000. **Fase 3c** (`docs/PIANO.md` §5.2): C1–C3, **C4a, C4b e C4c fatti** (interfaccia adattiva, scheda libera, tiri delle
-   famiglie con esito in parole: `docs/MECCANICHE.md`). Prossimo **C4d – modelli di scheda e iniziativa per ogni famiglia**
-   (sulla scheda libera, solo campi e calcoli) **e valute del gioco nelle Finanze**, poi C4e (bestiario per famiglia,
-   guida) (`docs/INTERFACCIA_ADATTIVA.md` §6).
+0000. **Fase 3c** (`docs/PIANO.md` §5.2): C1–C3, **C4a–C4d fatti** (interfaccia adattiva, scheda libera, tiri delle famiglie,
+   modelli di partenza per famiglia, iniziativa per valore, valute nelle Finanze). Prossimo **C4e – bestiario con schede di
+   creatura per famiglia, prove e guida** (`docs/INTERFACCIA_ADATTIVA.md` §6); poi C5 (pulizia: nomi di manuali ancora
+   visibili, regole scritte nel codice).
 000. **App di base installabile (richiesta del Master del 13/11)**: script sistemati (porta 7700/7701, servizio e cartelle
    `GasterBless`, percorsi `C:\Progetti\GM-Manager\app`, niente passaggi di Barovia), pacchetto completo
    (`app/strumenti/crea-pacchetto.ps1`), icona «GB», guida `docs/INSTALLAZIONE.md`. **Prove tutte verdi** (13/11): il tasto «Aggiorna»
@@ -89,6 +89,7 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 ## Registro sessioni
 | Data | Chi | Cosa |
 |---|---|---|
+| 2026-11-14 | Claude Code (cloud) | **C4d fatto**: `internal/server/modelli_famiglie.go` (modello di partenza della scheda per ognuna delle 10 famiglie, nomi generici, tiri con la meccanica, punti ferita, difesa, iniziativa, valuta; tutte le famiglie «pronte» nel registro), iniziativa per valore senza dadi (modello, riepilogo, tracker), `internal/server/valute.go` (`/api/v1/valute`: elenco, il Master dà o toglie, trasferimenti tra personaggi con la stessa valuta, registro, scheda aggiornata), Finanze di nuovo per tutti i giochi (monete in 5e, valute negli altri), editor del modello con valute. Prove: Go (`TestModelliFamiglie`, `TestValute`) e browser scheda_libera 18/18, meccaniche 12/12, gioco 14/14. |
 | 2026-11-14 | Claude Code (cloud) | **C4c fatto**: `internal/server/meccaniche.go` (tiro «dadi.meccanica» per 10 famiglie con esito in parole, successi; niente tabella della sfortuna), campi `meccanica`/`esito`/`esitoTesto`/`successi` nel tiro; registro con `tiro` per famiglia; `web/ui/meccaniche.js` (pannello per meccanica), sezione Dadi con il pannello del gioco attivo, esito sotto il lancio e negli avvisi; scheda libera: campi e tiri con la meccanica del gioco (`meccanica`, `valore`), i valori iniziali del modello non contano più come modifiche. Guida `docs/MECCANICHE.md`. Prove: Go (`TestMeccaniche` con dadi pilotati, `TestSchedaLibera` ampliata) e browser meccaniche 12/12. Lavoro ripreso dopo il riavvio del processo (nessuna perdita). |
 | 2026-11-13 | Claude Code (cloud) | **C4b fatto**: scheda libera. Migrazione 044 (modello della scheda della campagna; un gruppo nuovo va nella campagna attiva), `internal/server/scheda_libera.go` (modello con controlli, formule dei dadi, `/campagne/{id}/modello-scheda`, `/personaggi/{id}/modello-scheda`, iniziativa con la formula nel tracker), riepilogo con `initiativeFormula`, `/personaggi/{id}` con il gioco; pagina `web/scheda_libera/` (stesso protocollo della scheda 5e: salvataggi, approvazione, punti ferita del tracker, tiri sul server), sezione Schede che sceglie la scheda in base al gioco della campagna del personaggio, editor del modello (`web/sezioni/modello_scheda.js`, esporta/importa/base); Finanze solo nella quinta edizione; pulsante Sanità mentale solo nei giochi che la hanno. Prove: Go verdi (`TestFormuleSchedaLibera`, `TestSchedaLibera`, `TestGiocoAttivo` ampliata); browser scheda_libera 14/14. |
 | 2026-11-13 | Claude Code (cloud) | **C4a fatto**: registro dei giochi `app/web/sistemi/moduli.json` (12 moduli: quinta edizione, scheda libera e 10 famiglie, nomi descrittivi), migrazione 043 (gioco di ogni campagna), `internal/server/gioco.go` (campagna attiva, `/api/v1/gioco`, avviso a tutti), `/io` con il gioco; nelle pagine: «Che cosa giochiamo oggi?» dopo l'accesso del Master, campagna e gioco sotto il logo con «Cambia campagna», menu e barra filtrati, sezioni nascoste anche dall'indirizzo, giocatori aggiornati in tempo reale; gioco nella pagina Campagne. Prove: Go verdi (nuova `TestGiocoAttivo`); browser gioco 14/14 e tutte le altre verdi. |
@@ -114,8 +115,6 @@ tutte le schermate nella fase 3b, insieme alla copia del codice (oggi il reposit
 | 2026-11-13 | Claude Code (cloud) | Fase 3a: repository collegato alla sessione; creati `CLAUDE.md`, `README.md`, `.gitignore`, `STATO_LAVORO.md`, `docs/PIANO.md` (dall'inventario di Barovia, con il nome GM Manager e le fasi 3a-3d), `docs/LICENZE_E_CONTENUTI.md` (regole, attribuzione SRD 5.1, componenti di terzi). |
 
 ## File creati o modificati nell'ultima sessione
-C4c – nuovi: `docs/MECCANICHE.md`, `app/internal/server/meccaniche.go`, `meccaniche_test.go`, `app/web/ui/meccaniche.js`,
-`app/test/browser/meccaniche.js`. Modificati: `app/internal/server/dadi.go`, `gioco.go`, `scheda_libera.go`, `scheda_libera_test.go`,
-`app/web/sistemi/moduli.json`, `app/web/ui/dadi.js`, `app/web/sezioni/dadi.js`, `schede.js`, `modello_scheda.js`,
-`app/web/scheda_libera/scheda_libera.js`, `app/web/stile/base.css`, `docs/SCHEDA_LIBERA.md`, `docs/INTERFACCIA_ADATTIVA.md`,
-`docs/PIANO.md`, `STATO_LAVORO.md`.
+C4d – nuovi: `app/internal/server/modelli_famiglie.go`, `valute.go`, `valute_test.go`. Modificati: `app/internal/server/scheda_libera.go`,
+`scheda_libera_test.go`, `personaggi.go`, `server.go`, `app/web/sistemi/moduli.json`, `app/web/sezioni/finanze.js`, `modello_scheda.js`,
+`app/test/browser/scheda_libera.js`, `docs/SCHEDA_LIBERA.md`, `docs/INTERFACCIA_ADATTIVA.md`, `docs/PIANO.md`, `STATO_LAVORO.md`.

@@ -717,6 +717,8 @@ func pulisciRiepilogo(raw json.RawMessage) string {
 	if f := strings.TrimSpace(in.InitiativeFormula); f != "" && len(f) <= 60 {
 		if _, err := leggiFormula(f); err == nil {
 			r.IniziativaFormula = f
+		} else if _, ok := sommaValori(f); ok && reValore.MatchString(f) { // ordine per valore, senza dadi
+			r.IniziativaFormula = f
 		}
 	}
 	for _, d := range in.HitDice {

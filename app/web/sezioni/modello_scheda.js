@@ -20,7 +20,8 @@ const CAMPI = [
     colonne: [["nome", "Nome"], ["formula", "Formula (es. 2d6 + {abilita})"], ["valore", "oppure valore per la meccanica (es. {forza} + {atletica})"]] },
   { k: "pf", t: "testo", n: "Punti ferita: identificativo del campo (risorsa o numero)" },
   { k: "difesa", t: "testo", n: "Difesa per il tracker: identificativo del campo numerico" },
-  { k: "iniziativa", t: "testo", n: "Formula dell'iniziativa (vuota: la decide il Master)" },
+  { k: "iniziativa", t: "testo", n: "Iniziativa: formula (es. 1d10 + {riflessi}) oppure un valore senza dadi per l'ordine (es. {destrezza}); vuota: la decide il Master" },
+  { k: "valute", t: "elenco", n: "Valute: identificativi dei campi numerici con il denaro, separati da virgole (es. denaro)" },
 ];
 
 /** Converte i valori iniziali scritti come testo nel tipo del campo. */
@@ -48,7 +49,7 @@ export async function apriModello(c) {
     catch { avviso("Il file non è un modello di scheda valido (JSON).", "errore"); }
   } } });
   dialogo("📜 Modello della scheda · " + c.nome, el("div", { class: "ce-editor" },
-    el("p", { class: "tenue piccolo", testo: (r.personalizzato ? "Modello personalizzato di questa campagna." : "Modello di base dell'app: adattalo al tuo gioco e salva.") +
+    el("p", { class: "tenue piccolo", testo: (r.personalizzato ? "Modello personalizzato di questa campagna." : "Modello di partenza per il gioco di questa campagna: adattalo e salva.") +
       " Le formule usano i dadi d4, d6, d8, d10, d12, d20, d100 e i campi numerici tra graffe, per esempio 2d6 + {forza} - 1." }),
     contenitore, errore, file), { largo: true, azioni: (chiudi) => el("div", { class: "azioni" },
     el("button", { type: "button", testo: "⬇ Esporta", on: { click: () => {

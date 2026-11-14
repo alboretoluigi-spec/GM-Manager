@@ -43,9 +43,10 @@ type modelloScheda struct {
 	Versione   int              `json:"versione"`
 	Sezioni    []sezioneModello `json:"sezioni"`
 	Tiri       []tiroModello    `json:"tiri"`
-	PF         string           `json:"pf"`         // id di un campo «risorsa» o «numero»: i punti ferita massimi
-	Difesa     string           `json:"difesa"`     // id di un campo «numero»: la difesa (come la CA) per il tracker
-	Iniziativa string           `json:"iniziativa"` // formula dell'iniziativa; vuota = la decide il Master
+	PF         string           `json:"pf"`               // id di un campo «risorsa» o «numero»: i punti ferita massimi
+	Difesa     string           `json:"difesa"`           // id di un campo «numero»: la difesa (come la CA) per il tracker
+	Iniziativa string           `json:"iniziativa"`       // formula dell'iniziativa, oppure un valore senza dadi (ordine per valore); vuota = la decide il Master
+	Valute     []string         `json:"valute,omitempty"` // campi numerici con il denaro del personaggio (Finanze, C4d)
 }
 
 var (
@@ -66,8 +67,8 @@ func modelloBase() modelloScheda {
 			{ID: "mente", Nome: "Mente", Tipo: "numero", Min: &zero, Max: &cento, Predefinito: 0, Tiro: "1d20 + {mente}"},
 			{ID: "spirito", Nome: "Spirito", Tipo: "numero", Min: &zero, Max: &cento, Predefinito: 0, Tiro: "1d20 + {spirito}"}}},
 		{Titolo: "Condizione", Campi: []campoModello{{ID: "salute", Nome: "Salute", Tipo: "risorsa", Predefinito: 10}, {ID: "difesa", Nome: "Difesa", Tipo: "numero", Predefinito: 10}}},
-		{Titolo: "Equipaggiamento e note", Campi: []campoModello{{ID: "equipaggiamento", Nome: "Equipaggiamento", Tipo: "elenco"}, {ID: "note", Nome: "Note", Tipo: "area"}}},
-	}, PF: "salute", Difesa: "difesa", Iniziativa: "1d20 + {mente}"}
+		sezEquip("Denaro"),
+	}, PF: "salute", Difesa: "difesa", Iniziativa: "1d20 + {mente}", Valute: []string{"denaro"}}
 }
 
 // termineFormula: un gruppo di dadi o un numero, con il segno.
@@ -237,7 +238,17 @@ func validaModello(raw []byte) ([]byte, error) {
 	}
 	if m.Iniziativa != "" {
 		if err := controllaFormula(m.Iniziativa, numerici); err != nil {
-			return nil, fmt.Errorf("iniziativa: %v", err)
+			if controllaValore(m.Iniziativa, numerici) != nil { // senza dadi: ordine per valore (es. «{destrezza}»)
+				return nil, fmt.Errorf("iniziativa: %v", err)
+			}
+		}
+	}
+	if len(m.Valute) > 5 {
+		return nil, fmt.Errorf("al massimo 5 valute")
+	}
+	for _, v := range m.Valute {
+		if !numerici[v] || risorse[v] {
+			return nil, fmt.Errorf("la valuta «%s» deve essere un campo «numero» del modello", v)
 		}
 	}
 	return json.Marshal(m)
@@ -248,7 +259,9 @@ func (s *Server) modelloDellaCampagna(id string) json.RawMessage {
 	var m string
 	s.DB.QueryRow(`SELECT modello_scheda FROM campagne WHERE id = ?`, id).Scan(&m)
 	if m == "" {
-		b, _ := json.Marshal(modelloBase())
+		var mod string
+		s.DB.QueryRow(`SELECT modulo FROM campagne WHERE id = ?`, id).Scan(&mod)
+		b, _ := json.Marshal(modelloBasePer(mod)) // modello di partenza della famiglia del gioco (modelli_famiglie.go)
 		return b
 	}
 	return json.RawMessage(m)
@@ -320,8 +333,15 @@ func (s *Server) rotteSchedaLibera(mux *http.ServeMux) {
 	}))
 }
 
-// tiroIniziativa: con la formula della scheda libera (es. «1d10 + 3», già con i valori) oppure d20 + bonus.
+// tiroIniziativa: con la formula della scheda libera (es. «1d10 + 3», già con i valori), con un valore senza dadi
+// (ordine per valore, es. «12») oppure d20 + bonus.
 func tiroIniziativa(formula string, bonus int) (v int, nat any, testo string) {
+	if formula != "" && reValore.MatchString(formula) {
+		somma, ok := sommaValori(formula)
+		if ok {
+			return somma, nil, " (valore " + itoa(somma) + ")"
+		}
+	}
 	if formula != "" {
 		if t, err := leggiFormula(formula); err == nil {
 			parti := []string{}
@@ -343,4 +363,34 @@ func tiroIniziativa(formula string, bonus int) (v int, nat any, testo string) {
 	}
 	d20 := dado(20)
 	return d20 + bonus, d20, " (d20 " + itoa(d20) + ")" + testoNaturale(d20)
+}
+
+// sommaValori: «12 + 3 - 1» → 14 (numeri interi, senza dadi).
+func sommaValori(f string) (int, bool) {
+	s := strings.ReplaceAll(f, " ", "")
+	if s == "" {
+		return 0, false
+	}
+	if s[0] != '+' && s[0] != '-' {
+		s = "+" + s
+	}
+	tot := 0
+	for len(s) > 0 {
+		segno := 1
+		if s[0] == '-' {
+			segno = -1
+		}
+		s = s[1:]
+		j := strings.IndexAny(s, "+-")
+		if j < 0 {
+			j = len(s)
+		}
+		n, err := strconv.Atoi(s[:j])
+		if err != nil || n > 9999 {
+			return 0, false
+		}
+		tot += segno * n
+		s = s[j:]
+	}
+	return tot, true
 }

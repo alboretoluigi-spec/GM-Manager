@@ -49,7 +49,7 @@ func TestGiocoAttivo(t *testing.T) {
 	}
 	// Cambia il gioco della campagna attiva: d100 accende la sanità mentale.
 	m.deve(200, "PATCH", "/campagne/"+id, map[string]any{"modulo": "d100"})
-	if y := gioco(g); !ha(y["sezioni"], "sanita") || y["modulo"].(map[string]any)["pronto"] != false {
+	if y := gioco(g); !ha(y["sezioni"], "sanita") || y["modulo"].(map[string]any)["pronto"] != true {
 		t.Fatalf("gioco d100: %v", y)
 	}
 	m.deve(400, "PATCH", "/campagne/"+id, map[string]any{"modulo": ""})

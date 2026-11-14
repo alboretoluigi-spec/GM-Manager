@@ -1,6 +1,6 @@
 {
   "versione": 1,
-  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. «pronto»: false = la scheda, i dadi e l'iniziativa del modulo arrivano nei passi C4b-C4e; fino ad allora vale la scheda libera. Le Finanze (monete della quinta edizione) restano solo nel suo modulo finché non arrivano le valute del gioco. «tiro»: il tiro della famiglia (internal/server/meccaniche.go, docs/MECCANICHE.md).",
+  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. Le famiglie usano la scheda libera con il loro modello di partenza (internal/server/modelli_famiglie.go) e il loro tiro; le Finanze usano le monete nella quinta edizione e le valute del modello negli altri giochi (valute.go). «tiro»: il tiro della famiglia (internal/server/meccaniche.go, docs/MECCANICHE.md).",
   "comuni": [
     "sessioni",
     "documenti",
@@ -21,6 +21,7 @@
     "assistente",
     "lore",
     "bestiario",
+    "finanze",
     "impostazioni",
     "profilo",
     "privacy"
@@ -32,7 +33,6 @@
       "meccanica": "d20 + modificatore contro una difficoltà",
       "pronto": true,
       "sezioni": [
-        "finanze",
         "contenuti",
         "oggetti_magici",
         "strumenti",
@@ -56,7 +56,7 @@
       "id": "d100",
       "nome": "Percentuale d100",
       "meccanica": "d100 sotto il valore dell'abilità",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [
         "sanita"
       ],
@@ -67,7 +67,7 @@
       "id": "riserva-d10",
       "nome": "Riserva di d10",
       "meccanica": "riserva di d10, si contano i successi",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "riserva-d10"
@@ -76,7 +76,7 @@
       "id": "riserva-d6",
       "nome": "Riserva di d6",
       "meccanica": "riserva di d6, si contano i successi",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "riserva-d6"
@@ -85,7 +85,7 @@
       "id": "2d6-fasce",
       "nome": "2d6 a fasce",
       "meccanica": "2d6 + modificatore: fallimento, successo parziale, successo pieno",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "2d6-fasce"
@@ -94,7 +94,7 @@
       "id": "d10-somma",
       "nome": "d10 + caratteristica + abilità",
       "meccanica": "d10 più caratteristica e abilità contro una difficoltà",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "d10-somma"
@@ -103,7 +103,7 @@
       "id": "passi-esplosivi",
       "nome": "Dadi a passi esplosivi",
       "meccanica": "un dado da d4 a d12 per tratto, il massimo si ritira e si somma",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "passi-esplosivi"
@@ -112,7 +112,7 @@
       "id": "fate",
       "nome": "Dadi Fate",
       "meccanica": "4dF (−, vuoto, +) più l'abilità sulla scala degli aggettivi",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "fate"
@@ -121,7 +121,7 @@
       "id": "3d6-sotto",
       "nome": "3d6 sotto il valore",
       "meccanica": "3d6 uguale o sotto l'abilità",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "3d6-sotto"
@@ -130,7 +130,7 @@
       "id": "d20-sotto",
       "nome": "d20 sotto il valore",
       "meccanica": "d20 uguale o sotto la caratteristica o l'abilità",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "d20-sotto"
@@ -139,7 +139,7 @@
       "id": "narrativi",
       "nome": "Dadi narrativi con simboli",
       "meccanica": "dadi con simboli di successo, vantaggio e minaccia",
-      "pronto": false,
+      "pronto": true,
       "sezioni": [],
       "barra": [],
       "tiro": "narrativi"

@@ -1,6 +1,6 @@
 // Scheda libera (fase 3c, C4b): campagna con la scheda libera; il Master cambia il modello (nuovo campo con un tiro)
 // nella pagina Campagne; il giocatore apre la scheda del suo personaggio, la compila, tira i dadi (dal campo e dai
-// pulsanti) e ritrova i valori dopo aver ricaricato; Finanze nascoste fuori dalla quinta edizione; telefono.
+// pulsanti) e ritrova i valori dopo aver ricaricato; Finanze con le valute del modello (C4d); telefono.
 const path = require('path');
 const { BASE, ok, browser, master, chiudiFinestre, fine } = require('./comune');
 const chiama = (p, percorso, opz) => p.evaluate(([percorso, opz]) => import('/ui/ui.js').then((m) => m.api(percorso, opz)), [percorso, opz]);
@@ -54,7 +54,7 @@ const chiama = (p, percorso, opz) => p.evaluate(([percorso, opz]) => import('/ui
   await g.goto(BASE + '/sessioni', { waitUntil: 'networkidle' });
   await chiudiFinestre(g);
   const pg = (await chiama(g, '/personaggi', { dati: { gruppo: gr, nome: 'Arin' } })).id;
-  ok(!(await g.locator('nav.menu a').allTextContents()).some((t) => /Finanze/.test(t)), 'scheda libera: niente Finanze (monete della quinta edizione)');
+  ok((await g.locator('nav.menu a').allTextContents()).some((t) => /Finanze/.test(t)), 'scheda libera: Finanze con le valute del gioco');
   await g.goto(BASE + '/schede/' + pg, { waitUntil: 'networkidle' });
   await chiudiFinestre(g);
   ok(/scheda_libera/.test(await g.locator('iframe.riquadro-scheda').getAttribute('src')), 'si apre la scheda libera');
@@ -92,6 +92,26 @@ const chiama = (p, percorso, opz) => p.evaluate(([percorso, opz]) => import('/ui
   const elenco = await chiama(g, '/personaggi');
   const io = (Array.isArray(elenco) ? elenco : elenco.lista || elenco.personaggi || []).find((x) => x.id === pg) || {};
   ok(io.riepilogo && io.riepilogo.pfMax === 10 && io.riepilogo.ca === 10 && /^1d20 \+ \d+$/.test(io.riepilogo.iniziativaFormula || ''), 'riepilogo con punti ferita, difesa e formula dell\'iniziativa: ' + JSON.stringify(io.riepilogo));
+
+  // Finanze con le valute: il Master dà 30 Denaro, il giocatore lo vede nelle Finanze e nella scheda.
+  await p.goto(BASE + '/finanze', { waitUntil: 'networkidle' });
+  await chiudiFinestre(p);
+  const box = p.locator('.fin-pg').filter({ hasText: 'Arin' });
+  await box.waitFor({ timeout: 10000 });
+  ok(/0 Denaro/.test(await box.textContent()), 'Finanze del Master: denaro del personaggio');
+  await box.locator('input[type=number]').fill('30');
+  await box.locator('input[placeholder="Motivo"]').fill('ricompensa');
+  await box.locator('button:has-text("Applica")').click();
+  await p.waitForTimeout(1000);
+  ok(/30 Denaro/.test(await box.textContent()) && /Il Master dà 30 Denaro a Arin/.test(await p.locator('.fin-registro').textContent()), 'il Master dà 30 Denaro, con il registro');
+  await g.goto(BASE + '/finanze', { waitUntil: 'networkidle' });
+  await chiudiFinestre(g);
+  await g.locator('.fin-pg').waitFor({ timeout: 10000 });
+  ok(/30 Denaro/.test(await g.locator('.fin-pg').textContent()), 'il giocatore vede il suo denaro');
+  await g.goto(BASE + '/schede/' + pg, { waitUntil: 'networkidle' });
+  await chiudiFinestre(g);
+  await f.locator('#c-denaro').waitFor({ timeout: 10000 });
+  ok(await f.locator('#c-denaro').inputValue() === '30', 'il denaro è anche nella scheda');
 
   // Telefono.
   const tel = await b.newContext({ ignoreHTTPSErrors: true, viewport: { width: 390, height: 844 }, storageState: await cg.storageState() });

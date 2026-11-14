@@ -176,6 +176,7 @@ func (s *Server) Handler() http.Handler {
 	s.rotteScaricaRegolamenti(mux) // download dei documenti consentiti (L2)
 	s.rotteMieiRegolamenti(mux)    // MY RULEBOOKS
 	s.rotteRegolamenti(mux)        // RPG RULEBOOK LIBRARY e MY RULEBOOKS (docs/RULEBOOK_LIBRARY.md, 2026-11-13)
+	s.rotteValute(mux)             // valute del gioco nelle Finanze (fase 3c, C4d)
 	s.rotteSchedaLibera(mux)       // scheda libera: modello della campagna (fase 3c, C4b)
 	s.rotteGioco(mux)              // interfaccia adattiva: campagna e gioco attivi (fase 3c, C4a)
 	s.rotteContenuti(mux)          // pacchetti di contenuti importati dall'utente (fase 3c, C1)
