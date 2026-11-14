@@ -59,6 +59,9 @@ func TestSchedaLibera(t *testing.T) {
 		sez(`{"id":"nome","nome":"Nome","tipo":"testo"}`) + `,"pf":"nome"}`:                                                "i punti ferita devono essere",
 		sez(`{"id":"forza","nome":"Forza","tipo":"numero"}`) + `,"colore":"blu"}`:                                          `campo sconosciuto \"colore\"`,
 		`{"sezioni":[]}`: "da 1 a 20 sezioni",
+		sez(`{"id":"forza","nome":"Forza","tipo":"numero"}`) + `,"tiri":[{"nome":"Colpo","formula":"2d6","valore":"{forza}"}]}`: "uno dei due",
+		sez(`{"id":"forza","nome":"Forza","tipo":"numero"}`) + `,"tiri":[{"nome":"Colpo"}]}`:                                    "uno dei due",
+		sez(`{"id":"forza","nome":"Forza","tipo":"numero"}`) + `,"tiri":[{"nome":"Colpo","valore":"{forza} + 1d6"}]}`:           "somma di campi e numeri",
 	}
 	for corpo, atteso := range casi {
 		if e := salva(corpo, 400); !strings.Contains(e, atteso) {
@@ -67,8 +70,8 @@ func TestSchedaLibera(t *testing.T) {
 	}
 	buono := `{"sezioni":[{"titolo":"Valori","campi":[{"id":"forza","nome":"Forza","tipo":"numero","min":0,"max":10,"predefinito":3,"tiro":"{forza}d6"},
 		{"id":"riflessi","nome":"Riflessi","tipo":"numero","predefinito":2},{"id":"vita","nome":"Vita","tipo":"risorsa","predefinito":12},
-		{"id":"armatura","nome":"Armatura","tipo":"numero","predefinito":1}]}],
-		"tiri":[{"nome":"Colpo","formula":"2d6 + {forza}"}],"pf":"vita","difesa":"armatura","iniziativa":"1d10 + {riflessi}"}`
+		{"id":"armatura","nome":"Armatura","tipo":"numero","predefinito":1},{"id":"furtivita","nome":"Furtività","tipo":"numero","meccanica":true}]}],
+		"tiri":[{"nome":"Colpo","formula":"2d6 + {forza}"},{"nome":"Agguato","valore":"{furtivita} + {riflessi} - 1"}],"pf":"vita","difesa":"armatura","iniziativa":"1d10 + {riflessi}"}`
 	if r := salva(buono, 200); !strings.Contains(r, `"personalizzato":true`) || !strings.Contains(r, `"iniziativa":"1d10 + {riflessi}"`) {
 		t.Fatalf("modello salvato: %s", r)
 	}

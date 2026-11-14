@@ -247,6 +247,16 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
           .then((r) => invia({ type: "scheda:tiroRisultato", r })).catch((e) => invia({ type: "scheda:tiroErrore", errore: e.message }));
         break;
       }
+      case "scheda:tiroMeccanica": { // scheda libera: tiro con la meccanica del gioco della campagna (C4c)
+        const mod = info.gioco && info.gioco.modulo;
+        import("../ui/meccaniche.js").then(({ pannelloMeccanica, haMeccanica }) => {
+          if (!haMeccanica(mod)) { invia({ type: "scheda:tiroErrore", errore: "Questo gioco non ha un tiro dedicato: nel modello usa una formula." }); return; }
+          let chiudi = null;
+          chiudi = dialogo("🎲 " + (String(m.etichetta || "") || "Tiro"), pannelloMeccanica(mod, { valore: parseInt(m.valore, 10) || 0, etichetta: String(m.etichetta || "").slice(0, 40),
+            personaggio: pg.id, scheda: true, master: io_.ruolo === "master", dopo: (r) => { if (chiudi) chiudi(); invia({ type: "scheda:tiroRisultato", r }); } }));
+        });
+        break;
+      }
       case "scheda:tiro": // clic su un tiro salvezza, un'abilità o una prova: si chiede come tirare (sceltaTiro)
         sceltaTiro(m);
         break;
@@ -272,6 +282,11 @@ async function scheda(corpo, { io, titolo, azioni, vai }) {
         apriMiniSanita(pg.id);
         break;
       case "scheda:state":
+        // Scheda libera all'apertura (C4b): i valori iniziali del modello non sono modifiche del giocatore (come i
+        // predefiniti della scheda 5e letti con blank()): si considerano già salvati.
+        if (m.iniziale && libera) for (const [k, v] of Object.entries(appiattisci(m.state || {}))) {
+          if (!(k in salvato) && !Object.keys(salvato).some((x) => x.startsWith(k + ".") || k.startsWith(x + "."))) salvato[k] = v;
+        }
         ultimoStato = m;
         if (!modificabile || inConflitto) return;
         clearTimeout(attesa);

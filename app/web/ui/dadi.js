@@ -150,7 +150,7 @@ export function installaEffettiDadi(io) {
     if (!r) return;
     const mio = io() && r.chiId === io().id;
     // il Master vede anche i tiri dei giocatori fuori dallo scontro (2026-11-12)
-    if (!mio && (r.scontro || r.scheda || (io() && io().ruolo === "master"))) avviso("🎲 " + r.chi + ": " + (r.etichetta ? r.etichetta + " · " : "") + r.formula + " = " + r.totale, "", 5000);
+    if (!mio && (r.scontro || r.scheda || (io() && io().ruolo === "master"))) avviso("🎲 " + r.chi + ": " + (r.etichetta ? r.etichetta + " · " : "") + r.formula + " = " + r.totale + (r.esitoTesto ? " · " + r.esitoTesto : ""), "", 5000);
     // Lancio grafico al centro dello schermo per ogni tiro che questo utente vede (richiesta dell'utente,
     // 2026-11-06); gli effetti CRITICO/OOOPS e il tasto della sfortuna arrivano quando i dadi si fermano.
     const fermi = mostraLancio(r, mio);
@@ -289,6 +289,12 @@ export function lancioAutomatico({ dadi, totale, etichetta, formula, critico = f
 }
 
 /** Mostra il lancio; restituisce dopo quanti millisecondi i dadi sono fermi. */
+/** Nota sotto il totale: l'esito delle meccaniche delle famiglie (C4c) oppure 20/1 naturale del d20. */
+function notaTiro(r) {
+  if (r.esitoTesto) return r.esitoTesto;
+  return r.critico ? "20 naturale!" : r.fallimento ? "1 naturale" : r.modo && r.modo !== "normale" ? r.modo : "";
+}
+
 export function mostraLancio(r, mio) {
   if (!r || !r.dadi) return 0;
   if (chiudiLancio) chiudiLancio();
@@ -327,7 +333,7 @@ export function mostraLancio(r, mio) {
   const extra = dadi.length > vis.length ? el("div", { class: "lancio-extra", testo: "+" + (dadi.length - vis.length) + " dadi" }) : null;
   const tot = el("div", { class: "lancio-totale" + (r.critico ? " critico" : r.fallimento ? " fallimento" : ""), testo: String(r.totale) });
   const det = el("div", { class: "lancio-dettaglio", testo: r.formula });
-  const nota = r.critico ? "20 naturale!" : r.fallimento ? "1 naturale" : r.modo && r.modo !== "normale" ? r.modo : "";
+  const nota = notaTiro(r);
   const box = el("div", { class: "lancio-dadi", role: "status", "aria-live": "polite" },
     el("div", { class: "lancio-chi", testo: (mio ? "Il tuo tiro" : r.chi) + (r.etichetta ? " · " + r.etichetta : "") + (r.segreto ? " · segreto" : "") }),
     piano, extra, el("div", { class: "lancio-esito" }, tot, el("div", {}, det, nota ? el("div", { class: "lancio-nota", testo: nota }) : null)));
@@ -348,7 +354,7 @@ function lancio3D(r, mio) {
   }));
   const vis = dadi.slice(0, 10);
   const tot = el("div", { class: "lancio-totale" + (r.critico ? " critico" : r.fallimento ? " fallimento" : ""), testo: String(r.totale) });
-  const nota = r.critico ? "20 naturale!" : r.fallimento ? "1 naturale" : r.modo && r.modo !== "normale" ? r.modo : "";
+  const nota = notaTiro(r);
   const esito = el("div", { class: "lancio3d-esito", hidden: true },
     el("div", { class: "lancio-chi", testo: (mio ? "Il tuo tiro" : r.chi) + (r.etichetta ? " · " + r.etichetta : "") + (r.segreto ? " · segreto" : "") }),
     el("div", { class: "lancio-esito" }, tot, el("div", {}, el("div", { class: "lancio-dettaglio", testo: r.formula }),

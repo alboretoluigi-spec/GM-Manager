@@ -24,7 +24,8 @@ type campoModello struct {
 	Max         *int   `json:"max,omitempty"`
 	Predefinito any    `json:"predefinito,omitempty"`
 	Aiuto       string `json:"aiuto,omitempty"`
-	Tiro        string `json:"tiro,omitempty"` // formula del tiro con un clic sul campo (es. «1d20 + {forza}»)
+	Tiro        string `json:"tiro,omitempty"`      // formula del tiro con un clic sul campo (es. «1d20 + {forza}»)
+	Meccanica   bool   `json:"meccanica,omitempty"` // tiro con la meccanica del gioco: il campo dà il valore o i dadi (C4c)
 }
 
 type sezioneModello struct {
@@ -34,7 +35,8 @@ type sezioneModello struct {
 
 type tiroModello struct {
 	Nome    string `json:"nome"`
-	Formula string `json:"formula"`
+	Formula string `json:"formula,omitempty"`
+	Valore  string `json:"valore,omitempty"` // in alternativa: valore per la meccanica del gioco (es. «{forza} + {atletica}», C4c)
 }
 
 type modelloScheda struct {
@@ -137,6 +139,21 @@ func controllaFormula(f string, numerici map[string]bool) error {
 	return err
 }
 
+var reValore = regexp.MustCompile(`^[0-9+\- ]+$`)
+
+// controllaValore: somma di campi numerici e numeri, senza dadi (es. «{forza} + {atletica} - 1»).
+func controllaValore(v string, numerici map[string]bool) error {
+	for _, m := range reRifCampo.FindAllStringSubmatch(v, -1) {
+		if !numerici[m[1]] {
+			return fmt.Errorf("«{%s}» non è un campo numerico del modello", m[1])
+		}
+	}
+	if s := reRifCampo.ReplaceAllString(v, "1"); !reValore.MatchString(s) || len(s) > 120 {
+		return fmt.Errorf("il valore è una somma di campi e numeri, per esempio {forza} + {atletica}")
+	}
+	return nil
+}
+
 // validaModello controlla un modello e lo restituisce in JSON compatto.
 func validaModello(raw []byte) ([]byte, error) {
 	var m modelloScheda
@@ -201,7 +218,14 @@ func validaModello(raw []byte) ([]byte, error) {
 		if strings.TrimSpace(t.Nome) == "" || utf8.RuneCountInString(t.Nome) > 40 {
 			return nil, fmt.Errorf("tiro n. %d: serve un nome (al massimo 40 caratteri)", i+1)
 		}
-		if err := controllaFormula(t.Formula, numerici); err != nil {
+		if (t.Formula == "") == (t.Valore == "") {
+			return nil, fmt.Errorf("tiro «%s»: scrivi una formula oppure un valore per la meccanica del gioco (uno dei due)", t.Nome)
+		}
+		if t.Formula != "" {
+			if err := controllaFormula(t.Formula, numerici); err != nil {
+				return nil, fmt.Errorf("tiro «%s»: %v", t.Nome, err)
+			}
+		} else if err := controllaValore(t.Valore, numerici); err != nil {
 			return nil, fmt.Errorf("tiro «%s»: %v", t.Nome, err)
 		}
 	}

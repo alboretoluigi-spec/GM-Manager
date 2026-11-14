@@ -68,6 +68,12 @@
   function tira(nome, formula) {
     invia({ type: 'scheda:tiroLibero', etichetta: String(nome).slice(0, 40), formula: sostituisci(formula) });
   }
+  /** Tiro con la meccanica del gioco (C4c): l'app apre il modulo del tiro con il valore già scritto. */
+  function tiraMeccanica(nome, valore) {
+    let v = 0;
+    try { v = String(sostituisci(valore)).replace(/\s+/g, '').split(/(?=[+-])/).reduce((a, x) => a + (parseInt(x, 10) || 0), 0); } catch { v = 0; }
+    invia({ type: 'scheda:tiroMeccanica', etichetta: String(nome).slice(0, 40), valore: v });
+  }
 
   function controlloCampo(c) {
     const v = st.campi[c.id];
@@ -100,8 +106,8 @@
     }
     return el('div', { class: 'sl-campo', 'data-campo': c.id },
       el('label', { for: id, testo: c.nome }),
-      c.tiro ? el('div', { class: 'sl-riga' }, ctl, el('button', { type: 'button', class: 'sl-dado', title: 'Tira: ' + c.tiro, 'aria-label': 'Tira ' + c.nome,
-        testo: '🎲', on: { click: () => tira(c.nome, c.tiro) } })) : ctl,
+      c.tiro || c.meccanica ? el('div', { class: 'sl-riga' }, ctl, el('button', { type: 'button', class: 'sl-dado', title: c.meccanica ? 'Tira con la meccanica del gioco' : 'Tira: ' + c.tiro,
+        'aria-label': 'Tira ' + c.nome, testo: '🎲', on: { click: () => (c.meccanica ? tiraMeccanica(c.nome, '{' + c.id + '}') : tira(c.nome, c.tiro)) } })) : ctl,
       c.aiuto ? el('div', { class: 'sl-aiuto', testo: c.aiuto }) : null);
   }
 
@@ -114,7 +120,8 @@
       bloccata ? el('p', { class: 'sl-blocco', testo: 'Le modifiche ai dati della scheda passano dal Master: accendi «Modifica manuale» per proporle. Punti ferita e tiri restano liberi.' }) : null,
       (modello.tiri || []).length || modello.iniziativa ? el('section', { class: 'sl-sezione' }, el('h2', { testo: 'Tiri' }),
         el('div', { class: 'sl-tiri' },
-          (modello.tiri || []).map((t) => el('button', { type: 'button', class: 'sl-dado', title: t.formula, on: { click: () => tira(t.nome, t.formula) } }, '🎲 ' + t.nome)),
+          (modello.tiri || []).map((t) => el('button', { type: 'button', class: 'sl-dado', title: t.formula || 'Meccanica del gioco: ' + t.valore,
+            on: { click: () => (t.valore ? tiraMeccanica(t.nome, t.valore) : tira(t.nome, t.formula)) } }, '🎲 ' + t.nome)),
           modello.iniziativa ? el('button', { type: 'button', class: 'sl-dado', title: modello.iniziativa, on: { click: () => tira('Iniziativa', modello.iniziativa) } }, '⚡ Iniziativa') : null)) : null,
       el('div', { class: 'sl-sezioni' }, modello.sezioni.map((s) => el('section', { class: 'sl-sezione' }, el('h2', { testo: s.titolo }), s.campi.map(controlloCampo))))].filter(Boolean));
   }
@@ -128,7 +135,8 @@
     } catch (e) { radice.replaceChildren(el('p', { class: 'sl-blocco', testo: e.message })); return; }
     predefiniti();
     disegna();
-    invia({ type: 'scheda:state', state: st, summary: riepilogo() }); // il riepilogo arriva al server anche senza modifiche
+    // il riepilogo arriva al server anche senza modifiche; «iniziale»: i valori iniziali del modello non sono modifiche
+    invia({ type: 'scheda:state', state: st, summary: riepilogo(), iniziale: true });
   }
 
   window.addEventListener('message', (e) => {
@@ -155,6 +163,7 @@
         break;
       case 'scheda:tiroRisultato': {
         const r = m.r || {};
+        if (r.esitoTesto) { avviso('🎲 ' + (r.etichetta || '') + ': ' + r.formula + ' → ' + r.totale + ' · ' + r.esitoTesto, 8000); break; }
         const dadi = (r.dadi || []).map((d) => d.n + 'd' + d.facce + ' [' + (d.valori || []).join(', ') + ']').join(' + ');
         avviso('🎲 ' + (r.etichetta || '') + ': ' + dadi + (r.mod ? (r.mod > 0 ? ' + ' : ' − ') + Math.abs(r.mod) : '') + ' = ' + r.totale);
         break;

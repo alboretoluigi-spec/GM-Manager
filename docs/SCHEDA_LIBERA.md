@@ -26,7 +26,10 @@ modello resta com'era.
 - Dadi: `d4`, `d6`, `d8`, `d10`, `d12`, `d20`, `d100`, da 1 a 20 per tipo (al massimo 50 in tutto): `2d6`, `d20`, `3d10`.
 - Numeri e campi numerici tra graffe: `1d20 + {forza} - 2`, `2d6 + {abilita}`.
 - Il numero dei dadi può venire da un campo: `{forza}d6` tira tanti d6 quanto vale Forza.
-- Il risultato è la somma. Successi, soglie e dadi speciali delle singole famiglie arrivano con i loro moduli (C4c).
+- Il risultato è la somma.
+- **Meccanica del gioco** (C4c, `docs/MECCANICHE.md`): un campo con «tiro con la meccanica del gioco» oppure un tiro
+  del modello con un **valore** al posto della formula (es. `{furtivita} + 10`) apre il modulo del tiro del gioco della
+  campagna (d100, riserve, 2d6 a fasce…) con il valore già scritto; l'esito torna nella scheda.
 
 ## La scheda del giocatore
 Si apre dalla sezione Schede come l'altra scheda: salvataggio automatico, versioni, approvazione del Master (con

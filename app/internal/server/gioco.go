@@ -17,6 +17,7 @@ type moduloGioco struct {
 	Nome      string   `json:"nome"`
 	Meccanica string   `json:"meccanica"`
 	Pronto    bool     `json:"pronto"`
+	Tiro      string   `json:"tiro,omitempty"` // tiro della famiglia (meccaniche.go)
 	Sezioni   []string `json:"sezioni"`
 	Barra     []string `json:"barra"`
 }

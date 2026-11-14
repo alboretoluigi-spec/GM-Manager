@@ -1,6 +1,6 @@
 {
   "versione": 1,
-  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. «pronto»: false = la scheda, i dadi e l'iniziativa del modulo arrivano nei passi C4b-C4e; fino ad allora vale la scheda libera. Le Finanze (monete della quinta edizione) restano solo nel suo modulo finché non arrivano le valute del gioco.",
+  "nota": "Registro dei moduli di gioco (fase 3c, passo C4, docs/INTERFACCIA_ADATTIVA.md). «comuni»: sezioni del menu (campo m di web/ui/app.js) per qualsiasi gioco; ogni modulo aggiunge le sue sezioni e i suoi pulsanti della barra. Nomi descrittivi delle meccaniche, mai nomi di giochi o di editori. «pronto»: false = la scheda, i dadi e l'iniziativa del modulo arrivano nei passi C4b-C4e; fino ad allora vale la scheda libera. Le Finanze (monete della quinta edizione) restano solo nel suo modulo finché non arrivano le valute del gioco. «tiro»: il tiro della famiglia (internal/server/meccaniche.go, docs/MECCANICHE.md).",
   "comuni": [
     "sessioni",
     "documenti",
@@ -60,7 +60,8 @@
       "sezioni": [
         "sanita"
       ],
-      "barra": []
+      "barra": [],
+      "tiro": "d100"
     },
     {
       "id": "riserva-d10",
@@ -68,7 +69,8 @@
       "meccanica": "riserva di d10, si contano i successi",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "riserva-d10"
     },
     {
       "id": "riserva-d6",
@@ -76,7 +78,8 @@
       "meccanica": "riserva di d6, si contano i successi",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "riserva-d6"
     },
     {
       "id": "2d6-fasce",
@@ -84,7 +87,8 @@
       "meccanica": "2d6 + modificatore: fallimento, successo parziale, successo pieno",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "2d6-fasce"
     },
     {
       "id": "d10-somma",
@@ -92,7 +96,8 @@
       "meccanica": "d10 più caratteristica e abilità contro una difficoltà",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "d10-somma"
     },
     {
       "id": "passi-esplosivi",
@@ -100,7 +105,8 @@
       "meccanica": "un dado da d4 a d12 per tratto, il massimo si ritira e si somma",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "passi-esplosivi"
     },
     {
       "id": "fate",
@@ -108,7 +114,8 @@
       "meccanica": "4dF (−, vuoto, +) più l'abilità sulla scala degli aggettivi",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "fate"
     },
     {
       "id": "3d6-sotto",
@@ -116,7 +123,8 @@
       "meccanica": "3d6 uguale o sotto l'abilità",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "3d6-sotto"
     },
     {
       "id": "d20-sotto",
@@ -124,7 +132,8 @@
       "meccanica": "d20 uguale o sotto la caratteristica o l'abilità",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "d20-sotto"
     },
     {
       "id": "narrativi",
@@ -132,7 +141,8 @@
       "meccanica": "dadi con simboli di successo, vantaggio e minaccia",
       "pronto": false,
       "sezioni": [],
-      "barra": []
+      "barra": [],
+      "tiro": "narrativi"
     }
   ]
 }
