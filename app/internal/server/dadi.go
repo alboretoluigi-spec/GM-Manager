@@ -47,10 +47,16 @@ type tiroDadi struct {
 	Scheda     bool         `json:"scheda,omitempty"`   // tiro fatto cliccando una voce della scheda
 	Colore     string       `json:"colore,omitempty"`   // set di dadi di chi tira, «#corpo/#numeri» (dadi_aspetto.go)
 	Classe     string       `json:"classe,omitempty"`   // classe del personaggio di chi tira: effetto del d20
+	// Tiri delle famiglie di meccaniche (meccaniche.go, fase 3c, C4c): esito in parole e successi.
+	Meccanica  string `json:"meccanica,omitempty"`
+	Esito      string `json:"esito,omitempty"`
+	EsitoTesto string `json:"esitoTesto,omitempty"`
+	Successi   *int   `json:"successi,omitempty"`
 }
 
 func (s *Server) rotteDadi() {
 	s.Hub.Registra("dadi.tira", s.wsTiraDadi)
+	s.Hub.Registra("dadi.meccanica", s.wsTiraMeccanica) // tiri delle famiglie di meccaniche (meccaniche.go)
 	s.Hub.Registra("dadi.reale", s.wsDadoReale)
 	s.Hub.Registra("dadi.manuale", s.wsTiroManuale)
 }
@@ -244,7 +250,7 @@ func (s *Server) inviaTiro(u *Utente, t tiroDadi, sessione, personaggio string) 
 		s.decoraTiro(&t, u.ID, personaggio, sess)
 	}
 	// Chi fa 1 naturale in scontro (giocatore o Master) può tirare sulla tabella della sfortuna (una volta).
-	if scontro && t.Fallimento && !t.Segreto {
+	if scontro && t.Fallimento && !t.Segreto && t.Meccanica == "" { // la tabella della sfortuna è del d20
 		t.ID, t.Sfortuna = cripto.ID(), true
 		registraSfortuna(t.ID, u.ID, sess, u.Nome)
 	}
@@ -255,7 +261,9 @@ func (s *Server) inviaTiro(u *Utente, t tiroDadi, sessione, personaggio string) 
 		}
 		if comb, _, _, _, ok := s.scontroAttivo(sess); ok {
 			testo := "tira " + t.Formula + " = " + strconv.Itoa(t.Totale)
-			if t.Critico {
+			if t.EsitoTesto != "" {
+				testo += " · " + t.EsitoTesto
+			} else if t.Critico {
 				testo += " · CRITICO"
 			} else if t.Fallimento {
 				testo += " · 1 naturale"
